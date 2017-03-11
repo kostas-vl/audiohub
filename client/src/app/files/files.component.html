@@ -1,0 +1,102 @@
+<div class="files-card row">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <button md-raised-button class="pull-right" (click)="openDialog()">Add</button>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <br>
+
+    <md-toolbar color="primary">
+
+      <span mdTooltip="home directory" mdTooltipPosition="above">
+
+        <button md-icon-button (click)="homeDir()" [disabled]="currentSystemStack.length <= 1">
+
+          <md-icon>home</md-icon>
+
+        </button>
+
+      </span>
+
+      <span mdTooltip="previous directory" mdTooltipPosition="above">
+
+        <button md-icon-button (click)="previousDir()" [disabled]="currentSystemStack.length <= 1">
+
+          <md-icon>reply</md-icon>
+
+        </button>
+
+      </span>
+
+      <button md-button [mdMenuTriggerFor]="systemsMenu" *ngIf="currentSystem">
+
+        {{currentSystem.name}}
+
+      </button>
+
+      <md-menu #systemsMenu="mdMenu">
+
+        <button md-menu-item *ngFor="let system of systems" (click)="openDir(system.path)">
+
+          {{system.name}}
+
+        </button>
+
+      </md-menu>
+
+    </md-toolbar>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <md-nav-list *ngIf="currentSystem">
+
+      <md-list-item *ngFor="let entry of currentSystem.entries" (click)="entryClick(entry)" [mdMenuTriggerFor]="menu">
+
+        <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory'">folder</md-icon>
+
+        <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
+
+        <h4 md-line>{{entry.name}}</h4>
+        <p md-line>{{entry.path}}</p>
+
+      </md-list-item>
+
+    </md-nav-list>
+
+    <md-menu #menu="mdMenu">
+
+      <button md-menu-item>
+
+        <md-icon>playlist_add</md-icon>
+
+        <span>Add to playlist</span>
+
+      </button>
+
+      <button md-menu-item>
+
+        <md-icon>delete_sweeo</md-icon>
+
+        <span>Delete</span>
+
+      </button>
+
+      <button md-menu-item>
+
+        <md-icon>close</md-icon>
+
+        <span>Close</span>
+
+      </button>
+
+    </md-menu>
+
+  </div>
+
+</div>

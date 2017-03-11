@@ -1,0 +1,27 @@
+body {
+    display: inline-flex;
+    height: 100%;
+}
+
+.audiohub {
+    padding-top: 30px;
+    height: 100%;
+}
+
+.sidenav {
+    width: 250px;
+}
+
+.sidenav .sidenav-list {
+    padding-top: 0;
+}
+
+.children-components {
+    height: 760px;
+}
+
+@media(max-width: 450px) {
+    .sidenav {
+        width: 100%;
+    }
+}

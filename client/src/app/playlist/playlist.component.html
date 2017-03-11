@@ -1,0 +1,39 @@
+<div class="playlist-card row">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <span mdTooltip="refresh playlist" mdTooltipPosition="above">
+
+      <button md-icon-button type="button" (click)="onPlaylist()"><md-icon>cached</md-icon></button>
+
+    </span>
+
+    <span mdTooltip="play all tracks" mdTooltipPosition="above">
+
+      <button md-icon-button>
+
+        <md-icon>playlist_play</md-icon>
+
+      </button>
+
+    </span>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <md-list *ngFor="let entry of playlist">
+
+      <md-list-item>
+
+        <md-icon md-list-avatar>insert_drive_file</md-icon>
+        <h4 md-line>{{entry.name}}</h4>
+        <p md-line>{{entry.url}}</p>
+
+      </md-list-item>
+
+    </md-list>
+
+  </div>
+
+</div>

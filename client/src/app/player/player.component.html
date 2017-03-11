@@ -1,0 +1,75 @@
+<md-card class="player-card">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <span mdTooltip="Play" mdTooltipPosition="above">
+
+      <button md-icon-button (click)="onPlay()" *ngIf="!playing">
+        
+        <md-icon color="accent">play_arrow</md-icon>
+        
+      </button>
+
+    </span>
+
+    <span mdTooltip="Pause" mdTooltipPosition="above">
+
+      <button md-icon-button (click)="onPause()" *ngIf="playing">
+        
+        <md-icon color="accent">pause</md-icon>
+        
+      </button>
+
+    </span>
+
+    <span mdTooltip="Stop" mdTooltipPosition="above">
+
+      <button md-icon-button (click)="onStop()">
+      
+        <md-icon color="warn">stops</md-icon>
+
+      </button>
+
+    </span>
+
+    <span mdTooltip="Previous" mdTooltipPosition="above">
+
+      <button md-icon-button>
+        
+        <md-icon>skip_previous</md-icon>
+        
+      </button>  
+              
+    </span>
+
+    <span mdTooltip="Next" mdTooltipPosition="above">  
+
+      <button md-icon-button>
+        
+        <md-icon>skip_next</md-icon>
+        
+      </button>
+
+    </span>
+
+    <span class="pull-right">
+
+      <md-slider class="volume-margin" min="0" max="100" step="1" [(ngModel)]="volume" (ngModelChange)="onVolume($event)"></md-slider>
+
+    </span>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <div class="text-right">
+
+      <small>00:00 / 10:52</small>
+
+    </div>
+
+    <md-progress-bar color="primary" value="50" [bufferValue]="100"></md-progress-bar>
+
+  </div>
+
+</md-card>
