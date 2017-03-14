@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 
-import { FileSystemEntry } from 'app/files/file-system-entry/file-system-entry';
+import { FileSystemEntry } from 'app/file-system-entry/file-system-entry';
 import { SocketService } from 'app/socket/socket.service';
 import { AddFolderDialogComponent } from 'app/files/add-folder-dialog/add-folder-dialog.component';
 
@@ -41,27 +41,28 @@ export class FilesComponent implements OnInit {
 
     this.socket.subscribe('mount volume success', data => {
       this.systems.push(data);
-      this.socket.emit('list dir', data.path);
+      this.socket.emit('list dir', '\\\\192.168.1.72\\shared');
     });
 
     this.socket.emit('available systems');
   }
 
-  public entryClick(entry: FileSystemEntry) {
-    if (entry.type === 'directory') {
-      this.openDir(entry.path);
-    }
-  }
-
   public openDialog() {
     const dialog = this.mdDialog.open(AddFolderDialogComponent);
     dialog.afterClosed().subscribe(data => {
-      if (data.action === 'mount') {
+      if (data && data.action === 'mount') {
         this.socket.emit('mount volume', data.details);
-      } else {
-
       }
     });
+  }
+
+  public changeSystem(path: string) {
+    const entry = this.systems.find(f => f.path === path);
+    if (entry) {
+      this.currentSystem = entry;
+      this.currentSystemStack = [];
+      this.openDir(entry.path);
+    }
   }
 
   public homeDir() {
@@ -74,9 +75,19 @@ export class FilesComponent implements OnInit {
     this.socket.emit('list dir', this.currentPath());
   }
 
-  public openDir(path) {
-    this.socket.emit('list dir', path + '/');
+  public entryClick(entry: FileSystemEntry) {
+    if (entry.type === 'directory') {
+      this.openDir(entry.path);
+    }
+  }
+
+  public openDir(path: string) {
+    this.socket.emit('list dir', path);
     this.currentSystemStack.push(path);
+  }
+
+  public addToPlaylist(entry: FileSystemEntry) {
+    this.socket.emit('queue push', entry);
   }
 
 }

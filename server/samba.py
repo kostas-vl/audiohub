@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 from enviroment import *
+from subprocess import call
 
 connections = []
 files = []
@@ -46,24 +47,16 @@ def unmount(details):
 
 def nt_mount(details):
     persistent = 'yes' if details.Persistent else 'no'
-    # print('net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
-    #     details.Ip_Address, details.Volume, details.Password, details.User, persistent))
-    # os.system('net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
-    #     details.Ip_Address, details.Volume, details.Password, details.User, persistent))
     command = 'net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
         details.Ip_Address, details.Volume, details.Password, details.User, persistent)
-    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-
-    print(output)
-    print(error)
-
+    call(command.split())
     connections.append(details)
 
 
 def nt_unmount(details):
-    os.system(
-        'net use \\\\{0}\IPC$ /delete'.format(details.Ip_Address))
+    path = '\\\\' + details.Ip_Address + '\\' + details.Volume
+    command = 'net use {0} /delete'.format(path)
+    call(command.split())
 
 
 def posix_mount(details):

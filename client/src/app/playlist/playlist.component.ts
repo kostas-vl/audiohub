@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ITrack, TrackType } from '../track/track.model';
 import { SocketService } from 'app/socket/socket.service';
+
+import { FileSystemEntry } from 'app/file-system-entry/file-system-entry';
 
 @Component({
   selector: 'app-playlist',
@@ -9,7 +10,7 @@ import { SocketService } from 'app/socket/socket.service';
 })
 export class PlaylistComponent implements OnInit {
 
-  public playlist: ITrack[] = [];
+  public playlist: FileSystemEntry[] = [];
 
   constructor(private socket: SocketService) { }
 
@@ -20,6 +21,10 @@ export class PlaylistComponent implements OnInit {
 
   public onPlaylist() {
     this.socket.emit('queue');
+  }
+
+  public onPlayNow(entry: FileSystemEntry) {
+    this.socket.emit('play now', entry);
   }
 
 }

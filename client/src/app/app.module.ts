@@ -89,6 +89,8 @@ const appRoutes: Routes = [
       useClass: HammerJsConfiguration
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

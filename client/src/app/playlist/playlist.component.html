@@ -2,37 +2,57 @@
 
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <span mdTooltip="refresh playlist" mdTooltipPosition="above">
+    <md-toolbar color="primary">
 
-      <button md-icon-button type="button" (click)="onPlaylist()"><md-icon>cached</md-icon></button>
+      <span mdTooltip="refresh playlist" mdTooltipPosition="above">
 
-    </span>
+        <button md-icon-button type="button" (click)="onPlaylist()">
+          
+          <md-icon>cached</md-icon>
+          
+        </button>
 
-    <span mdTooltip="play all tracks" mdTooltipPosition="above">
+      </span>
 
-      <button md-icon-button>
+      <span mdTooltip="play all tracks" mdTooltipPosition="above">
 
-        <md-icon>playlist_play</md-icon>
+        <button md-icon-button>
 
-      </button>
+          <md-icon>playlist_play</md-icon>
 
-    </span>
+        </button>
+
+      </span>
+
+    </md-toolbar>
 
   </div>
 
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <md-list *ngFor="let entry of playlist">
+    <md-nav-list *ngFor="let entry of playlist">
 
       <md-list-item>
 
-        <md-icon md-list-avatar>insert_drive_file</md-icon>
+        <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
+
         <h4 md-line>{{entry.name}}</h4>
-        <p md-line>{{entry.url}}</p>
+
+        <p md-line>{{entry.path}}</p>
+
+        <span mdTooltip="play now" mdTooltipPosition="above">
+
+          <button md-icon-button (click)="onPlayNow(entry)">
+
+            <md-icon>play_circle_outline</md-icon>
+
+          </button>
+
+        </span>
 
       </md-list-item>
 
-    </md-list>
+    </md-nav-list>
 
   </div>
 

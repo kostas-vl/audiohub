@@ -1,14 +1,10 @@
 import pyglet
 from flask_socketio import emit
 from enviroment import *
-from track import *
+from files import FileSystemEntry
 
 # Audio player initialization and configuration
-# finalFantasyTheme = Track('Final Fantasy Main Theme',
-#                           TrackType.File, 'C:/Users/kvl_9/Music/fantasy.mp3')
-# audioSource = pyglet.media.load(finalFantasyTheme.Url)
 audioPlayer = pyglet.media.Player()
-# audioPlayer.queue(audioSource)
 
 # Playlist initialization
 playlist = []
@@ -18,6 +14,18 @@ playlist = []
 @socketio.on('play', namespace='/server')
 def play_audio(data):
     if not audioPlayer.playing:
+        source = pyglet.media.load(playlist[0].Path)
+        audioPlayer.queue(source)
+        audioPlayer.play()
+
+
+@socketio.on('play now', namespace='/server')
+def play_now(file):
+    audioPlayer.next_source()
+    entries = [entry for entry in playlist if entry.Path == file['path']]
+    if len(entries) > 0:
+        source = pyglet.media.load(entries[0].Path)
+        audioPlayer.queue(source)
         audioPlayer.play()
 
 
@@ -42,29 +50,19 @@ def volume_audio(data):
 
 # Push neew track on queue event handler
 @socketio.on('queue push', namespace='/server')
-def queue_push(data):
-    if data.type == TrackType.File:
-        track = Track(data.name, data.type, data.url)
-        audioPlayer.queue(data.Url)
-        playlist.append(track)
+def queue_push(entry):
+    entry = FileSystemEntry(entry['name'], entry['type'], entry['path'])
+    playlist.append(entry)
+    queue(None)
 
-    elif data.type == TrackType.NetworkFile:
-        track = Track(data.name, data.type, data.url)
-        audioPlayer.queue(data.url)
-        playlist.append(track)
-        pass
 
-    elif data.type == TrackType.YoutubeStream:
-        pass
-
-    else:
-        pass
-
-    queue()
+@socketio.on('queue pop', namespace='/server')
+def queue_pop(path):
+    playlist = filter(lambda x: x.path != path, playlist)
+    queue(None)
 
 
 # List queued tracks event handler
 @socketio.on('queue', namespace='/server')
 def queue(data):
-    json_playlist = list(map(lambda x: x.Json(), playlist))
-    emit('queue', json_playlist)
+    emit('queue', [dict(entry) for entry in playlist])

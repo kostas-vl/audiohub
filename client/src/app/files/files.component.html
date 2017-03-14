@@ -40,7 +40,7 @@
 
       <md-menu #systemsMenu="mdMenu">
 
-        <button md-menu-item *ngFor="let system of systems" (click)="openDir(system.path)">
+        <button md-menu-item *ngFor="let system of systems" (click)="changeSystem(system.path)">
 
           {{system.name}}
 
@@ -56,22 +56,29 @@
 
     <md-nav-list *ngIf="currentSystem">
 
-      <md-list-item *ngFor="let entry of currentSystem.entries" (click)="entryClick(entry)" [mdMenuTriggerFor]="menu">
+      <md-list-item *ngFor="let entry of currentSystem.entries" (click)="entryClick(entry)">
 
         <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory'">folder</md-icon>
 
         <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
 
         <h4 md-line>{{entry.name}}</h4>
+        
         <p md-line>{{entry.path}}</p>
+
+        <button md-icon-button *ngIf="entry.type === 'file'" (click)="addToPlaylist(entry)">
+
+          <md-icon>playlist_add</md-icon>
+
+        </button>
 
       </md-list-item>
 
     </md-nav-list>
 
-    <md-menu #menu="mdMenu">
+    <!--<md-menu #fileActionsMenu="mdMenu">
 
-      <button md-menu-item>
+      <button md-menu-item (click)="addToPlaylist($event)">
 
         <md-icon>playlist_add</md-icon>
 
@@ -95,7 +102,7 @@
 
       </button>
 
-    </md-menu>
+    </md-menu>-->
 
   </div>
 

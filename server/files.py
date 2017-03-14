@@ -2,23 +2,15 @@ import os
 import sys
 import samba
 import config
+import enviroment
 from enum import Enum
 from enviroment import *
-
-
-class DirectoryAction(Enum):
-    Descend = 0
-    Ascend = 1
-    Add = 2
-    Remove = 3
-    Create = 4
 
 
 class FileSystemEntry():
     Name = ''
     Type = ''
     Path = ''
-    Entries = []
 
     def __init__(self, name, type, path):
         self.Name = name
@@ -29,7 +21,6 @@ class FileSystemEntry():
         yield 'name', self.Name
         yield 'type', self.Type
         yield 'path', self.Path
-        # yield 'entries', self.Entries
 
 
 file_systems = [
@@ -74,16 +65,15 @@ def mount_volume(data):
         ip_address=data['ip'], volume=data['volume'], user=data['user'], password=data['password'], persistent=True)
     samba.mount(details)
 
-    ip_address_str = str(details.Ip_Address)
-    mount_path = '/' + ip_address_str + '/' + details.Volume
+    mount_path = '\\\\' + details.Ip_Address + '\\' + details.Volume + '\\'
     mount_name = 'Mount: ' + mount_path
 
     file_system_entry = FileSystemEntry(mount_name, 'directory', mount_path)
-    save_volume(file_system_entry)
+    file_systems.append(file_system_entry)    
     emit('mount volume success', dict(file_system_entry))
 
 
 @socketio.on('save volume', namespace='/server')
 def save_volume(data):
-    if os.path.exists(data.name) and os.path.isdir(data.path):
-        file_system.append(FileSystemEntry(data.name, 'directory', data.path))
+    file_systems.append(FileSystemEntry(
+        data['name'], 'directory', data['path']))
