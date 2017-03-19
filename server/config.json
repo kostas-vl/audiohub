@@ -1,0 +1,31 @@
+{
+    "systems": [
+        {
+            "name": "Local Dir",
+            "type": "directory",
+            "path": "C:/Users/kvl_9/Music"
+        }
+    ],
+    "selectedSystem": {
+        "name": "",
+        "type": "",
+        "path": ""
+    },
+    "playlist": [
+        {
+            "name": "A",
+            "type": "directory",
+            "path": "C:/A/A"
+        },
+        {
+            "name": "A",
+            "type": "directory",
+            "path": "C:/A/A"
+        },
+        {
+            "name": "A",
+            "type": "directory",
+            "path": "C:/A/A"
+        }
+    ]
+}

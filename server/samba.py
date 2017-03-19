@@ -25,13 +25,13 @@ class SambaDetails():
 
 def mount(details):
     if os.name == 'nt':
-        nt_mount(details)
+        return nt_mount(details)
     elif os.name == 'posix':
-        java_mount(details)
+        return posix_mount(details)
     elif os.name == 'java':
-        java_mount(details)
+        return java_mount(details)
     else:
-        pass
+        return ''
 
 
 def unmount(details):
@@ -47,10 +47,15 @@ def unmount(details):
 
 def nt_mount(details):
     persistent = 'yes' if details.Persistent else 'no'
+
     command = 'net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
         details.Ip_Address, details.Volume, details.Password, details.User, persistent)
     call(command.split())
+
     connections.append(details)
+
+    mount_path = '\\\\' + details.Ip_Address + '\\' + details.Volume + '\\'
+    return mount_path
 
 
 def nt_unmount(details):

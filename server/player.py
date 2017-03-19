@@ -1,20 +1,17 @@
 import pyglet
+import config
 from flask_socketio import emit
+from file_system_entry import *
 from enviroment import *
-from files import FileSystemEntry
 
 # Audio player initialization and configuration
 audioPlayer = pyglet.media.Player()
 
-# Playlist initialization
-playlist = []
 
-
-# Play event handler
 @socketio.on('play', namespace='/server')
 def play_audio(data):
     if not audioPlayer.playing:
-        source = pyglet.media.load(playlist[0].Path)
+        source = pyglet.media.load(config.playlist[0].Path)
         audioPlayer.queue(source)
         audioPlayer.play()
 
@@ -22,7 +19,7 @@ def play_audio(data):
 @socketio.on('play now', namespace='/server')
 def play_now(file):
     audioPlayer.next_source()
-    entries = [entry for entry in playlist if entry.Path == file['path']]
+    entries = [entry for entry in config.playlist if entry.Path == file['path']]
     if len(entries) > 0:
         source = pyglet.media.load(entries[0].Path)
         audioPlayer.queue(source)
@@ -52,17 +49,17 @@ def volume_audio(data):
 @socketio.on('queue push', namespace='/server')
 def queue_push(entry):
     entry = FileSystemEntry(entry['name'], entry['type'], entry['path'])
-    playlist.append(entry)
+    config.playlist.append(entry)
     queue(None)
 
 
 @socketio.on('queue pop', namespace='/server')
 def queue_pop(path):
-    playlist = filter(lambda x: x.path != path, playlist)
+    config.playlist = filter(lambda x: x.path != path, config.playlist)
     queue(None)
 
 
 # List queued tracks event handler
 @socketio.on('queue', namespace='/server')
 def queue(data):
-    emit('queue', [dict(entry) for entry in playlist])
+    emit('queue', [dict(entry) for entry in config.playlist])

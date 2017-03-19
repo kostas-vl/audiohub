@@ -27,8 +27,11 @@ def on_disconnect():
 
 def main():
     # Flask App Initialization
+    config.load()
+
     socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
                  port=int(os.getenv('PORT', 5000)))
+
     emit('queue', playlist, broadcast=True)
 
 
