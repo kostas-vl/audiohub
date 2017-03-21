@@ -1,4 +1,5 @@
 import os
+import atexit
 import samba
 import player
 import files
@@ -27,12 +28,16 @@ def on_disconnect():
 
 def main():
     # Flask App Initialization
-    config.load()
+    config.load_queries()
 
-    socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
-                 port=int(os.getenv('PORT', 5000)))
+    
 
-    emit('queue', playlist, broadcast=True)
+    # socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
+    #              port=int(os.getenv('PORT', 5000)))
+
+    # emit('queue', playlist, broadcast=True)
+
+    # atexit.register(config.update)
 
 
 if __name__ == '__main__':

@@ -3,3 +3,10 @@ __pycache__/*
 
 # IDE - VSCode
 .vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# sqlite3 Database Files
+*.db

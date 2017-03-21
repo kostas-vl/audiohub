@@ -20,10 +20,6 @@ def build_dir_tree(path):
     return tree
 
 
-def change_current_system(name):
-    selected_file_system = config.systems
-
-
 @socketio.on('available systems', namespace='/server')
 def available_file_systems(data):
     emit('available systems', [dict(entry) for entry in config.systems])
