@@ -3,9 +3,9 @@ import atexit
 import samba
 import player
 import files
-import config
+import settings
+import database
 from enviroment import *
-from config import *
 
 
 # Default http route
@@ -28,16 +28,14 @@ def on_disconnect():
 
 def main():
     # Flask App Initialization
-    config.load_queries()
-
-    
-
     # socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
     #              port=int(os.getenv('PORT', 5000)))
 
     # emit('queue', playlist, broadcast=True)
 
     # atexit.register(config.update)
+
+    settings.load()
 
 
 if __name__ == '__main__':

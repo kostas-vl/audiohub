@@ -1,11 +1,12 @@
 import os
 import sys
 import samba
-import config
 import enviroment
 from enum import Enum
 from file_system_entry import *
 from enviroment import *
+
+systems = []
 
 
 def build_dir_tree(path):
@@ -22,7 +23,7 @@ def build_dir_tree(path):
 
 @socketio.on('available systems', namespace='/server')
 def available_file_systems(data):
-    emit('available systems', [dict(entry) for entry in config.systems])
+    emit('available systems', [dict(entry) for entry in systems])
 
 
 @socketio.on('list dir', namespace='/server')
@@ -40,11 +41,11 @@ def mount_volume(data):
     mount_name = 'Mount: ' + mount_path
 
     file_system_entry = FileSystemEntry(mount_name, 'directory', mount_path)
-    config.systems.append(file_system_entry)
+    systems.append(file_system_entry)
     emit('mount volume success', dict(file_system_entry))
 
 
 @socketio.on('save volume', namespace='/server')
 def save_volume(data):
-    config.systems.append(FileSystemEntry(
+    systems.append(FileSystemEntry(
         data['name'], 'directory', data['path']))

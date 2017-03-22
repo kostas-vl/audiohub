@@ -1,0 +1,6 @@
+{
+    "database": {
+        "connectionString": "sqlite:///audiohub.db",
+        "echo": true
+    }
+}
