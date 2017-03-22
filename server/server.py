@@ -1,10 +1,9 @@
 import os
 import atexit
-import samba
-import player
-import files
-import settings
-import database
+import sound
+import drive.files
+import settings.container as settings
+import database.config as db
 from enviroment import *
 
 
@@ -28,14 +27,14 @@ def on_disconnect():
 
 def main():
     # Flask App Initialization
-    # socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
-    #              port=int(os.getenv('PORT', 5000)))
+    socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
+                 port=int(os.getenv('PORT', 5000)))
 
-    # emit('queue', playlist, broadcast=True)
+    emit('queue', playlist, broadcast=True)
 
-    # atexit.register(config.update)
+    # settings.load()
 
-    settings.load()
+    # db.init(settings.database_settings)
 
 
 if __name__ == '__main__':

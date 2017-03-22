@@ -1,6 +1,5 @@
 import pyglet
 from flask_socketio import emit
-from file_system_entry import *
 from enviroment import *
 
 # Audio player initialization and configuration

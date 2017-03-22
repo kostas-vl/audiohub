@@ -1,12 +1,14 @@
 import os
 import sys
-import samba
+import drive.samba
 import enviroment
 from enum import Enum
-from file_system_entry import *
+from drive.file_system_entry import *
 from enviroment import *
 
-systems = []
+systems = [
+    FileSystemEntry(name='Local Dir', type='directory', path='C:/Users/kvl_9/Music/')
+]
 
 
 def build_dir_tree(path):
