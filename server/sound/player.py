@@ -1,12 +1,14 @@
 import pyglet
 from flask_socketio import emit
 from enviroment import *
+from drive.file_system_entry import *
 
 # Audio player initialization and configuration
 audioPlayer = pyglet.media.Player()
 
 playlist = []
 
+# Starts playing the first track on the playlist
 @socketio.on('play', namespace='/server')
 def play_audio(data):
     if not audioPlayer.playing:
@@ -15,8 +17,9 @@ def play_audio(data):
         audioPlayer.play()
 
 
+# Play track that is provided event handler
 @socketio.on('play now', namespace='/server')
-def play_now(file):
+def play_now(file): 
     audioPlayer.next_source()
     entries = [entry for entry in playlist if entry.Path == file['path']]
     if len(entries) > 0:
@@ -27,7 +30,7 @@ def play_now(file):
 
 # Pause event handler
 @socketio.on('pause', namespace='/server')
-def pause_audio(data):
+def pause_audio(data):    
     audioPlayer.pause()
 
 
@@ -44,14 +47,15 @@ def volume_audio(data):
     audioPlayer.volume = data / 100
 
 
-# Push neew track on queue event handler
+# Push new track on queue event handler
 @socketio.on('queue push', namespace='/server')
-def queue_push(entry):
+def queue_push(entry):    
     entry = FileSystemEntry(entry['name'], entry['type'], entry['path'])
     playlist.append(entry)
     queue(None)
 
 
+# Pop track from queue event handler
 @socketio.on('queue pop', namespace='/server')
 def queue_pop(path):
     playlist = filter(lambda x: x.path != path, playlist)
