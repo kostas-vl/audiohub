@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 
-import { FileSystemEntry } from 'app/file-system-entry/file-system-entry';
+import { IFileSystem, FileSystem } from 'app/models/file-system';
 import { SocketService } from 'app/socket/socket.service';
 import { AddFolderDialogComponent } from 'app/files/add-folder-dialog/add-folder-dialog.component';
 
@@ -12,11 +12,13 @@ import { AddFolderDialogComponent } from 'app/files/add-folder-dialog/add-folder
 })
 export class FilesComponent implements OnInit {
 
-  public systems: FileSystemEntry[] = [];
+  public systems: IFileSystem[] = [];
 
-  public selectedSystem: FileSystemEntry;
+  public selectedSystem: IFileSystem;
 
-  public currentSystem: FileSystemEntry;
+  public currentSystem: IFileSystem;
+
+  public currentSystemEntries: IFileSystem[];
 
   public currentSystemStack: string[] = [];
 
@@ -30,18 +32,27 @@ export class FilesComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.socket.subscribe('available systems', data => {
-      this.systems = data;
-      this.currentSystem = this.systems[0];
-      this.currentSystemStack = [this.currentSystem.path];
-      this.socket.emit('list dir', this.currentPath());
+    this.socket.subscribe('available systems', (data: IFileSystem[]) => {
+      if (data) {
+        this.systems = data;
+        this.currentSystem = this.systems[0];
+        this.currentSystemStack = [this.currentSystem.path];
+        this.socket.emit('list dir', this.currentPath());
+      }
     });
 
-    this.socket.subscribe('list dir', data => this.currentSystem.entries = data);
+    this.socket.subscribe('list dir', (data: IFileSystem[]) => {
+      this.currentSystemEntries = data;
+    });
 
-    this.socket.subscribe('mount volume success', data => {
+    this.socket.subscribe('mount volume success', (data: IFileSystem) => {
       this.systems.push(data);
-      this.socket.emit('list dir', '\\\\192.168.1.72\\shared');
+      this.socket.emit('list dir', data.path);
+    });
+
+    this.socket.subscribe('add volume success', (data: IFileSystem) => {
+      this.systems.push(data);
+      this.socket.emit('list dir', data.path);
     });
 
     this.socket.emit('available systems');
@@ -52,6 +63,8 @@ export class FilesComponent implements OnInit {
     dialog.afterClosed().subscribe(data => {
       if (data && data.action === 'mount') {
         this.socket.emit('mount volume', data.details);
+      } else if (data && data.action === 'add folder') {
+        this.socket.emit('add volume', data.details);
       }
     });
   }
@@ -75,7 +88,7 @@ export class FilesComponent implements OnInit {
     this.socket.emit('list dir', this.currentPath());
   }
 
-  public entryClick(entry: FileSystemEntry) {
+  public entryClick(entry: IFileSystem) {
     if (entry.type === 'directory') {
       this.openDir(entry.path);
     }
@@ -86,7 +99,7 @@ export class FilesComponent implements OnInit {
     this.currentSystemStack.push(path);
   }
 
-  public addToPlaylist(entry: FileSystemEntry) {
+  public addToPlaylist(entry: IFileSystem) {
     this.socket.emit('queue push', entry);
   }
 

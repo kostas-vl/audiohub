@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from 'app/socket/socket.service';
 
-import { FileSystemEntry } from 'app/file-system-entry/file-system-entry';
+import { IPlaylist, Playlist } from 'app/models/playlist';
 
 @Component({
   selector: 'app-playlist',
@@ -10,7 +10,7 @@ import { FileSystemEntry } from 'app/file-system-entry/file-system-entry';
 })
 export class PlaylistComponent implements OnInit {
 
-  public playlist: FileSystemEntry[] = [];
+  public playlist: IPlaylist[] = [];
 
   constructor(private socket: SocketService) { }
 
@@ -23,7 +23,7 @@ export class PlaylistComponent implements OnInit {
     this.socket.emit('queue');
   }
 
-  public onPlayNow(entry: FileSystemEntry) {
+  public onPlayNow(entry: IPlaylist) {
     this.socket.emit('play now', entry);
   }
 

@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
 import { SocketService } from 'app/socket/socket.service';
-
-class MountFolder {
-
-  public ip = '';
-  public volume = '';
-  public user = '';
-  public password = '';
-
-}
+import { IMountFolder, MountFolder } from 'app/files/add-folder-dialog/models/mount-folder';
 
 @Component({
   selector: 'app-add-folder-dialog',
@@ -19,13 +11,21 @@ class MountFolder {
 export class AddFolderDialogComponent {
 
   public addOptions = [
-    { label: 'Mount Network Folder', value: 0 },
-    { label: 'Add Local Folder', value: 1 }
+    {
+      label: 'Mount Network Folder',
+      value: 0
+    },
+    {
+      label: 'Add Local Folder',
+      value: 1
+    }
   ];
 
   public selectedAction = 0;
 
-  public mountFolder = new MountFolder();
+  public mountFolder: IMountFolder = new MountFolder();
+
+  public folder = { name: '', path: '' };
 
   constructor(
     private dialog: MdDialogRef<AddFolderDialogComponent>,
@@ -39,12 +39,13 @@ export class AddFolderDialogComponent {
         break;
 
       case 1:
+        this.dialog.close({ action: 'add folder', details: this.folder });
         break;
 
       default:
+        this.dialog.close();
         break;
     }
-    this.dialog.close();
   }
 
   public cancel() {

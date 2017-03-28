@@ -54,7 +54,13 @@
 
         <md-input-container class="dialog-input">
 
-          <input mdInput placeholder="Path">
+          <input mdInput placeholder="Name" [(ngModel)]="folder.name">
+
+        </md-input-container>
+
+        <md-input-container class="dialog-input">
+
+          <input mdInput placeholder="Path" [(ngModel)]="folder.path">
 
         </md-input-container>
 

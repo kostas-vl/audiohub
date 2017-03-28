@@ -56,7 +56,7 @@
 
     <md-nav-list *ngIf="currentSystem">
 
-      <md-list-item *ngFor="let entry of currentSystem.entries" (click)="entryClick(entry)">
+      <md-list-item *ngFor="let entry of currentSystemEntries" (click)="entryClick(entry)">
 
         <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory'">folder</md-icon>
 
