@@ -31,12 +31,12 @@ def list_dir(data):
     emit('list dir', [dict(node) for node in tree])
 
 
-# @socketio.on('add volume', namespace='/server')
+@socketio.on('add volume', namespace='/server')
 def add_volume(data):
     if os.path.isdir(data['path']):
         file_system = fs.insert(fs.FileSystem(
             name=data['name'], type='directory', path=data['path'], active=True))
-        emit('add volume success', file_system)
+        emit('add volume success', dict(file_system))
 
 
 @socketio.on('mount volume', namespace='/server')
@@ -48,7 +48,7 @@ def mount_volume(data):
     mount_name = 'Mount: ' + mount_path
 
     file_system = fs.insert(fs.FileSystem(
-        name=mount_name, type='directory', path=mount_path))
+        name=mount_name, type='directory', path=mount_path, active=True))
     emit('mount volume success', dict(file_system))
 
 

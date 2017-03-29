@@ -54,10 +54,3 @@ def playlist_init():
                          Column('date_created', DateTime, nullable=False),
                          Column('date_modified', DateTime)
                          )
-
-
-def func_max(column, type):
-    with database_engine.connect() as conn:
-        conn.execute(select([
-            func.max(file_systems.c.id, type_=Integer).label('id_max')
-        ])).scalar()

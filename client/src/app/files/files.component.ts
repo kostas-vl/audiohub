@@ -61,10 +61,17 @@ export class FilesComponent implements OnInit {
   public openDialog() {
     const dialog = this.mdDialog.open(AddFolderDialogComponent);
     dialog.afterClosed().subscribe(data => {
-      if (data && data.action === 'mount') {
-        this.socket.emit('mount volume', data.details);
-      } else if (data && data.action === 'add folder') {
-        this.socket.emit('add volume', data.details);
+      switch (data ? data.action : '') {
+        case 'mount':
+          this.socket.emit('mount volume', data.details);
+          break;
+
+        case 'add folder':
+          this.socket.emit('add volume', data.details);
+          break;
+
+        default:
+          break;
       }
     });
   }

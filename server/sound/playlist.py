@@ -25,14 +25,24 @@ class Playlist():
         yield 'type', self.type
         yield 'path', self.path
         yield 'active', self.active
-        yield 'date_created', self.date_created
-        yield 'date_modified', self.date_modified
+        yield 'date_created', '' if not self.date_created else self.date_created.isoformat()
+        yield 'date_modified', '' if not self.date_modified else self.date_modified.isoformat()
+
+
+def new_id():
+    with db.database_engine.connect() as conn:
+        max_id = conn.execute(db.
+                              select([
+                                  db.func.max(db.playlist.c.id,
+                                              type_=db.Integer).label('max')
+                              ])).scalar()
+        return max_id + 1 if max_id else 1
 
 
 def insert(playlist):
     with db.database_engine.connect() as conn:
         entry = dict(playlist)
-        entry['id'] = db.func.max(db.playlist.c.id)
+        entry['id'] = new_id()
         entry['date_created'] = datetime.datetime.now()
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(db.
@@ -44,12 +54,14 @@ def insert(playlist):
 def insert_collection(playlist_collection):
     with db.database_engine.connect() as conn:
         collection = []
+        id_interval = 0
         for playlist in playlist_collection:
             entry = dict(playlist)
-            entry['id'] = db.func.max(db.playlist.c.id)
+            entry['id'] = new_id() + id_interval
             entry['date_created'] = datetime.datetime.now()
             entry['date_modified'] = datetime.datetime.now()
             collection.append(entry)
+            id_interval += 1
         conn.execute(db.
                      playlist.
                      insert(), collection)
@@ -92,6 +104,22 @@ def update_collection(playlist_collection):
                          values(entry))
             collection.append(entry)
         return [Playlist(entry) for entry in collection]
+
+
+def select_by_id(id):
+    with db.database_engine.connect() as conn:
+        entry = conn.execute(db.
+                             select([db.playlist]).
+                             where(db.playlist.c.id == id)).one()
+        return Playlist(entry)
+
+
+def select_by_path(path):
+    with db.database_engine.connect() as conn:
+        entry = conn.execute(db.
+                             select([db.playlist]).
+                             where(db.playlist.path == path)).one()
+        return Playlist(entry)
 
 
 def select_active():

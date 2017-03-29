@@ -25,13 +25,18 @@ class FileSystem():
         yield 'type', self.type
         yield 'path', self.path
         yield 'active', self.active
-        yield 'date_created', self.date_created
-        yield 'date_modified', self.date_modified
+        yield 'date_created', '' if not self.date_created else self.date_created.isoformat()
+        yield 'date_modified', '' if not self.date_modified else self.date_modified.isoformat()
 
 
 def new_id():
-    max_id = db.func_max(db.file_systems.c.id, db.Integer)    
-    return max_id + 1 if max_id else 1
+    with db.database_engine.connect() as conn:
+        max_id = conn.execute(db.
+                              select([
+                                  db.func.max(db.file_systems.c.id, type_=db.Integer).
+                                  label('max')
+                              ])).scalar()
+        return max_id + 1 if max_id else 1
 
 
 def insert(file_system):
