@@ -1,9 +1,7 @@
 import os
 import sys
-import drive.samba
-import enviroment
-import drive.samba as samba
 import drive.file_system as fs
+import drive.network as net
 from enum import Enum
 from enviroment import *
 
@@ -41,10 +39,10 @@ def add_volume(data):
 
 @socketio.on('mount volume', namespace='/server')
 def mount_volume(data):
-    details = samba.SambaDetails(
+    details = net.SambaDetails(
         ip_address=data['ip'], volume=data['volume'], user=data['user'], password=data['password'], persistent=True)
 
-    mount_path = samba.mount(details)
+    mount_path = net.mount(details)
     mount_name = 'Mount: ' + mount_path
 
     file_system = fs.insert(fs.FileSystem(

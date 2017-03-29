@@ -8,19 +8,19 @@ connections = []
 files = []
 
 
-class SambaDetails():
-    Ip_Address = ''
-    Volume = ''
-    User = ''
-    Password = ''
-    Persistent = True
+class NetworkFileSystem():
+    ip = ''
+    volume = ''
+    user = ''
+    password = ''
+    persistent = True
 
-    def __init__(self, ip_address, volume, user, password='', persistent=False):
-        self.Ip_Address = ip_address
-        self.Volume = volume
-        self.User = user
-        self.Password = password
-        self.Persistent = persistent
+    def __init__(self, ip, volume, user, password='', persistent=False):
+        self.ip = ip_address
+        self.volume = volume
+        self.user = user
+        self.password = password
+        self.persistent = persistent
 
 
 def mount(details):
@@ -46,20 +46,20 @@ def unmount(details):
 
 
 def nt_mount(details):
-    persistent = 'yes' if details.Persistent else 'no'
+    persistent = 'yes' if details.persistent else 'no'
 
     command = 'net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
-        details.Ip_Address, details.Volume, details.Password, details.User, persistent)
+        details.ip, details.volume, details.password, details.user, persistent)
     call(command.split())
 
     connections.append(details)
 
-    mount_path = '\\\\' + details.Ip_Address + '\\' + details.Volume + '\\'
+    mount_path = '\\\\' + details.ip + '\\' + details.volume + '\\'
     return mount_path
 
 
 def nt_unmount(details):
-    path = '\\\\' + details.Ip_Address + '\\' + details.Volume
+    path = '\\\\' + details.ip + '\\' + details.volume
     command = 'net use {0} /delete'.format(path)
     call(command.split())
 
