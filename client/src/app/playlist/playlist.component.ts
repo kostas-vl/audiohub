@@ -23,6 +23,10 @@ export class PlaylistComponent implements OnInit {
     this.socket.emit('queue');
   }
 
+  public onRemove(entry: IPlaylist) {
+    this.socket.emit('queue pop', entry.id);
+  }
+
   public onPlayNow(entry: IPlaylist) {
     this.socket.emit('play now', entry);
   }

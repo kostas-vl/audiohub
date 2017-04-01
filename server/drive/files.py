@@ -50,6 +50,14 @@ def mount_volume(data):
     emit('mount volume success', dict(file_system))
 
 
+@socketio.on('remove volume', namespace='/server')
+def remove_volume(data):
+    system = fs.select_by_id(data)
+    system.active = False
+    fs.update_by_id(system)
+    available_file_systems(None)
+
+
 @socketio.on('save volume', namespace='/server')
 def save_volume(data):
     data['type'] = 'directory'

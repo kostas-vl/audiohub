@@ -58,8 +58,8 @@ def queue_push(entry):
 
 # Pop track from queue event handler
 @socketio.on('queue pop', namespace='/server')
-def queue_pop(path):
-    playlist = pl.select_by_path(path)
+def queue_pop(data):
+    playlist = pl.select_by_id(data)
     playlist.active = False
     pl.update_by_id(playlist)
     queue(None)

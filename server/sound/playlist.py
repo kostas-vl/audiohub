@@ -106,25 +106,41 @@ def update_collection(playlist_collection):
         return [Playlist(entry) for entry in collection]
 
 
+def delete_by_id(id):
+    with db.database_engine.connect() as conn:
+        conn.execute(db.
+                     playlist.
+                     delete().
+                     where(db.playlist.c.id == id))
+
+
+def delete_by_path(path):
+    with db.database_engine.connect() as conn:
+        conn.execute(db.
+                     playlist.
+                     delete().
+                     where(db.playlist.c.path == path))
+
+
 def select_by_id(id):
     with db.database_engine.connect() as conn:
-        entry = conn.execute(db.
-                             select([db.playlist]).
-                             where(db.playlist.c.id == id)).one()
-        return Playlist(entry)
+        playlist_collection = conn.execute(db.
+                                           select([db.playlist]).
+                                           where(db.playlist.c.id == id))
+        return Playlist(dict(playlist_collection.fetchone()))
 
 
 def select_by_path(path):
     with db.database_engine.connect() as conn:
-        entry = conn.execute(db.
-                             select([db.playlist]).
-                             where(db.playlist.path == path)).one()
-        return Playlist(entry)
+        playlist_collection = conn.execute(db.
+                                           select([db.playlist]).
+                                           where(db.playlist.c.path == path))
+        return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))
 
 
 def select_active():
     with db.database_engine.connect() as conn:
-        collection = conn.execute(db.
-                                  select([db.playlist]).
-                                  where(db.playlist.c.active == True))
-        return list(map(lambda entry: Playlist(dict(entry)), collection))
+        playlist_collection = conn.execute(db.
+                                           select([db.playlist]).
+                                           where(db.playlist.c.active == True))
+        return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))

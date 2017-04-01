@@ -1,6 +1,6 @@
 import sys
 import datetime
-from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, create_engine, select, bindparam, func
+from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, create_engine, select, delete, bindparam, func
 
 # Engine and Metadata
 connection_string = None

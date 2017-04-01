@@ -105,6 +105,38 @@ def update_collection(file_system_collection):
     return [FileSystem(system) for system in collection]
 
 
+def delete_by_id(id):
+    with db.database_engine.connect() as conn:
+        conn.execute(db.
+                     file_systems.
+                     delete().
+                     where(db.file_systems.c.id == id))
+
+
+def delete_by_path(path):
+    with db.database_engine.connect() as conn:
+        conn.execute(db.
+                     file_systems.
+                     delete().
+                     where(db.file_systems.c.path == path))
+
+
+def select_by_id(id):
+    with db.database_engine.connect() as conn:
+        file_system_collection = conn.execute(db.
+                                              select([db.file_systems]).
+                                              where(db.file_systems.c.id == id))
+        return FileSystem(dict(file_system_collection.fetchone()))
+
+
+def select_by_path(path):
+    with db.database_engine.connect() as conn:
+        file_system_collection = conn.execute(db.
+                                              select([db.file_systems]).
+                                              where(db.file_systems.c.path == path))
+        return list(map(lambda system: FileSystem(dict(system)), file_system_collection))
+
+
 def select_active():
     with db.database_engine.connect() as conn:
         file_system_collection = conn.execute(db.
