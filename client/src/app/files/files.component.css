@@ -6,6 +6,6 @@
     width: 200px;
 }
 
-.add-button {
-    margin-right: 10px;
+.add-button-container {
+    padding-top: 5px;
 }

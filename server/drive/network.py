@@ -16,7 +16,7 @@ class NetworkFileSystem():
     persistent = True
 
     def __init__(self, ip, volume, user, password='', persistent=False):
-        self.ip = ip_address
+        self.ip = ip
         self.volume = volume
         self.user = user
         self.password = password

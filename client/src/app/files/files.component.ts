@@ -22,27 +22,43 @@ export class FilesComponent implements OnInit {
 
   public currentSystemStack: string[] = [];
 
+  public loading = false;
+
   constructor(
     private socket: SocketService,
     private mdDialog: MdDialog
   ) { }
 
-  private currentPath() {
-    return this.currentSystemStack[this.currentSystemStack.length - 1];
-  }
-
-  public ngOnInit() {
+  private availableSystems() {
+    this.loading = true;
+    this.socket.emit('available systems');
     this.socket.subscribe('available systems', (data: IFileSystem[]) => {
       if (data) {
         this.systems = data;
         this.currentSystem = this.systems[0];
-        this.currentSystemStack = [this.currentSystem.path];
+        this.currentSystemEntries = this.systems;
+        this.currentSystemStack = [];
         this.socket.emit('list dir', this.currentPath());
+        this.loading = false;
       }
     });
+  }
 
+  private currentPath() {
+    return this.currentSystemStack[this.currentSystemStack.length - 1];
+  }
+
+  private openDir(path: string) {
+    this.loading = true;
+    this.socket.emit('list dir', path);
+    this.currentSystemStack.push(path);
+  }
+
+  public ngOnInit() {
     this.socket.subscribe('list dir', (data: IFileSystem[]) => {
       this.currentSystemEntries = data;
+      setTimeout(() => this.loading = false, 500);
+      // this.loading = false;
     });
 
     this.socket.subscribe('mount volume success', (data: IFileSystem) => {
@@ -55,7 +71,7 @@ export class FilesComponent implements OnInit {
       this.socket.emit('list dir', data.path);
     });
 
-    this.socket.emit('available systems');
+    this.availableSystems();
   }
 
   public openDialog() {
@@ -63,10 +79,12 @@ export class FilesComponent implements OnInit {
     dialog.afterClosed().subscribe(data => {
       switch (data ? data.action : '') {
         case 'mount':
+        this.loading = true;
           this.socket.emit('mount volume', data.details);
           break;
 
         case 'add folder':
+        this.loading = true;
           this.socket.emit('add volume', data.details);
           break;
 
@@ -85,28 +103,27 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  public homeDir() {
-    this.currentSystemStack = [this.currentSystemStack[0]];
-    this.socket.emit('list dir', this.currentPath());
+  public onRefresh() {
+    this.availableSystems();
   }
 
-  public previousDir() {
+  public onHome() {
+    this.currentSystemEntries = this.systems;
+    this.currentSystemStack = [];
+  }
+
+  public onPrevious() {
     this.currentSystemStack.pop();
     this.socket.emit('list dir', this.currentPath());
   }
 
-  public entryClick(entry: IFileSystem) {
+  public onEntry(entry: IFileSystem) {
     if (entry.type === 'directory') {
       this.openDir(entry.path);
     }
   }
 
-  public openDir(path: string) {
-    this.socket.emit('list dir', path);
-    this.currentSystemStack.push(path);
-  }
-
-  public addToPlaylist(entry: IFileSystem) {
+  public onAdd(entry: IFileSystem) {
     this.socket.emit('queue push', entry);
   }
 

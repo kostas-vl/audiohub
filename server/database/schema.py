@@ -31,26 +31,62 @@ def init(database_settings):
 def file_systems_init():
     global file_systems
     if database_engine and metadata:
-        file_systems = Table('file_systems', metadata,
-                             Column('id', Integer, primary_key=True),
-                             Column('name', String, nullable=False),
-                             Column('type', String, nullable=False),
-                             Column('path', String, nullable=False),
-                             Column('active', Boolean, nullable=False),
-                             Column('date_created', DateTime, nullable=False),
-                             Column('date_modified', DateTime)
-                             )
+        file_systems = Table('file_systems',
+                             metadata,
+                             Column('id',
+                                    Integer,
+                                    primary_key=True),
+                             Column('name',
+                                    String,
+                                    nullable=False),
+                             Column('type',
+                                    String,
+                                    nullable=False),
+                             Column('path',
+                                    String,
+                                    nullable=False),
+                             Column('active',
+                                    Boolean,
+                                    nullable=False),
+                             Column('date_created',
+                                    DateTime,
+                                    nullable=False,
+                                    onupdate=file_systems_date_created_update),
+                             Column('date_modified',
+                                    DateTime))
 
 
 def playlist_init():
     global playlist
     if database_engine and metadata:
-        playlist = Table('playlist', metadata,
-                         Column('id', Integer, primary_key=True),
-                         Column('name', String, nullable=False),
-                         Column('type', String, nullable=False),
-                         Column('path', String, nullable=False),
-                         Column('active', Boolean, nullable=False),
-                         Column('date_created', DateTime, nullable=False),
-                         Column('date_modified', DateTime)
-                         )
+        playlist = Table('playlist',
+                         metadata,
+                         Column('id',
+                                Integer,
+                                primary_key=True),
+                         Column('name',
+                                String,
+                                nullable=False),
+                         Column('type',
+                                String,
+                                nullable=False),
+                         Column('path',
+                                String,
+                                nullable=False),
+                         Column('active',
+                                Boolean,
+                                nullable=False),
+                         Column('date_created',
+                                DateTime,
+                                nullable=False,
+                                onupdate=playlist_date_created_update),
+                         Column('date_modified',
+                                DateTime))
+
+
+def file_systems_date_created_update(context):
+    return datetime.datetime.strptime(context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+
+
+def playlist_date_created_update(context):
+    return datetime.datetime.strptime(context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f')

@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
+.system-button {
+    color: #6fe294;
+}
+
 .directory-button {
     color: #FB8C00;
 }

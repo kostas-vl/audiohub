@@ -12,6 +12,7 @@ import { SocketService } from './socket/socket.service';
 
 /* Audiohub components */
 import { AppComponent } from './app.component';
+import { LoaderComponent } from 'app/loader/loader.component';
 import { PlayerComponent } from './player/player.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { AddFolderDialogComponent } from './files/add-folder-dialog/add-folder-dialog.component';
@@ -63,6 +64,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    LoaderComponent,
     TopBarComponent,
     PlayerComponent,
     PlaylistComponent,

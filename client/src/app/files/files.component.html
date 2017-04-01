@@ -2,19 +2,13 @@
 
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <button md-raised-button class="pull-right" (click)="openDialog()">Add</button>
-
-  </div>
-
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
     <br>
 
     <md-toolbar color="primary">
 
       <span mdTooltip="home directory" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="homeDir()" [disabled]="currentSystemStack.length <= 1">
+        <button md-icon-button (click)="onHome()">
 
           <md-icon>home</md-icon>
 
@@ -24,7 +18,7 @@
 
       <span mdTooltip="previous directory" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="previousDir()" [disabled]="currentSystemStack.length <= 1">
+        <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length <= 1">
 
           <md-icon>reply</md-icon>
 
@@ -32,41 +26,43 @@
 
       </span>
 
-      <button md-button [mdMenuTriggerFor]="systemsMenu" *ngIf="currentSystem">
-
-        {{currentSystem.name}}
-
-      </button>
-
-      <md-menu #systemsMenu="mdMenu">
-
-        <button md-menu-item *ngFor="let system of systems" (click)="changeSystem(system.path)">
-
-          {{system.name}}
-
-        </button>
-
-      </md-menu>
-
     </md-toolbar>
 
   </div>
 
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+    <div class="add-button-container pull-right">
+
+      <button md-raised-button color="accent" (click)="openDialog()">Add</button>
+
+    </div>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="loading">
+
+    <app-loader loading="true"></app-loader>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!loading">
+
     <md-nav-list *ngIf="currentSystem">
 
-      <md-list-item *ngFor="let entry of currentSystemEntries" (click)="entryClick(entry)">
+      <md-list-item *ngFor="let entry of currentSystemEntries" (click)="onEntry(entry)">
 
-        <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory'">folder</md-icon>
+        <md-icon md-list-avatar class="system-button" *ngIf="currentSystemStack.length == 0">device_hub</md-icon>
+
+        <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory' && currentSystemStack.length > 0">folder</md-icon>
 
         <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
 
         <h4 md-line>{{entry.name}}</h4>
-        
+
         <p md-line>{{entry.path}}</p>
 
-        <button md-icon-button *ngIf="entry.type === 'file'" (click)="addToPlaylist(entry)">
+        <button md-icon-button *ngIf="entry.type === 'file'" (click)="onAdd(entry)">
 
           <md-icon>playlist_add</md-icon>
 
@@ -75,34 +71,6 @@
       </md-list-item>
 
     </md-nav-list>
-
-    <!--<md-menu #fileActionsMenu="mdMenu">
-
-      <button md-menu-item (click)="addToPlaylist($event)">
-
-        <md-icon>playlist_add</md-icon>
-
-        <span>Add to playlist</span>
-
-      </button>
-
-      <button md-menu-item>
-
-        <md-icon>delete_sweeo</md-icon>
-
-        <span>Delete</span>
-
-      </button>
-
-      <button md-menu-item>
-
-        <md-icon>close</md-icon>
-
-        <span>Close</span>
-
-      </button>
-
-    </md-menu>-->
 
   </div>
 

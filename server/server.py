@@ -28,16 +28,24 @@ def on_disconnect():
     print('Client disconnected')
 
 
+def main_operation(label, callback):
+    print(label + '...')
+    callback()
+
+
 def main():
     # Loading settings
-    settings.load()
+    main_operation('Loading settings', lambda: settings.load())
 
     # Initializing database
-    db.init(settings.database_settings)
+    main_operation('Initializing database schema image',
+                   lambda: db.init(settings.database_settings))
 
     # Flask App Initialization
-    socketio.run(app, host=os.getenv('IP', '127.0.0.1'),
-                 port=int(os.getenv('PORT', 5000)))
+    main_operation('Starting flask-socketio server',
+                   lambda: socketio.run(app,
+                                        host=os.getenv('IP', '127.0.0.1'),
+                                        port=int(os.getenv('PORT', 5000))))
 
     emit('queue', playlist, broadcast=True)
 

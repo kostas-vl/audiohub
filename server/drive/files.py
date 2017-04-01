@@ -39,8 +39,11 @@ def add_volume(data):
 
 @socketio.on('mount volume', namespace='/server')
 def mount_volume(data):
-    details = net.SambaDetails(
-        ip_address=data['ip'], volume=data['volume'], user=data['user'], password=data['password'], persistent=True)
+    details = net.NetworkFileSystem(ip=data['ip'],
+                                    volume=data['volume'],
+                                    user=data['user'],
+                                    password=data['password'],
+                                    persistent=True)
 
     mount_path = net.mount(details)
     mount_name = 'Mount: ' + mount_path

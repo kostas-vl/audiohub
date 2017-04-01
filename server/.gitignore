@@ -10,3 +10,6 @@
 
 # sqlite3 Database Files
 *.db
+
+# Virtualenv
+venv/*

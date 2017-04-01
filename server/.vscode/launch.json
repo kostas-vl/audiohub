@@ -6,8 +6,8 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": true,
-            "pythonPath": "${config.python.pythonPath}",
-            "program": "${file}",
+            "pythonPath": "${workspaceRoot}/venv/Scripts/python.exe",
+            "program": "${workspaceRoot}/server.py",
             "cwd": "${workspaceRoot}",
             "debugOptions": [
                 "WaitOnAbnormalExit",

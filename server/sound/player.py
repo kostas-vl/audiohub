@@ -7,6 +7,7 @@ from drive.file_system import *
 # Audio player initialization and configuration
 audioPlayer = pyglet.media.Player()
 
+
 # Starts playing the first track on the playlist
 @socketio.on('play', namespace='/server')
 def play_audio(data):
@@ -19,9 +20,10 @@ def play_audio(data):
 
 # Play track that is provided event handler
 @socketio.on('play now', namespace='/server')
-def play_now(file): 
+def play_now(file):
     audioPlayer.next_source()
-    entries = [entry for entry in pl.select_active() if entry.path == file['path']]    
+    entries = [entry for entry in pl.select_active() if entry.path ==
+               file['path']]
     if len(entries) > 0:
         source = pyglet.media.load(entries[0].path)
         audioPlayer.queue(source)
@@ -30,7 +32,7 @@ def play_now(file):
 
 # Pause event handler
 @socketio.on('pause', namespace='/server')
-def pause_audio(data):    
+def pause_audio(data):
     audioPlayer.pause()
 
 
@@ -49,11 +51,11 @@ def volume_audio(data):
 
 # Push new track on queue event handler
 @socketio.on('queue push', namespace='/server')
-def queue_push(entry): 
-    playlist = pl.Playlist(entry) 
+def queue_push(entry):
+    playlist = pl.Playlist(entry)
     playlist.active = True
-    pl.insert(playlist)          
-    queue(None)
+    pl.insert(playlist)
+    emit_queue()
 
 
 # Pop track from queue event handler
@@ -62,10 +64,14 @@ def queue_pop(data):
     playlist = pl.select_by_id(data)
     playlist.active = False
     pl.update_by_id(playlist)
-    queue(None)
+    emit_queue()
 
 
 # List queued tracks event handler
 @socketio.on('queue', namespace='/server')
 def queue(data):
+    emit_queue()
+
+
+def emit_queue():
     emit('queue', [dict(entry) for entry in pl.select_active()])

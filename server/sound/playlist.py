@@ -33,8 +33,10 @@ def new_id():
     with db.database_engine.connect() as conn:
         max_id = conn.execute(db.
                               select([
-                                  db.func.max(db.playlist.c.id,
-                                              type_=db.Integer).label('max')
+                                  db.
+                                  func.
+                                  max(db.playlist.c.id,
+                                      type_=db.Integer).label('max')
                               ])).scalar()
         return max_id + 1 if max_id else 1
 
@@ -71,6 +73,7 @@ def insert_collection(playlist_collection):
 def update_by_id(playlist):
     with db.database_engine.connect() as conn:
         entry = dict(playlist)
+        entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      playlist.
@@ -83,6 +86,7 @@ def update_by_id(playlist):
 def update_by_path(playlist):
     with db.database_engine.connect() as conn:
         entry = dict(playlist)
+        entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      playlist.
@@ -97,6 +101,7 @@ def update_collection(playlist_collection):
     with db.database_engine.connect() as conn:
         for playlist in playlist_collection:
             entry = dict(playlist)
+            entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
             entry['date_modified'] = datetime.datetime.now()
             conn.execute(db.
                          playlist.
