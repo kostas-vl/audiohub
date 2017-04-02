@@ -7,6 +7,7 @@ import drive.files as files
 import drive.file_system as file_system
 import settings.container as settings
 import database.schema as db
+import subprocess
 from enviroment import *
 
 
@@ -33,7 +34,7 @@ def main_operation(label, callback):
     callback()
 
 
-def main():
+def main():  
     # Loading settings
     main_operation('Loading settings', lambda: settings.load())
 

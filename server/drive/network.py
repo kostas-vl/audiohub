@@ -2,10 +2,6 @@ import sys
 import os
 import subprocess
 from enviroment import *
-from subprocess import call
-
-connections = []
-files = []
 
 
 class NetworkFileSystem():
@@ -46,22 +42,38 @@ def unmount(details):
 
 
 def nt_mount(details):
-    persistent = 'yes' if details.persistent else 'no'
+    try:
+        persistent = 'yes' if details.persistent else 'no'
 
-    command = 'net use \\\\{0}\{1} {2} /user:{3} /persistent:{4}'.format(
-        details.ip, details.volume, details.password, details.user, persistent)
-    call(command.split())
+        command = [
+            'net use',
+            '\\\\' + details.ip + '\\' + details.volume,
+            details.password,
+            '/user:' + details.user,
+            '/persistent:' + persistent
+        ]
 
-    connections.append(details)
+        result = subprocess.run(command, shell=True, check=True)
+        result.check_returncode()
 
-    mount_path = '\\\\' + details.ip + '\\' + details.volume + '\\'
-    return mount_path
+        return '\\\\' + details.ip + '\\' + details.volume + '\\'
+
+    except subprocess.CalledProcessError:
+        return None
 
 
 def nt_unmount(details):
-    path = '\\\\' + details.ip + '\\' + details.volume
-    command = 'net use {0} /delete'.format(path)
-    call(command.split())
+    try:
+        path = '\\\\' + details.ip + '\\' + details.volume
+        command = 'net use {0} /delete'.format(path)
+        
+        result = subprocess.run(command.split(), shell=True, check=True)
+        result.check_returncode()
+
+        return 0
+
+    except subprocess.CalledProcessError:
+        return None
 
 
 def posix_mount(details):
