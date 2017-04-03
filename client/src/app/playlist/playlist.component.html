@@ -6,7 +6,7 @@
 
       <span mdTooltip="refresh playlist" mdTooltipPosition="above">
 
-        <button md-icon-button type="button" (click)="onPlaylist()">
+        <button md-icon-button (click)="onRefresh()">
           
           <md-icon>cached</md-icon>
           
@@ -16,7 +16,7 @@
 
       <span mdTooltip="play all tracks" mdTooltipPosition="above">
 
-        <button md-icon-button>
+        <button md-icon-button (click)="onPlaylistPlay()">
 
           <md-icon>playlist_play</md-icon>
 

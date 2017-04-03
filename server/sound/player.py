@@ -29,6 +29,18 @@ def play_now(file):
         audioPlayer.queue(source)
         audioPlayer.play()
 
+@socketio.on('play all', namespace='/server')
+def play_all(data):
+    while audioPlayer.playing:
+        audioPlayer.next_source()
+
+    playlist = pl.select_active()
+    for track in playlist:
+        source = pyglet.media.load(track.path)
+        audioPlayer.queue(source)
+
+    audioPlayer.play()
+
 
 # Pause event handler
 @socketio.on('pause', namespace='/server')

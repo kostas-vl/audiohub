@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
-import { SocketService } from 'app/socket/socket.service';
+import { SocketService } from './socket/socket.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.socket.connect();
     this.socket.subscribe('track time', (data) => console.log(data));
-  }
+  }  
 
   public ngOnDestroy() {
     this.socket.disconnect();

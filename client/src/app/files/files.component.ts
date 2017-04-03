@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 
-import { IFileSystem, FileSystem } from 'app/models/file-system';
-import { SocketService } from 'app/socket/socket.service';
-import { AddFolderDialogComponent } from 'app/files/add-folder-dialog/add-folder-dialog.component';
+import { IFileSystem, FileSystem } from '../models/file-system';
+import { SocketService } from '../socket/socket.service';
+import { AddFolderDialogComponent } from './add-folder-dialog/add-folder-dialog.component';
 
 @Component({
   selector: 'app-files',

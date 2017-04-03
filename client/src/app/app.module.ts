@@ -1,9 +1,11 @@
 /* Fundamental Libraries */
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MaterialModule } from '@angular/material';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
@@ -12,7 +14,7 @@ import { SocketService } from './socket/socket.service';
 
 /* Audiohub components */
 import { AppComponent } from './app.component';
-import { LoaderComponent } from 'app/loader/loader.component';
+import { LoaderComponent } from './loader/loader.component';
 import { PlayerComponent } from './player/player.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { AddFolderDialogComponent } from './files/add-folder-dialog/add-folder-dialog.component';
@@ -23,76 +25,77 @@ import { SettingsComponent } from './settings/settings.component';
 
 export class HammerJsConfiguration extends HammerGestureConfig {
 
-  public override = {
-    'swipe': {
-      velocity: 0.4,
-      threshold: 20
-    }
-  };
+    public override = {
+        'swipe': {
+            velocity: 0.4,
+            threshold: 20
+        }
+    };
 
 }
 
 const appRoutes: Routes = [
-  {
-    path: 'playlist',
-    component: PlaylistComponent
-  },
-  {
-    path: 'files',
-    component: FilesComponent
-  },
-  {
-    path: 'stream',
-    component: StreamComponent
-  },
-  {
-    path: 'settings',
-    component: SettingsComponent
-  },
-  {
-    path: '',
-    redirectTo: '/playlist',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: '/playlist',
-    pathMatch: 'full'
-  }
+    {
+        path: 'playlist',
+        component: PlaylistComponent
+    },
+    {
+        path: 'files',
+        component: FilesComponent
+    },
+    {
+        path: 'stream',
+        component: StreamComponent
+    },
+    {
+        path: 'settings',
+        component: SettingsComponent
+    },
+    {
+        path: '',
+        redirectTo: '/playlist',
+        pathMatch: 'full'
+    },
+    {
+        path: '**',
+        redirectTo: '/playlist',
+        pathMatch: 'full'
+    }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoaderComponent,
-    TopBarComponent,
-    PlayerComponent,
-    PlaylistComponent,
-    AddFolderDialogComponent,
-    FilesComponent,
-    StreamComponent,
-    SettingsComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    MaterialModule,
-    RouterModule.forRoot(appRoutes),
-    Ng2BootstrapModule.forRoot()
-  ],
-  entryComponents: [
-    AddFolderDialogComponent
-  ],
-  providers: [
-    SocketService,
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: HammerJsConfiguration
-    }
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+    declarations: [
+        AppComponent,
+        LoaderComponent,
+        TopBarComponent,
+        PlayerComponent,
+        PlaylistComponent,
+        AddFolderDialogComponent,
+        FilesComponent,
+        StreamComponent,
+        SettingsComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpModule,
+        MaterialModule,
+        RouterModule.forRoot(appRoutes),
+        Ng2BootstrapModule.forRoot()
+    ],
+    entryComponents: [
+        AddFolderDialogComponent
+    ],
+    providers: [
+        SocketService,
+        {
+            provide: HAMMER_GESTURE_CONFIG,
+            useClass: HammerJsConfiguration
+        }
+    ],
+    bootstrap: [
+        AppComponent
+    ]
 })
 export class AppModule { }

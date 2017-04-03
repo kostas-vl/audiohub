@@ -5,23 +5,27 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
     "lib": [
       "es2016",
       "dom"
     ],
-    "outDir": "../out-tsc/app",
-    "module": "es2015",
+    "outDir": "../out-tsc/spec",
+    "module": "commonjs",
+    "target": "es5",
     "baseUrl": "",
     "typeRoots": [
       "node_modules/@types"
     ],
     "types": [
-      "socket.io-client"      
+      "jasmine",
+      "node"
     ]
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "test.ts"
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
   ]
 }

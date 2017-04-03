@@ -1,4 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "vsicons.presets.angular": true
+    "vsicons.presets.angular": true,
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "tslint.configFile": "./tslint.json",
+    "editor.detectIndentation": false,
 }

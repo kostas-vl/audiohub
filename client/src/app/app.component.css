@@ -17,7 +17,7 @@ body {
 }
 
 .children-components {
-    height: 760px;
+    min-height: 760px;
 }
 
 @media(max-width: 450px) {

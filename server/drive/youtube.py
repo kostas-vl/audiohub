@@ -1,11 +1,11 @@
 import subprocess
 
-drive_path = 'C:/Users/kvl_9/Music/'
-
 def download(url):
     try:
+        drive_path = 'C:/Users/kvl_9/Music/'
         command = [
-            'youtube-dl',
+            'youtube-dl -o',
+            drive_path + '"%(title)s.%(ext)s"'
             url
         ]
         command_result = subprocess.run(command, shell=True, check=True)
