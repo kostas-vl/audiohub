@@ -58,7 +58,8 @@ def nt_mount(details):
 
         return '\\\\' + details.ip + '\\' + details.volume + '\\'
 
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as err:
+        print(err)
         return None
 
 

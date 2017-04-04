@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 import { LoaderComponent } from './loader/loader.component';
 import { PlayerComponent } from './player/player.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { AddFolderDialogComponent } from './files/add-folder-dialog/add-folder-dialog.component';
+import { AddDialogComponent } from './files/add-dialog/add-dialog.component';
 import { FilesComponent } from './files/files.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { StreamComponent } from './stream/stream.component';
@@ -70,7 +70,7 @@ const appRoutes: Routes = [
         TopBarComponent,
         PlayerComponent,
         PlaylistComponent,
-        AddFolderDialogComponent,
+        AddDialogComponent,
         FilesComponent,
         StreamComponent,
         SettingsComponent,
@@ -85,7 +85,7 @@ const appRoutes: Routes = [
         Ng2BootstrapModule.forRoot()
     ],
     entryComponents: [
-        AddFolderDialogComponent
+        AddDialogComponent
     ],
     providers: [
         SocketService,

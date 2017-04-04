@@ -59,9 +59,3 @@ def remove_volume(data):
     system.active = False
     fs.update_by_id(system)
     available_file_systems(None)
-
-
-@socketio.on('save volume', namespace='/server')
-def save_volume(data):
-    data['type'] = 'directory'
-    systems.append(fs.FileSystem(data))

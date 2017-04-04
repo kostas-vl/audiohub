@@ -2,55 +2,55 @@
 
 <md-sidenav-container>
 
-  <md-sidenav #sidenav class="sidenav" mode="over">
+    <md-sidenav #sidenav class="sidenav" mode="over">
 
-    <md-nav-list class="sidenav-list">
+        <md-nav-list class="sidenav-list">
 
-      <md-list-item routerLink="/playlist" (click)="sidenav.toggle()">
+            <md-list-item routerLink="/playlist" (click)="sidenav.toggle()">
 
-        <md-icon md-list-icon>album</md-icon>
-        <h4 md-line>Playlist</h4>
+                <md-icon md-list-icon>album</md-icon>
+                <h4 md-line>Playlist</h4>
 
-      </md-list-item>
+            </md-list-item>
 
-      <md-list-item routerLink="/files" (click)="sidenav.toggle()">
+            <md-list-item routerLink="/files" (click)="sidenav.toggle()">
 
-        <md-icon md-list-icon>insert_drive_file</md-icon>
-        <h4 md-line>Files</h4>
+                <md-icon md-list-icon>insert_drive_file</md-icon>
+                <h4 md-line>Files</h4>
 
-      </md-list-item>
+            </md-list-item>
 
-      <md-list-item routerLink="/settings" (click)="sidenav.toggle()">
+            <md-list-item routerLink="/settings" (click)="sidenav.toggle()">
 
-        <md-icon md-list-icon>settings</md-icon>
-        <h4 md-line>Settings</h4>
+                <md-icon md-list-icon>settings</md-icon>
+                <h4 md-line>Settings</h4>
 
-      </md-list-item>
+            </md-list-item>
 
-    </md-nav-list>
+        </md-nav-list>
 
-  </md-sidenav>
+    </md-sidenav>
 
-  <div class="wrapper container audiohub">
+    <div class="wrapper container audiohub">
 
-    <div class="row">
+        <div class="row">
 
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-        <app-player></app-player>
+                <app-player></app-player>
 
-      </div>
+            </div>
 
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
 
-        <br />
+                <br />
 
-        <router-outlet></router-outlet>
+                <router-outlet></router-outlet>
 
-      </div>
+            </div>
+
+        </div>
 
     </div>
-
-  </div>
 
 </md-sidenav-container>

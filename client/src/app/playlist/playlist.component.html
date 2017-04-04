@@ -1,69 +1,69 @@
 <div class="playlist-card row">
 
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <md-toolbar color="primary">
+        <md-toolbar color="primary">
 
-      <span mdTooltip="refresh playlist" mdTooltipPosition="above">
+            <span mdTooltip="refresh playlist" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="onRefresh()">
-          
-          <md-icon>cached</md-icon>
-          
-        </button>
+                <button md-icon-button (click)="onRefresh()">
+                
+                    <md-icon>cached</md-icon>
+                
+                </button>
 
-      </span>
+            </span>
 
-      <span mdTooltip="play all tracks" mdTooltipPosition="above">
+            <span mdTooltip="play all tracks" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="onPlaylistPlay()">
+                <button md-icon-button (click)="onPlaylistPlay()">
 
-          <md-icon>playlist_play</md-icon>
+                    <md-icon>playlist_play</md-icon>
 
-        </button>
+                </button>
 
-      </span>
+            </span>
 
-    </md-toolbar>
+        </md-toolbar>
 
-  </div>
+    </div>
 
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <md-nav-list *ngFor="let entry of playlist">
+        <md-nav-list *ngFor="let entry of playlist">
 
-      <md-list-item>
+            <md-list-item>
 
-        <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
+                <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
 
-        <h4 md-line>{{entry.name}}</h4>
+                <h4 md-line>{{entry.name}}</h4>
 
-        <p md-line>{{entry.path}}</p>
+                <p md-line>{{entry.path}}</p>
 
-        <span mdTooltip="play now" mdTooltipPosition="above">
+                <span mdTooltip="play now" mdTooltipPosition="above">
 
-          <button md-icon-button (click)="onPlayNow(entry)">
+                    <button md-icon-button (click)="onPlayNow(entry)">
 
-            <md-icon color="primary">play_arrow</md-icon>
+                        <md-icon color="primary">play_arrow</md-icon>
 
-          </button>
+                    </button>
 
-        </span>
+                </span>
 
-        <span mdTooltip="remove" mdTooltipPosition="above">
+                <span mdTooltip="remove" mdTooltipPosition="above">
 
-          <button md-icon-button (click)="onRemove(entry)">
+                    <button md-icon-button (click)="onRemove(entry)">
 
-            <md-icon color="warn">delete</md-icon>
+                        <md-icon color="warn">delete</md-icon>
 
-          </button>
+                    </button>
 
-        </span>
+                </span>
 
-      </md-list-item>
+            </md-list-item>
 
-    </md-nav-list>
+        </md-nav-list>
 
-  </div>
+    </div>
 
 </div>

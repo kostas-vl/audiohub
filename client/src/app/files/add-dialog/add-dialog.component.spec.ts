@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './settings.component';
+import { AddFolderDialogComponent } from './add-dialog.component';
 
-describe('SettingsComponent', () => {
-    let component: SettingsComponent;
-    let fixture: ComponentFixture<SettingsComponent>;
+describe('AddFolderDialogComponent', () => {
+    let component: AddFolderDialogComponent;
+    let fixture: ComponentFixture<AddFolderDialogComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SettingsComponent]
+            declarations: [AddFolderDialogComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SettingsComponent);
+        fixture = TestBed.createComponent(AddFolderDialogComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
