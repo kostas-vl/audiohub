@@ -5,16 +5,15 @@ from enviroment import *
 
 def download_url(path, url):
     try:
-        drive_path = 'C:/Users/kvl_9/Music/'
         command = [
             'youtube-dl -o',
             path + '"%(title)s.%(ext)s"',
             url
         ]
-        command_result = subprocess.run(command, shell=True, check=True)
+        command = ['ls']
+        command_result = subprocess.run('net use', shell=True, check=True)        
         command_result.check_returncode()
-
-    except subprocess.CalledProcessError as err:
+    except CalledProcessError as err:
         print(err)
 
 
