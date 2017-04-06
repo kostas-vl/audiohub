@@ -6,21 +6,21 @@
 
         <md-nav-list class="sidenav-list">
 
-            <md-list-item routerLink="/playlist" (click)="sidenav.toggle()">
+            <md-list-item (click)="onItemClick('/playlist')">
 
                 <md-icon md-list-icon>album</md-icon>
                 <h4 md-line>Playlist</h4>
 
             </md-list-item>
 
-            <md-list-item routerLink="/files" (click)="sidenav.toggle()">
+            <md-list-item (click)="onItemClick('/files')">
 
                 <md-icon md-list-icon>insert_drive_file</md-icon>
                 <h4 md-line>Files</h4>
 
             </md-list-item>
 
-            <md-list-item routerLink="/settings" (click)="sidenav.toggle()">
+            <md-list-item (click)="onItemClick('/settings')">
 
                 <md-icon md-list-icon>settings</md-icon>
                 <h4 md-line>Settings</h4>

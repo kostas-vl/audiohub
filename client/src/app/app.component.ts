@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { SocketService } from './socket/socket.service';
 
 @Component({
@@ -9,15 +9,27 @@ import { SocketService } from './socket/socket.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    constructor(private socket: SocketService) { }
+    @ViewChild('sidenav')
+    public sidenav: any
+
+    constructor(
+        private router: Router,
+        private socket: SocketService
+    ) { }
 
     public ngOnInit() {
         this.socket.connect();
-        this.socket.subscribe('track time', (data) => console.log(data));
     }
 
     public ngOnDestroy() {
         this.socket.disconnect();
+    }
+
+    public onItemClick(url: string) {
+        if (url) {
+            this.sidenav.toggle();
+            this.router.navigateByUrl(url);
+        }
     }
 
 }
