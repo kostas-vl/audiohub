@@ -71,6 +71,7 @@ def insert_collection(file_system_collection):
 def update_by_id(file_system):
     with db.database_engine.connect() as conn:
         system = dict(file_system)
+        system['date_created'] = datetime.datetime.strptime(system['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         system['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      file_systems.
@@ -83,6 +84,7 @@ def update_by_id(file_system):
 def update_by_path(file_system):
     with db.database_engine.connect() as conn:
         system = dict(file_system)
+        system['date_created'] = datetime.datetime.strptime(system['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         system['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      file_systems.
@@ -96,6 +98,7 @@ def update_collection(file_system_collection):
     collection = []
     for file_system in file_system_collection:
         system = dict(file_system)
+        system['date_created'] = datetime.datetime.strptime(system['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         system['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      file_system.

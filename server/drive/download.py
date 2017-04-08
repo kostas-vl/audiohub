@@ -1,4 +1,5 @@
 import subprocess
+import urllib
 import drive.file_system as file_system
 from enviroment import *
 
@@ -6,14 +7,13 @@ from enviroment import *
 def download_url(path, url):
     try:
         command = [
-            'youtube-dl -o',
-            path + '"%(title)s.%(ext)s"',
+            'youtube-dl.exe --extract-audio --audio-format mp3 -o ',
+            path + "'%(title)s.%(ext)s'" + ' ',
             url
-        ]
-        command = ['ls']
-        command_result = subprocess.run('net use', shell=True, check=True)        
+        ]        
+        command_result = subprocess.run(''.join(command), shell=True, check=True)        
         command_result.check_returncode()
-    except CalledProcessError as err:
+    except subprocess.CalledProcessError as err:
         print(err)
 
 

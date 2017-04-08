@@ -19,8 +19,8 @@ def build_dir_tree(path):
 
 
 @socketio.on('available systems', namespace='/server')
-def available_file_systems(data):
-    emit('available systems', [dict(entry) for entry in fs.select_active()])
+def available_systems(data):
+    emit_available_systems()
 
 
 @socketio.on('list dir', namespace='/server')
@@ -32,8 +32,10 @@ def list_dir(data):
 @socketio.on('add volume', namespace='/server')
 def add_volume(data):
     if os.path.isdir(data['path']):
-        file_system = fs.insert(fs.FileSystem(
-            name=data['name'], type='directory', path=data['path'], active=True))
+        file_system = fs.insert(fs.FileSystem(name=data['name'],
+                                              type='directory',
+                                              path=data['path'],
+                                              active=True))
         emit('add volume success', dict(file_system))
 
 
@@ -55,7 +57,12 @@ def mount_volume(data):
 
 @socketio.on('remove volume', namespace='/server')
 def remove_volume(data):
-    system = fs.select_by_id(data)
-    system.active = False
-    fs.update_by_id(system)
-    available_file_systems(None)
+    if data:
+        system = fs.select_by_id(data)
+        system.active = False
+        fs.update_by_id(system)
+        emit_available_systems
+
+
+def emit_available_systems():
+    emit('available systems', [dict(entry) for entry in fs.select_active()])

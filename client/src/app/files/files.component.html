@@ -72,6 +72,16 @@
 
                 </button>
 
+                <div mdTooltip="disconnect" mdTooltipPosition="above">
+
+                    <button md-icon-button *ngIf="currentSystemStack.length === 0" (click)="onSystemDisconect(entry)">
+
+                        <md-icon color="warn">do_not_disturb</md-icon>
+
+                    </button>
+
+                </div>
+
             </md-list-item>
 
         </md-nav-list>

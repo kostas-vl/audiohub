@@ -103,6 +103,10 @@ export class FilesComponent implements OnInit {
         }
     }
 
+    public onSystemDisconect(entry: IFileSystem) {
+        this.socket.emit('remove volume', entry.id);
+    }
+
     public onAdd(entry: IFileSystem) {
         this.socket.emit('queue push', entry);
     }

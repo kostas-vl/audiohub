@@ -13,3 +13,6 @@
 
 # Virtualenv
 venv/*
+
+# Exclude any executables
+**/*.exe
