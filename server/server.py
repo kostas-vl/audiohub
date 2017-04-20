@@ -36,7 +36,8 @@ def main_operation(label, callback):
 
 def main():
     # Loading settings
-    main_operation('Loading settings', lambda: settings.load())
+    main_operation('Loading settings',
+                   lambda: settings.load())
 
     # Initializing database
     main_operation('Initializing database schema image',

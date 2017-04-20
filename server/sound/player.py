@@ -8,6 +8,10 @@ from drive.file_system import *
 audioPlayer = pyglet.media.Player()
 
 
+def currently_playling(entry):
+    emit('currently playing', dict(entry))
+
+
 # Starts playing the first track on the playlist
 @socketio.on('play', namespace='/server')
 def play_audio(data):
@@ -16,18 +20,22 @@ def play_audio(data):
         source = pyglet.media.load(playlist_collection[0].path)
         audioPlayer.queue(source)
         audioPlayer.play()
+        currently_playling(playlist_collection[0])
 
 
 # Play track that is provided event handler
 @socketio.on('play now', namespace='/server')
-def play_now(file):
+def play_now(data):
     audioPlayer.next_source()
-    entries = [entry for entry in pl.select_active() if entry.path ==
-               file['path']]
+    entries = [
+        entry for entry in pl.select_active() if entry.path == data['path']
+    ]
     if len(entries) > 0:
         source = pyglet.media.load(entries[0].path)
         audioPlayer.queue(source)
         audioPlayer.play()
+        currently_playling(entries[0])
+
 
 @socketio.on('play all', namespace='/server')
 def play_all(data):
@@ -40,6 +48,7 @@ def play_all(data):
         audioPlayer.queue(source)
 
     audioPlayer.play()
+    currently_playling(playlist[0])
 
 
 # Pause event handler
