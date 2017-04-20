@@ -73,7 +73,8 @@ def insert_collection(playlist_collection):
 def update_by_id(playlist):
     with db.database_engine.connect() as conn:
         entry = dict(playlist)
-        entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+        entry['date_created'] = datetime.datetime.strptime(
+            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      playlist.
@@ -86,7 +87,8 @@ def update_by_id(playlist):
 def update_by_path(playlist):
     with db.database_engine.connect() as conn:
         entry = dict(playlist)
-        entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+        entry['date_created'] = datetime.datetime.strptime(
+            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(db.
                      playlist.
@@ -101,7 +103,8 @@ def update_collection(playlist_collection):
     with db.database_engine.connect() as conn:
         for playlist in playlist_collection:
             entry = dict(playlist)
-            entry['date_created'] = datetime.datetime.strptime(entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+            entry['date_created'] = datetime.datetime.strptime(
+                entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
             entry['date_modified'] = datetime.datetime.now()
             conn.execute(db.
                          playlist.
@@ -140,6 +143,14 @@ def select_by_path(path):
         playlist_collection = conn.execute(db.
                                            select([db.playlist]).
                                            where(db.playlist.c.path == path))
+        return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))
+
+
+def select_active_by_path(path):
+    with db.database_engine.connect() as conn:
+        playlist_collection = conn.execute(db.
+                                           select([db.playlist]).
+                                           where(db.playlist.c.path == path and db.playlist.c.active == True))
         return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))
 
 
