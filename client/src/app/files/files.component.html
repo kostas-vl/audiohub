@@ -6,25 +6,35 @@
 
         <md-toolbar color="primary">
 
+            <span mdTooltip="refresh" mdTooltipPosition="above">
+
+                <button md-icon-button (click)="onRefresh()">
+
+                    <md-icon>refresh</md-icon>
+
+                </button>
+
+            </span>
+
             <span mdTooltip="home directory" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="onHome()">
+                <button md-icon-button (click)="onHome()">
 
-          <md-icon>home</md-icon>
+                    <md-icon>home</md-icon>
 
-        </button>
+                </button>
 
-      </span>
+            </span>
 
             <span mdTooltip="previous directory" mdTooltipPosition="above">
 
-        <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length <= 1">
+                <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length <= 1">
 
-          <md-icon>reply</md-icon>
+                    <md-icon>reply</md-icon>
 
-        </button>
+                </button>
 
-      </span>
+            </span>
 
         </md-toolbar>
 

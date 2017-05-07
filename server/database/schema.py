@@ -1,92 +1,78 @@
-import sys
+""" Contains functions that initialize the database schema """
 import datetime
 from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, create_engine, select, delete, bindparam, func
 
-# Engine and Metadata
-connection_string = None
-database_engine = None
-metadata = None
 
-# Tables
-file_systems = None
-playlist = None
+class Database():
+    """ Class representing the database and the database schema """
+    connection_string = None
+    engine = None
+    metadata = None
+    file_systems = None
+    playlist = None
 
+    def init(self, database_settings):
+        """ A function that initializes  """
+        connection_string = database_settings['connectionString']
+        echo = database_settings['echo']
 
-def init(database_settings):
-    global connection_string, database_engine, metadata
+        if connection_string:
+            self.engine = create_engine(connection_string, echo=echo)
+            self.metadata = MetaData()
+            self.file_systems = self.file_systems_init()
+            self.playlist = self.playlist_init()
+            self.metadata.create_all(self.engine)
+        else:
+            raise NameError('Database Connection String not found!')
 
-    connection_string = database_settings['connectionString']
-    echo = database_settings['echo']
+    def file_systems_init(self):
+        """ A method that initialized the file_systems table """
+        if self.engine and self.metadata:
+            systems = Table(
+                'file_systems',
+                self.metadata,
+                Column('id', Integer, primary_key=True),
+                Column('name', String, nullable=False),
+                Column('type', String, nullable=False),
+                Column('path', String, nullable=False),
+                Column('active', Boolean, nullable=False),
+                Column(
+                    'date_created',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                ),
+                Column('date_modified', DateTime)
+            )
+            return systems
 
-    if connection_string:
-        database_engine = create_engine(connection_string, echo=echo)
-        metadata = MetaData()
-        file_systems_init()
-        playlist_init()
-        metadata.create_all(database_engine)
-    else:
-        raise NameError('Database Connection String not found!')
-
-
-def file_systems_init():
-    global file_systems
-    if database_engine and metadata:
-        file_systems = Table('file_systems',
-                             metadata,
-                             Column('id',
-                                    Integer,
-                                    primary_key=True),
-                             Column('name',
-                                    String,
-                                    nullable=False),
-                             Column('type',
-                                    String,
-                                    nullable=False),
-                             Column('path',
-                                    String,
-                                    nullable=False),
-                             Column('active',
-                                    Boolean,
-                                    nullable=False),
-                             Column('date_created',
-                                    DateTime,
-                                    nullable=False,
-                                    onupdate=file_systems_date_created_update),
-                             Column('date_modified',
-                                    DateTime))
-
-
-def playlist_init():
-    global playlist
-    if database_engine and metadata:
-        playlist = Table('playlist',
-                         metadata,
-                         Column('id',
-                                Integer,
-                                primary_key=True),
-                         Column('name',
-                                String,
-                                nullable=False),
-                         Column('type',
-                                String,
-                                nullable=False),
-                         Column('path',
-                                String,
-                                nullable=False),
-                         Column('active',
-                                Boolean,
-                                nullable=False),
-                         Column('date_created',
-                                DateTime,
-                                nullable=False,
-                                onupdate=playlist_date_created_update),
-                         Column('date_modified',
-                                DateTime))
+    def playlist_init(self):
+        """ A method that intializes the playlist table """
+        if self.engine and self.metadata:
+            playlist = Table(
+                'playlist',
+                self.metadata,
+                Column('id', Integer, primary_key=True),
+                Column('name', String, nullable=False),
+                Column('type', String, nullable=False),
+                Column('path', String, nullable=False),
+                Column('active', Boolean, nullable=False),
+                Column(
+                    'date_created',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                ),
+                Column('date_modified', DateTime)
+            )
+            return playlist
 
 
-def file_systems_date_created_update(context):
-    return datetime.datetime.strptime(context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+def date_created_update(context):
+    """ A function that changes the format of a datetime """
+    return datetime.datetime.strptime(
+        context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+    )
 
 
-def playlist_date_created_update(context):
-    return datetime.datetime.strptime(context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+DATABASE = Database()

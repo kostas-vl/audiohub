@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../socket/socket.service';
 import { IPlaylist } from '../models/playlist';
+import { SocketService } from '../socket/socket.service';
 
 @Component({
     selector: 'app-player',
@@ -42,6 +42,10 @@ export class PlayerComponent implements OnInit {
         this.socket.emit('stop');
         this.playing = false;
         this.progressMode = 'determinate';
+    }
+
+    public onNext() {
+        this.socket.emit('next');
     }
 
     public onVolume(value: number) {

@@ -4,11 +4,11 @@
 
         <md-toolbar color="primary">
 
-            <span mdTooltip="refresh playlist" mdTooltipPosition="above">
+            <span mdTooltip="refresh" mdTooltipPosition="above">
 
                 <button md-icon-button (click)="onRefresh()">
                 
-                    <md-icon>cached</md-icon>
+                    <md-icon>refresh</md-icon>
                 
                 </button>
 
@@ -27,6 +27,18 @@
         </md-toolbar>
 
     </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+        <md-input-container class="search-input">
+
+            <input mdInput placeholder="Search">
+
+        </md-input-container>
+
+    </div>
+
+    <div class="col-lg-6 col-md-6 hidden-sm hidden-xs"></div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 

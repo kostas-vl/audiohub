@@ -1,53 +1,56 @@
+""" The initial file of the application """
 import os
-import subprocess
-import datetime
+import settings.container as settings
 import sound.player as player
 import sound.playlist as playlist
 import drive.files as files
 import drive.file_system as file_system
 import drive.download as download
-import settings.container as settings
-import database.schema as db
-from enviroment import *
+from database.schema import DATABASE
+from enviroment import SOCKET_IO, APP, emit
 
 
 # Default http route
-@app.route('/')
+@APP.route('/')
 def index():
+    """ End point for the '/' path """
     return 'Audiohub API running...'
 
 
 # New flask socket connection event handler
-@socketio.on('connect', namespace='/server')
+@SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
+    """ function that handles a new connection socket """
     emit('my response', {'data': 'connected'})
 
 
 # Flask socket disconnect event handler
-@socketio.on('disconnect', namespace='/server')
+@SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
+    """ Function that handles a socket disconnect event """
     print('Client disconnected')
 
 
 def main_operation(label, callback):
+    """ Print a message on the console and executes the provide callback """
     print(label + '...')
     callback()
 
 
 def main():
+    """ The main source of the APPlcation execution """
     # Loading settings
     main_operation('Loading settings',
-                   lambda: settings.load())
+                   settings.load)
 
     # Initializing database
     main_operation('Initializing database schema image',
-                   lambda: db.init(settings.database_settings))
+                   lambda: DATABASE.init(settings.DATABASE_SETTINGS))
 
-    # Flask App Initialization
-    main_operation('Starting flask-socketio server',
-                   lambda: socketio.run(app,
-                                        host=os.getenv('IP', '127.0.0.1'),
-                                        port=int(os.getenv('PORT', 5000))))
+    # Flask APP Initialization
+    main_operation('Starting flask-SOCKET_IO server',
+                   lambda: SOCKET_IO.run(
+                       APP, host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000))))
 
     emit('queue', playlist, broadcast=True)
 

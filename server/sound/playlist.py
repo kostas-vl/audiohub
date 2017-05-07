@@ -1,8 +1,10 @@
+""" File containing code that revolves around the playlist data table """
 import datetime
-import database.schema as db
+from database.schema import DATABASE, select, func, Integer
 
 
 class Playlist():
+    """ A class representing the playlist data table """
     id = None
     name = None
     type = None
@@ -30,31 +32,34 @@ class Playlist():
 
 
 def new_id():
-    with db.database_engine.connect() as conn:
-        max_id = conn.execute(db.
-                              select([
-                                  db.
-                                  func.
-                                  max(db.playlist.c.id,
-                                      type_=db.Integer).label('max')
-                              ])).scalar()
+    """ A function that produces a new id for the playlist data table """
+    with DATABASE.engine.connect() as conn:
+        max_id = conn.execute(
+            select([
+                func.max(
+                    DATABASE.playlist.c.id, type_=Integer
+                ).label('max')
+            ])
+        ).scalar()
         return max_id + 1 if max_id else 1
 
 
 def insert(playlist):
-    with db.database_engine.connect() as conn:
+    """ A function that inserts a new entry on the playlist data table """
+    with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
         entry['id'] = new_id()
         entry['date_created'] = datetime.datetime.now()
         entry['date_modified'] = datetime.datetime.now()
-        conn.execute(db.
-                     playlist.
-                     insert(), entry)
+        conn.execute(
+            DATABASE.playlist.insert(), entry
+        )
         return Playlist(entry)
 
 
 def insert_collection(playlist_collection):
-    with db.database_engine.connect() as conn:
+    """ A function that inserts a collection of entries on the playlist data table """
+    with DATABASE.engine.connect() as conn:
         collection = []
         id_interval = 0
         for playlist in playlist_collection:
@@ -64,99 +69,141 @@ def insert_collection(playlist_collection):
             entry['date_modified'] = datetime.datetime.now()
             collection.append(entry)
             id_interval += 1
-        conn.execute(db.
-                     playlist.
-                     insert(), collection)
+        conn.execute(
+            DATABASE.playlist.insert(), collection
+        )
         return [Playlist(entry) for entry in collection]
 
 
 def update_by_id(playlist):
-    with db.database_engine.connect() as conn:
+    """ A function that updates an entry on the playlist data table
+        that contains tha provided playlist id
+    """
+    with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
         entry['date_created'] = datetime.datetime.strptime(
-            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+        )
         entry['date_modified'] = datetime.datetime.now()
-        conn.execute(db.
-                     playlist.
-                     update().
-                     where(db.playlist.c.id == entry['id']).
-                     values(entry))
+        conn.execute(
+            DATABASE.
+            playlist.
+            update().
+            where(DATABASE.playlist.c.id == entry['id']).
+            values(entry)
+        )
         return Playlist(entry)
 
 
 def update_by_path(playlist):
-    with db.database_engine.connect() as conn:
+    """ A function that updates an entry on the playlist data table
+        that contains the provided playlist path
+    """
+    with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
         entry['date_created'] = datetime.datetime.strptime(
-            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+            entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+        )
         entry['date_modified'] = datetime.datetime.now()
-        conn.execute(db.
-                     playlist.
-                     update().
-                     where(db.playlist.c.path == entry['path']).
-                     values(entry))
+        conn.execute(
+            DATABASE.
+            playlist.
+            update().
+            where(DATABASE.playlist.c.path == entry['path']).
+            values(entry)
+        )
         return Playlist(entry)
 
 
 def update_collection(playlist_collection):
+    """ A function that updates a collection of entries on the playlist data table """
     collection = []
-    with db.database_engine.connect() as conn:
+    with DATABASE.engine.connect() as conn:
         for playlist in playlist_collection:
             entry = dict(playlist)
             entry['date_created'] = datetime.datetime.strptime(
-                entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f')
+                entry['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+            )
             entry['date_modified'] = datetime.datetime.now()
-            conn.execute(db.
-                         playlist.
-                         update().
-                         values(entry))
+            conn.execute(
+                DATABASE.
+                playlist.
+                update().
+                values(entry)
+            )
             collection.append(entry)
         return [Playlist(entry) for entry in collection]
 
 
 def delete_by_id(id):
-    with db.database_engine.connect() as conn:
-        conn.execute(db.
-                     playlist.
-                     delete().
-                     where(db.playlist.c.id == id))
+    """ A function that deletes an entry for the playlist data table
+        that contains the provided id
+    """
+    with DATABASE.engine.connect() as conn:
+        conn.execute(
+            DATABASE.
+            playlist.
+            delete().
+            where(DATABASE.playlist.c.id == id)
+        )
 
 
 def delete_by_path(path):
-    with db.database_engine.connect() as conn:
-        conn.execute(db.
-                     playlist.
-                     delete().
-                     where(db.playlist.c.path == path))
+    """ A function that deletes an entry for the playlist data table
+        that contains the provided playlist path
+    """
+    with DATABASE.engine.connect() as conn:
+        conn.execute(
+            DATABASE.
+            playlist.
+            delete().
+            where(DATABASE.playlist.c.path == path)
+        )
 
 
 def select_by_id(id):
-    with db.database_engine.connect() as conn:
-        playlist_collection = conn.execute(db.
-                                           select([db.playlist]).
-                                           where(db.playlist.c.id == id))
+    """ A function that returns all the entries on the playlist data table
+        that contain the provided playlist id
+    """
+    with DATABASE.engine.connect() as conn:
+        playlist_collection = conn.execute(
+            select([DATABASE.playlist]).
+            where(DATABASE.playlist.c.id == id)
+        )
         return Playlist(dict(playlist_collection.fetchone()))
 
 
 def select_by_path(path):
-    with db.database_engine.connect() as conn:
-        playlist_collection = conn.execute(db.
-                                           select([db.playlist]).
-                                           where(db.playlist.c.path == path))
+    """ A function that returns all the entries of the playlist data table
+        that contain the provided playlist path
+    """
+    with DATABASE.engine.connect() as conn:
+        playlist_collection = conn.execute(
+            select([DATABASE.playlist]).
+            where(DATABASE.playlist.c.path == path)
+        )
         return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))
 
 
 def select_active_by_path(path):
-    with db.database_engine.connect() as conn:
-        playlist_collection = conn.execute(db.
-                                           select([db.playlist]).
-                                           where(db.playlist.c.path == path and db.playlist.c.active == True))
+    """ A function taht returns all the active entries on the playlist data table
+        for the provided path
+    """
+    with DATABASE.engine.connect() as conn:
+        playlist_collection = conn.execute(
+            select([DATABASE.playlist]).
+            where(
+                DATABASE.playlist.c.path == path and DATABASE.playlist.c.active == True
+            )
+        )
         return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))
 
 
 def select_active():
-    with db.database_engine.connect() as conn:
-        playlist_collection = conn.execute(db.
-                                           select([db.playlist]).
-                                           where(db.playlist.c.active == True))
+    """ A function that returns all the active entries on the playlist data table """
+    with DATABASE.engine.connect() as conn:
+        playlist_collection = conn.execute(
+            select([DATABASE.playlist]).
+            where(DATABASE.playlist.c.active == True)
+        )
         return list(map(lambda entry: Playlist(dict(entry)), playlist_collection))

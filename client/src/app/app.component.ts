@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { MdSidenav } from '@angular/material';
 import { SocketService } from './socket/socket.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { SocketService } from './socket/socket.service';
 export class AppComponent implements OnInit, OnDestroy {
 
     @ViewChild('sidenav')
-    public sidenav: any
+    public sidenav: MdSidenav;
 
     constructor(
         private router: Router,

@@ -1,10 +1,10 @@
-import sys
+""" Contains functions for mounting and unmounting network file systems """
 import os
 import subprocess
-from enviroment import *
 
 
 class NetworkFileSystem():
+    """ Class representing a network file system details """
     ip = ''
     volume = ''
     user = ''
@@ -20,6 +20,7 @@ class NetworkFileSystem():
 
 
 def mount(details):
+    """ A function that mounts a new network file system """
     if os.name == 'nt':
         return nt_mount(details)
     elif os.name == 'posix':
@@ -31,6 +32,7 @@ def mount(details):
 
 
 def unmount(details):
+    """ A function that unmounts a network file system """
     if os.name == 'nt':
         nt_unmount(details)
     elif os.name == 'posix':
@@ -42,6 +44,7 @@ def unmount(details):
 
 
 def nt_mount(details):
+    """ A function that mounts a new network file system on a windows OS """
     try:
         persistent = 'yes' if details.persistent else 'no'
 
@@ -64,10 +67,11 @@ def nt_mount(details):
 
 
 def nt_unmount(details):
+    """ A function that unmounts a network file system on a windows OS """
     try:
         path = '\\\\' + details.ip + '\\' + details.volume
         command = 'net use {0} /delete'.format(path)
-        
+
         result = subprocess.run(command.split(), shell=True, check=True)
         result.check_returncode()
 
@@ -78,16 +82,20 @@ def nt_unmount(details):
 
 
 def posix_mount(details):
+    """ A function that mounts a new network file system on a posix OS """
     pass
 
 
 def posix_unmount(details):
+    """ A function that unmounts a network file system on a posix OS """
     pass
 
 
 def java_mount(details):
+    """ JAVAAAAAAAA """
     pass
 
 
 def java_unmount(details):
+    """ JAVAAAAAAAA """
     pass

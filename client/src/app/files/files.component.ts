@@ -13,15 +13,10 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 export class FilesComponent implements OnInit {
 
     public systems: IFileSystem[] = [];
-
     public selectedSystem: IFileSystem;
-
     public currentSystem: IFileSystem;
-
     public currentSystemEntries: IFileSystem[];
-
     public currentSystemStack: string[] = [];
-
     public loading = false;
 
     constructor(
@@ -58,7 +53,6 @@ export class FilesComponent implements OnInit {
         this.socket.subscribe('list dir', (data: IFileSystem[]) => {
             this.currentSystemEntries = data;
             setTimeout(() => this.loading = false, 500);
-            // this.loading = false;
         });
 
         this.socket.subscribe('mount volume success', (data: IFileSystem) => {
@@ -84,7 +78,7 @@ export class FilesComponent implements OnInit {
     }
 
     public onRefresh() {
-        this.availableSystems();
+        this.socket.emit('list dir', this.currentPath());
     }
 
     public onHome() {

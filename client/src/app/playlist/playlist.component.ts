@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from 'app/socket/socket.service';
-
-import { IPlaylist, Playlist } from 'app/models/playlist';
+import { IPlaylist } from '../models/playlist';
+import { SocketService } from '../socket/socket.service';
 
 @Component({
     selector: 'app-playlist',

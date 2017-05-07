@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
-import { SocketService } from 'app/socket/socket.service';
-import { IMountFolder, MountFolder } from 'app/files/add-dialog/models/mount-folder';
+import { SocketService } from '../../socket/socket.service';
+import { IMountFolder, MountFolder } from './models/mount-folder';
 
 @Component({
     selector: 'app-add-dialog',
@@ -10,6 +10,10 @@ import { IMountFolder, MountFolder } from 'app/files/add-dialog/models/mount-fol
 })
 export class AddDialogComponent {
 
+    public selectedAction = 0;
+    public mountFolder: IMountFolder = new MountFolder();
+    public folder = { name: '', path: '' };
+    public downloadDetails = { path: '', url: '' };
     public addOptions = [
         {
             label: 'Mount Network Folder',
@@ -24,14 +28,6 @@ export class AddDialogComponent {
             value: 2
         }
     ];
-
-    public selectedAction = 0;
-
-    public mountFolder: IMountFolder = new MountFolder();
-
-    public folder = { name: '', path: '' };
-
-    public downloadDetails = { path: '', url: '' };
 
     constructor(
         private dialog: MdDialogRef<AddDialogComponent>,
