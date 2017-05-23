@@ -42,16 +42,14 @@ def main():
     # Loading settings
     main_operation('Loading settings',
                    settings.load)
-
     # Initializing database
     main_operation('Initializing database schema image',
                    lambda: DATABASE.init(settings.DATABASE_SETTINGS))
-
     # Flask APP Initialization
     main_operation('Starting flask-SOCKET_IO server',
                    lambda: SOCKET_IO.run(
-                       APP, host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000))))
-
+                       APP, host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000))
+                   ))
     emit('queue', playlist, broadcast=True)
 
 

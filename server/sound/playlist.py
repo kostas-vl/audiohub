@@ -135,6 +135,16 @@ def update_collection(playlist_collection):
         return [Playlist(entry) for entry in collection]
 
 
+def delete_all():
+    """ A function that deletes all entries in the playlist data table """
+    with DATABASE.engine.connect() as conn:
+        conn.execute(
+            DATABASE.
+            playlist.
+            delete()
+        )
+
+
 def delete_by_id(id):
     """ A function that deletes an entry for the playlist data table
         that contains the provided id
