@@ -1,8 +1,24 @@
 """ Contains functions for downloading an mp3 using youtube dl """
+import os
 import subprocess
 import collections
 import drive.file_system as file_system
 from enviroment import SOCKET_IO, emit
+
+
+def youtube_dl_command(path, url):
+    """ A function that returns the command for downloading an mp3 with youtube dl """
+    youtube_dl = ''
+    if os.name == 'nt':
+        youtube_dl = 'youtube-dl.exe'
+    elif os.name == 'posix':
+        youtube_dl = 'youtube_dl'
+    return ''.join([
+        youtube_dl,
+        '--extract-audio --audio-format mp3 -o ',
+        path + "'%(title)s.%(ext)s'" + ' ',
+        url
+    ])
 
 
 def download_url(path, url):
@@ -10,12 +26,8 @@ def download_url(path, url):
         on the provided path using youtube dl
     """
     try:
-        command = [
-            'youtube-dl.exe --extract-audio --audio-format mp3 -o ',
-            path + "'%(title)s.%(ext)s'" + ' ',
-            url
-        ]
-        command_result = subprocess.check_call(''.join(command), shell=True)
+        command = youtube_dl_command(path, url)
+        subprocess.check_call(command, shell=True)
     except subprocess.CalledProcessError as err:
         print(err)
 
