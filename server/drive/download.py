@@ -14,7 +14,7 @@ def youtube_dl_command(path, url):
     elif os.name == 'posix':
         youtube_dl = 'youtube_dl'
     return ''.join([
-        youtube_dl,
+        youtube_dl + ' ',
         '--extract-audio --audio-format mp3 -o ',
         path + "'%(title)s.%(ext)s'" + ' ',
         url
