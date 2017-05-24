@@ -12,7 +12,7 @@ def youtube_dl_command(path, url):
     if os.name == 'nt':
         youtube_dl = 'youtube-dl.exe'
     elif os.name == 'posix':
-        youtube_dl = 'youtube_dl'
+        youtube_dl = 'youtube-dl'
     return ''.join([
         youtube_dl + ' ',
         '--extract-audio --audio-format mp3 -o ',
