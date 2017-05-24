@@ -20,6 +20,10 @@ body {
     min-height: 760px;
 }
 
+.snack-bar-bg {
+    background-color: red;
+}
+
 @media(max-width: 450px) {
     .sidenav {
         width: 100%;

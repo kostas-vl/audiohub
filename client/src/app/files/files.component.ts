@@ -18,6 +18,7 @@ export class FilesComponent implements OnInit {
     public currentSystemEntries: IFileSystem[];
     public currentSystemStack: string[] = [];
     public loading = false;
+    public asyncLoading = false;
 
     constructor(
         private socket: SocketService,
@@ -65,6 +66,10 @@ export class FilesComponent implements OnInit {
             this.socket.emit('list dir', data.path);
         });
 
+        this.socket.subscribe('download finished', _ => {
+            this.asyncLoading = false;
+        });
+
         this.availableSystems();
     }
 
@@ -72,6 +77,7 @@ export class FilesComponent implements OnInit {
         const dialog = this.mdDialog.open(AddDialogComponent);
         dialog.afterClosed().subscribe(data => {
             if (data) {
+                this.asyncLoading = true;
                 this.socket.emit(data.action, data.details);
             }
         });
@@ -88,7 +94,11 @@ export class FilesComponent implements OnInit {
 
     public onPrevious() {
         this.currentSystemStack.pop();
-        this.socket.emit('list dir', this.currentPath());
+        if (this.currentSystemStack.length === 0) {
+            this.onHome();
+        } else {
+            this.socket.emit('list dir', this.currentPath());
+        }
     }
 
     public onEntry(entry: IFileSystem) {

@@ -28,7 +28,7 @@
 
             <span mdTooltip="previous directory" mdTooltipPosition="above">
 
-                <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length <= 1">
+                <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length < 1">
 
                     <md-icon>reply</md-icon>
 
@@ -37,6 +37,12 @@
             </span>
 
         </md-toolbar>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <md-progress-bar color="primary" value="0" mode="indeterminate" bufferValue="0" *ngIf="asyncLoading"></md-progress-bar>
 
     </div>
 

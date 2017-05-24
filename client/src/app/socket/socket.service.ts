@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Injectable()
 export class SocketService {
 
-  public socketInstance: SocketIOClient.Socket;
+    public socketInstance: SocketIOClient.Socket;
 
     public constructor() { }
 
     public connect() {
         if (!this.socketInstance) {
-            this.socketInstance = io.connect('ws://127.0.0.1:5000/server');
+            this.socketInstance = io.connect(environment.webSocketUrl);
         }
     }
 

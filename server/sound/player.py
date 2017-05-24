@@ -7,7 +7,7 @@ from flask_socketio import emit
 from enviroment import SOCKET_IO
 
 
-class PlayerState(enum.Enum):
+class PlayerStateEnum(enum.Enum):
     """ Enum that shows various player state values """
     Init = 'init'
     Stoped = 'stoped'
@@ -20,71 +20,82 @@ class Player():
 
     def __init__(self):
         self.current_track = None
-        self.state = PlayerState.Init
+        self.state = PlayerStateEnum.Init
         if not pg.mixer.get_init():
             pg.mixer.init(44100)
 
     def add(self, entry):
+        """ Adds a new entry on the playlist """
         if entry is not None:
             playlist = pl.Playlist(entry)
             playlist.active = True
             pl.insert(playlist)
 
     def remove(self, id):
+        """ A method that removes an entry from the playlist based on the provided id """
         if id is not None:
             playlist = pl.select_by_id(id)
             playlist.active = False
             pl.delete_by_id(id)
 
     def remove_all(self):
+        """ A method that removes all entries from the playlist """
         pl.delete_all()
 
     def play(self, track=None):
-        if self.state == PlayerState.Paused or self.state == PlayerState.Stoped:
+        """ A method that plays music based on the state of the player """
+        if self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Stoped:
             pg.mixer.music.unpause()
-            self.state = PlayerState.Playing
-        elif self.state == PlayerState.Init and track is None:
+            self.state = PlayerStateEnum.Playing
+        elif self.state == PlayerStateEnum.Init and track is None:
             playlist = pl.select_active()
             if playlist:
                 pg.mixer.music.load(playlist.pop())
-                self.state = PlayerState.Playing
+                self.state = PlayerStateEnum.Playing
         elif track is not None:
             pg.mixer.music.load(track.path)
             pg.mixer.music.play()
-            self.state = PlayerState.Playing
+            self.state = PlayerStateEnum.Playing
 
     def play_all(self):
-        if self.state == PlayerState.Paused or self.state == PlayerState.Playing:
+        """ A method that queues all the available songs of the playlist and then start playing """
+        if self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Playing:
             self.stop()
-            self.state = PlayerState.Stoped
+            self.state = PlayerStateEnum.Stoped
         playlist = pl.select_active()
         if playlist and isinstance(playlist, collections.Sequence):
             for entry in playlist:
                 pg.mixer.music.queue(entry.path)
         pg.mixer.music.play()
-        self.state = PlayerState.Playing
+        self.state = PlayerStateEnum.Playing
 
     def pause(self):
-        if self.state == PlayerState.Playing:
+        """ A method that pauses the player """
+        if self.state == PlayerStateEnum.Playing:
             pg.mixer.music.pause()
-            self.state = PlayerState.Paused
+            self.state = PlayerStateEnum.Paused
 
     def stop(self):
-        if self.state == PlayerState.Playing or self.state == PlayerState.Paused:
+        """ A method that stops the player """
+        if self.state == PlayerStateEnum.Playing or self.state == PlayerStateEnum.Paused:
             pg.mixer.music.rewind()
             self.pause()
-            self.state = PlayerState.Stoped
+            self.state = PlayerStateEnum.Stoped
 
     def next(self):
+        """ A method that plays the next track on the playlist """
         pass
 
     def previous(self):
+        """ A method that plays the previous track on the playlist """
         pass
 
     def volume(self, value):
+        """ A method that sets the volume of the player """
         pg.mixer.music.set_volume(value)
 
     def has_entries(self):
+        """ A method that returns a boolean specifying whether there are entries on the playlist """
         playlist = pl.select_active()
         return playlist and isinstance(playlist, collections.Sequence)
 
@@ -162,7 +173,6 @@ def next_track(data):
 @SOCKET_IO.on('volume', namespace='/server')
 def volume_audio(data):
     """ event handler for controlling the volume of the audio player """
-    # AUDIO_PLAYER.volume = data / 100
     AUDIO_PLAYER.volume(data / 100)
 
 

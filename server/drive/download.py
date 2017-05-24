@@ -2,7 +2,8 @@
 import subprocess
 import collections
 import drive.file_system as file_system
-from enviroment import SOCKET_IO
+from enviroment import SOCKET_IO, emit
+
 
 def download_url(path, url):
     """ A function that executes a shell command to download the provided url
@@ -14,9 +15,7 @@ def download_url(path, url):
             path + "'%(title)s.%(ext)s'" + ' ',
             url
         ]
-        command_result = subprocess.run(
-            ''.join(command), shell=True, check=True)
-        command_result.check_returncode()
+        command_result = subprocess.check_call(''.join(command), shell=True)
     except subprocess.CalledProcessError as err:
         print(err)
 
@@ -28,3 +27,4 @@ def download(data):
     system = file_system.select_by_path(path)
     if isinstance(system, collections.Sequence) and system:
         download_url(path, data['url'])
+        emit('download finished')

@@ -8,7 +8,7 @@
             "url": "http://localhost:4200",
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}",
-            "userDataDir": "${workspaceRoot}/.vscode/chrome"
+            "userDataDir": "${workspaceRoot}/.vscode/chrome"        
         },
         {
             "name": "Attach to Chrome, with sourcemaps",
