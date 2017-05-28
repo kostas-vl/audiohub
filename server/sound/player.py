@@ -44,14 +44,19 @@ class Player():
 
     def play(self, track=None):
         """ A method that plays music based on the state of the player """
-        if self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Stoped:
+        if (
+                (self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Stoped) and
+                track is None
+        ):
             pg.mixer.music.unpause()
             self.state = PlayerStateEnum.Playing
+
         elif self.state == PlayerStateEnum.Init and track is None:
             playlist = pl.select_active()
             if playlist:
                 pg.mixer.music.load(playlist.pop())
                 self.state = PlayerStateEnum.Playing
+
         elif track is not None:
             pg.mixer.music.load(track.path)
             pg.mixer.music.play()

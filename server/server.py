@@ -38,7 +38,7 @@ def main_operation(label, callback):
 
 
 def main():
-    """ The main source of the APPlcation execution """
+    """ The main source of the application execution """
     # Loading settings
     main_operation('Loading settings',
                    settings.load)
@@ -48,7 +48,7 @@ def main():
     # Flask APP Initialization
     main_operation('Starting flask-SOCKET_IO server',
                    lambda: SOCKET_IO.run(
-                       APP, host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000))
+                       APP, host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 5000))
                    ))
     emit('queue', playlist, broadcast=True)
 
