@@ -4,7 +4,7 @@
 
         <span mdTooltip="Play" mdTooltipPosition="above">
 
-            <button md-icon-button (click)="onPlay()" *ngIf="!playing">
+            <button md-icon-button (click)="onPlay()" *ngIf="info.state === 'paused' || info.state === 'stoped' || info.state === 'init'">
                 
                 <md-icon color="accent">play_arrow</md-icon>
                 
@@ -14,7 +14,7 @@
 
         <span mdTooltip="Pause" mdTooltipPosition="above">
 
-            <button md-icon-button (click)="onPause()" *ngIf="playing">
+            <button md-icon-button (click)="onPause()" *ngIf="info.state === 'playing'">
                 
                 <md-icon color="accent">pause</md-icon>
                 
@@ -54,7 +54,7 @@
 
         <span class="pull-right">
 
-             <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [(ngModel)]="volume" (ngModelChange)="onVolume($event)"></md-slider>
+             <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>
 
         </span>
 
@@ -66,7 +66,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-left">
 
-                <small *ngIf="currentPlaying">{{currentPlaying.name}}</small>
+                <small *ngIf="info.track">{{info.track.name}}</small>
 
             </div>
 

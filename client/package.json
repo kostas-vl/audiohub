@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-on-network": "ng server --host 192.168.1.67",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -20,7 +21,7 @@
     "@angular/core": "^4.0.1",
     "@angular/forms": "^4.0.1",
     "@angular/http": "^4.0.1",
-    "@angular/material": "^2.0.0-beta.3",
+    "@angular/material": "^2.0.0-beta.6",
     "@angular/platform-browser": "^4.0.1",
     "@angular/platform-browser-dynamic": "^4.0.1",
     "@angular/router": "^4.0.1",

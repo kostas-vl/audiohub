@@ -1,6 +1,6 @@
 """ Contains constants for the application runtime """
 import pyglet
-from flask import Flask
+from flask import Flask, render_template
 from flask_socketio import SocketIO, Namespace, emit
 
 # Initializing the flask and flask-socketio apps

@@ -14,7 +14,9 @@ export class PlaylistComponent implements OnInit {
     constructor(private socket: SocketService) { }
 
     public ngOnInit() {
-        this.socket.subscribe('queue', data => this.playlist = data);
+        this.socket.subscribe('queue', data => {
+            this.playlist = data;
+        });
         this.socket.emit('queue');
     }
 

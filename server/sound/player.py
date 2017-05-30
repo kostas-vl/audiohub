@@ -12,15 +12,26 @@ class PlayerStateEnum(enum.Enum):
     Init = 'init'
     Stoped = 'stoped'
     Paused = 'paused'
-    Playing = 'playling'
+    Playing = 'playing'
+
+
+class PlayerInfo():
+    def __init__(self):
+        self.track = ''
+        self.volume = 100
+        self.state = PlayerStateEnum.Init
+
+    def __iter__(self):
+        yield 'track', dict(self.track)
+        yield 'volume', self.volume
+        yield 'state', self.state.value
 
 
 class Player():
     """ Class that implements a basic music player """
 
     def __init__(self):
-        self.current_track = None
-        self.state = PlayerStateEnum.Init
+        self.info = PlayerInfo()
         if not pg.mixer.get_init():
             pg.mixer.init(44100)
 
@@ -45,47 +56,53 @@ class Player():
     def play(self, track=None):
         """ A method that plays music based on the state of the player """
         if (
-                (self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Stoped) and
+                (
+                    self.info.state == PlayerStateEnum.Paused or
+                    self.info.state == PlayerStateEnum.Stoped
+                ) and
                 track is None
         ):
             pg.mixer.music.unpause()
-            self.state = PlayerStateEnum.Playing
-
-        elif self.state == PlayerStateEnum.Init and track is None:
+            self.info.state = PlayerStateEnum.Playing
+        elif self.info.state == PlayerStateEnum.Init and track is None:
             playlist = pl.select_active()
             if playlist:
-                pg.mixer.music.load(playlist.pop())
-                self.state = PlayerStateEnum.Playing
-
+                track = playlist.pop()
+                pg.mixer.music.load(track.path)
+                self.info.track = track
+                self.info.state = PlayerStateEnum.Playing
+                pg.mixer.music.play()
         elif track is not None:
             pg.mixer.music.load(track.path)
+            self.info.track = track
+            self.info.state = PlayerStateEnum.Playing
             pg.mixer.music.play()
-            self.state = PlayerStateEnum.Playing
 
     def play_all(self):
         """ A method that queues all the available songs of the playlist and then start playing """
-        if self.state == PlayerStateEnum.Paused or self.state == PlayerStateEnum.Playing:
+        if self.info.state == PlayerStateEnum.Paused or self.info.state == PlayerStateEnum.Playing:
             self.stop()
-            self.state = PlayerStateEnum.Stoped
+            self.info.state = PlayerStateEnum.Stoped
         playlist = pl.select_active()
         if playlist and isinstance(playlist, collections.Sequence):
+            self.info.track = playlist[0]
             for entry in playlist:
                 pg.mixer.music.queue(entry.path)
         pg.mixer.music.play()
-        self.state = PlayerStateEnum.Playing
+        self.info.state = PlayerStateEnum.Playing
 
     def pause(self):
         """ A method that pauses the player """
-        if self.state == PlayerStateEnum.Playing:
+        if self.info.state == PlayerStateEnum.Playing:
             pg.mixer.music.pause()
-            self.state = PlayerStateEnum.Paused
+            self.info.state = PlayerStateEnum.Paused
 
     def stop(self):
         """ A method that stops the player """
-        if self.state == PlayerStateEnum.Playing or self.state == PlayerStateEnum.Paused:
+        if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
             pg.mixer.music.rewind()
             self.pause()
-            self.state = PlayerStateEnum.Stoped
+            self.info.state = PlayerStateEnum.Stoped
 
     def next(self):
         """ A method that plays the next track on the playlist """
@@ -97,7 +114,8 @@ class Player():
 
     def volume(self, value):
         """ A method that sets the volume of the player """
-        pg.mixer.music.set_volume(value)
+        pg.mixer.music.set_volume(value / 100)
+        self.info.volume = value
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """
@@ -110,9 +128,10 @@ class Player():
 AUDIO_PLAYER = Player()
 
 
-def currently_playling(entry):
+def emit_player_info():
     """ A function that sends the entry that is currently playing """
-    emit('currently playing', dict(entry))
+    info = dict(AUDIO_PLAYER.info)
+    emit('player info', info, broadcast=True)
 
 
 def emit_queue():
@@ -120,10 +139,17 @@ def emit_queue():
     emit('queue', [dict(entry) for entry in pl.select_active()])
 
 
+@SOCKET_IO.on('player info', namespace='/server')
+def player_info(_):
+    """ A function that sends thew info of the player """
+    emit_player_info()
+
+
 @SOCKET_IO.on('play', namespace='/server')
-def play_audio(data):
+def play_audio(_):
     """ A function that starts playing the first track on the playlist """
     AUDIO_PLAYER.play()
+    emit_player_info()
 
 
 @SOCKET_IO.on('play now', namespace='/server')
@@ -137,54 +163,53 @@ def play_now(data):
     if isinstance(entries, collections.Sequence) and entries:
         track = entries[0]
         AUDIO_PLAYER.play(track)
-        currently_playling(track)
+        emit_player_info()
 
 
 @SOCKET_IO.on('play all', namespace='/server')
-def play_all(data):
+def play_all(_):
     """ A function that plays all the active entries in the playlist table """
     # gets all the active entries in the playlsit table
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track
         AUDIO_PLAYER.play()
-        currently_playling(playlist[0])
+        emit_player_info()
 
 
 @SOCKET_IO.on('pause', namespace='/server')
-def pause_audio(data):
+def pause_audio(_):
     """ event handler for pausing the audio player """
     AUDIO_PLAYER.pause()
+    emit_player_info()
 
 
 @SOCKET_IO.on('stop', namespace='/server')
-def stop_audio(data):
+def stop_audio(_):
     """ event handler for stoping the audio player """
-    # AUDIO_PLAYER.pause()
-    # AUDIO_PLAYER.seek(0)
     AUDIO_PLAYER.stop()
+    emit_player_info()
 
 
 @SOCKET_IO.on('next', namespace='/server')
-def next_track(data):
+def next_track(_):
     """ starts playing the next track in the queue """
     AUDIO_PLAYER.next()
-    # AUDIO_PLAYER.next_source()
-    # source = AUDIO_PLAYER.source
-    # if source is not None:
-    #     print(source)
+    emit_player_info()
 
 
 @SOCKET_IO.on('volume', namespace='/server')
 def volume_audio(data):
     """ event handler for controlling the volume of the audio player """
-    AUDIO_PLAYER.volume(data / 100)
+    AUDIO_PLAYER.volume(data)
+    emit_player_info()
 
 
 @SOCKET_IO.on('queue push', namespace='/server')
-def queue_push(entry):
+def queue_push(data):
     """ event handler for pushing a new track on the queue """
-    AUDIO_PLAYER.add(entry)
+    AUDIO_PLAYER.add(data)
+    emit_player_info()
     emit_queue()
 
 
@@ -196,6 +221,7 @@ def queue_pop(data):
 
 
 @SOCKET_IO.on('queue', namespace='/server')
-def queue(data):
+def queue(_):
     """ List queued tracks event handler """
+    emit_player_info()
     emit_queue()

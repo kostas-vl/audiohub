@@ -7,7 +7,7 @@ import drive.files as files
 import drive.file_system as file_system
 import drive.download as download
 from database.schema import DATABASE
-from enviroment import SOCKET_IO, APP, emit
+from enviroment import SOCKET_IO, APP, emit, render_template
 
 
 # Default http route
