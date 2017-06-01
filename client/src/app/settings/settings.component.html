@@ -14,18 +14,10 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
 
-        <md-slide-toggle [checked]="darkThemeToggle">Dark Theme</md-slide-toggle>
+        <br>
+
+        <md-slide-toggle [(ngModel)]="settings.darkTheme" (change)="onChange()">Dark Theme</md-slide-toggle>
 
     </div>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-        <button md-raised-button color="accent" class="pull-right">
-
-            Save
-
-        </button>
-
-    </div>
-
+    
 </div>

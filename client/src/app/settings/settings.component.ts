@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from '../settings-service/settings.service';
+import { ISettings } from '../models/settings';
 
 @Component({
     selector: 'app-settings',
@@ -7,11 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
-    public darkThemeToggle: boolean;
+    public settings: ISettings;
 
-    constructor() { }
+    constructor(private settingsService: SettingsService) { }
 
     ngOnInit() {
+        this.settings = this.settingsService.get();
+    }
+
+    public onChange() {
+        this.settingsService.set(this.settings);
     }
 
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog } from '@angular/material';
-
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
@@ -22,7 +21,8 @@ export class FilesComponent implements OnInit {
 
     constructor(
         private socket: SocketService,
-        private mdDialog: MdDialog
+        private mdDialog: MdDialog,
+        private mdSnackBar: MdSnackBar
     ) { }
 
     private availableSystems() {
@@ -113,6 +113,7 @@ export class FilesComponent implements OnInit {
 
     public onAdd(entry: IFileSystem) {
         this.socket.emit('queue push', entry);
+        this.mdSnackBar.open('Added: ' + entry.name, '', { duration: 1500 });
     }
 
 }

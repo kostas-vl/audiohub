@@ -17,11 +17,12 @@ import { AppComponent } from './app.component';
 import { LoaderComponent } from './loader/loader.component';
 import { PlayerComponent } from './player/player.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { AddDialogComponent } from './files/add-dialog/add-dialog.component';
 import { FilesComponent } from './files/files.component';
+import { AddDialogComponent } from './files/add-dialog/add-dialog.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { StreamComponent } from './stream/stream.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsService } from './settings-service/settings.service';
 
 export class HammerJsConfiguration extends HammerGestureConfig {
 
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
         AddDialogComponent
     ],
     providers: [
+        SettingsService,
         SocketService,
         {
             provide: HAMMER_GESTURE_CONFIG,

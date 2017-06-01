@@ -1,57 +1,60 @@
-<app-top-bar [sidenav]="sidenav">
-</app-top-bar>
+<div [class.app-dark]="darkTheme">
 
-<md-sidenav-container>
+    <app-top-bar [sidenav]="sidenav"></app-top-bar>
 
-    <md-sidenav #sidenav class="sidenav" mode="over">
+    <md-sidenav-container>
 
-        <md-nav-list class="sidenav-list">
+        <md-sidenav #sidenav class="sidenav" mode="over">
 
-            <md-list-item (click)="onItemClick('/playlist')">
+            <md-nav-list class="sidenav-list">
 
-                <md-icon md-list-icon>album</md-icon>
-                <h4 md-line>Playlist</h4>
+                <md-list-item (click)="onItemClick('/playlist')">
 
-            </md-list-item>
+                    <md-icon md-list-icon>album</md-icon>
+                    <h4 md-line>Playlist</h4>
 
-            <md-list-item (click)="onItemClick('/files')">
+                </md-list-item>
 
-                <md-icon md-list-icon>insert_drive_file</md-icon>
-                <h4 md-line>Files</h4>
+                <md-list-item (click)="onItemClick('/files')">
 
-            </md-list-item>
+                    <md-icon md-list-icon>insert_drive_file</md-icon>
+                    <h4 md-line>Files</h4>
 
-            <md-list-item (click)="onItemClick('/settings')">
+                </md-list-item>
 
-                <md-icon md-list-icon>settings</md-icon>
-                <h4 md-line>Settings</h4>
+                <md-list-item (click)="onItemClick('/settings')">
 
-            </md-list-item>
+                    <md-icon md-list-icon>settings</md-icon>
+                    <h4 md-line>Settings</h4>
 
-        </md-nav-list>
+                </md-list-item>
 
-    </md-sidenav>
+            </md-nav-list>
 
-    <div class="wrapper container audiohub">
+        </md-sidenav>
 
-        <div class="row">
+        <div class="wrapper container audiohub">
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
 
-                <app-player></app-player>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-            </div>
+                    <app-player></app-player>
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
+                </div>
 
-                <br />
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
 
-                <router-outlet></router-outlet>
+                    <br />
+
+                    <router-outlet></router-outlet>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    </md-sidenav-container>
 
-</md-sidenav-container>
+</div>

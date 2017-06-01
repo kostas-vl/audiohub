@@ -70,7 +70,7 @@
 
                 <md-input-container class="dialog-input">
 
-                    <input mdInput placeholder="Path" [(ngModel)]="downloadDetails.path">
+                    <input mdInput placeholder="System" [(ngModel)]="downloadDetails.system">
 
                 </md-input-container>
 
@@ -79,6 +79,12 @@
                     <input mdInput placeholder="Url" [(ngModel)]="downloadDetails.url">
 
                 </md-input-container>
+
+                <md-radio-group class="dialog-input radio-group" [(ngModel)]="downloadDetails.fileFormat">
+
+                    <md-radio-button class="radion-button" *ngFor="let option of fileFormatOptions" [value]="option">{{option}}</md-radio-button>
+
+                </md-radio-group>
 
             </div>
 

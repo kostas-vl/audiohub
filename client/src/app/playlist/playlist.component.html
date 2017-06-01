@@ -42,24 +42,14 @@
 
         <md-nav-list *ngFor="let entry of playlist">
 
-            <md-list-item>
+            <md-list-item (click)="onPlayNow(entry)">
 
                 <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
 
                 <h4 md-line>{{entry.name}}</h4>
 
                 <p md-line>{{entry.path}}</p>
-
-                <span mdTooltip="play now" mdTooltipPosition="above">
-
-                    <button md-icon-button (click)="onPlayNow(entry)">
-
-                        <md-icon color="primary">play_arrow</md-icon>
-
-                    </button>
-
-                </span>
-
+                
                 <span mdTooltip="remove" mdTooltipPosition="above">
 
                     <button md-icon-button (click)="onRemove(entry)">

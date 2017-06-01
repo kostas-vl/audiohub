@@ -184,6 +184,13 @@ def select_by_path(path):
         )
         return list(map(lambda system: FileSystem(dict(system)), file_system_collection))
 
+def select_by_name(name):
+    with DATABASE.engine.connect() as conn:
+        file_system_collection = conn.execute(
+            select([DATABASE.file_systems]).
+            where(DATABASE.file_systems.c.name == name)
+        )
+        return list(map(lambda system: FileSystem(dict(system)), file_system_collection))
 
 def select_active():
     """ A function that returns all the active entries on the file systems data table """

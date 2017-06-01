@@ -33,7 +33,8 @@ class Player():
     def __init__(self):
         self.info = PlayerInfo()
         if not pg.mixer.get_init():
-            pg.mixer.init(44100)
+            pg.mixer.pre_init()
+            pg.mixer.init()
 
     def add(self, entry):
         """ Adds a new entry on the playlist """
@@ -64,14 +65,14 @@ class Player():
         ):
             pg.mixer.music.unpause()
             self.info.state = PlayerStateEnum.Playing
-        elif self.info.state == PlayerStateEnum.Init and track is None:
-            playlist = pl.select_active()
-            if playlist:
-                track = playlist.pop()
-                pg.mixer.music.load(track.path)
-                self.info.track = track
-                self.info.state = PlayerStateEnum.Playing
-                pg.mixer.music.play()
+        # elif self.info.state == PlayerStateEnum.Init and track is None:
+        #     playlist = pl.select_active()
+        #     if playlist:
+        #         track = playlist.pop()
+        #         pg.mixer.music.load(track.path)
+        #         self.info.track = track
+        #         self.info.state = PlayerStateEnum.Playing
+        #         pg.mixer.music.play()
         elif track is not None:
             pg.mixer.music.load(track.path)
             self.info.track = track
@@ -80,14 +81,20 @@ class Player():
 
     def play_all(self):
         """ A method that queues all the available songs of the playlist and then start playing """
+        # Checks if the player is paused or playing to stop it
         if self.info.state == PlayerStateEnum.Paused or self.info.state == PlayerStateEnum.Playing:
             self.stop()
             self.info.state = PlayerStateEnum.Stoped
+        # Get all the active tracks
         playlist = pl.select_active()
+        # Checks if any track exists
         if playlist and isinstance(playlist, collections.Sequence):
-            self.info.track = playlist[0]
+            # Load the first track and queue the rest
+            self.info.track = playlist.pop(0)
+            pg.mixer.music.load(self.info.track.path)
             for entry in playlist:
                 pg.mixer.music.queue(entry.path)
+        # Call the play function and set the state to playing
         pg.mixer.music.play()
         self.info.state = PlayerStateEnum.Playing
 
@@ -173,7 +180,7 @@ def play_all(_):
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track
-        AUDIO_PLAYER.play()
+        AUDIO_PLAYER.play_all()
         emit_player_info()
 
 

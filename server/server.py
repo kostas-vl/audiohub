@@ -7,7 +7,7 @@ import drive.files as files
 import drive.file_system as file_system
 import drive.download as download
 from database.schema import DATABASE
-from enviroment import SOCKET_IO, APP, emit, render_template
+from enviroment import SOCKET_IO, APP, emit
 
 
 # Default http route
@@ -31,25 +31,20 @@ def on_disconnect():
     print('Client disconnected')
 
 
-def main_operation(label, callback):
-    """ Print a message on the console and executes the provide callback """
-    print(label + '...')
-    callback()
-
-
 def main():
     """ The main source of the application execution """
     # Loading settings
-    main_operation('Loading settings',
-                   settings.load)
+    print("Loading settings...")
+    settings.load()
     # Initializing database
-    main_operation('Initializing database schema image',
-                   lambda: DATABASE.init(settings.DATABASE_SETTINGS))
+    print("Initializing database schema image...")
+    DATABASE.init(settings.DATABASE_SETTINGS)
     # Flask APP Initialization
-    main_operation('Starting flask-SOCKET_IO server',
-                   lambda: SOCKET_IO.run(
-                       APP, host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 5000))
-                   ))
+    print("Starting the flask socket-io server...")
+    SOCKET_IO.run(
+        APP, host=os.getenv('IP', '192.168.1.67'), port=int(os.getenv('PORT', 5000))
+    )
+    # Send out the current playlist
     emit('queue', playlist, broadcast=True)
 
 

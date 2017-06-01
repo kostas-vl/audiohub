@@ -2,6 +2,24 @@
     height: 150px;
 }
 
+.player-volume {
+    text-align: right;
+}
+
 .volume-margin {
     margin: 0 10px;
+}
+
+@media(max-width: 769px) {
+
+    .player-card {
+        height: 180px;
+    }
+
+    .player-actions {
+        text-align: center;
+    }
+    .player-volume {
+        text-align: center;
+    }
 }

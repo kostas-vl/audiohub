@@ -1,84 +1,90 @@
 <md-card class="player-card">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="row">
 
-        <span mdTooltip="Play" mdTooltipPosition="above">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 player-actions">
 
-            <button md-icon-button (click)="onPlay()" *ngIf="info.state === 'paused' || info.state === 'stoped' || info.state === 'init'">
+            <span mdTooltip="Play" mdTooltipPosition="above">
+
+                <button md-icon-button (click)="onPlay()" *ngIf="info.state === 'paused' || info.state === 'stoped' || info.state === 'init'">
+                    
+                    <md-icon color="accent">play_arrow</md-icon>
+                    
+                </button>
+
+            </span>
+
+            <span mdTooltip="Pause" mdTooltipPosition="above">
+
+                <button md-icon-button (click)="onPause()" *ngIf="info.state === 'playing'">
+                    
+                    <md-icon color="accent">pause</md-icon>
+                    
+                </button>
+
+            </span>
+
+            <span mdTooltip="Stop" mdTooltipPosition="above">
+
+                <button md-icon-button (click)="onStop()">
                 
-                <md-icon color="accent">play_arrow</md-icon>
+                    <md-icon color="warn">stops</md-icon>
+
+                </button>
+
+            </span>
+
+            <span mdTooltip="Previous" mdTooltipPosition="above">
+
+                <button md-icon-button>
+                    
+                    <md-icon>skip_previous</md-icon>
+                    
+                </button>  
                 
-            </button>
+            </span>
 
-        </span>
+            <span mdTooltip="Next" mdTooltipPosition="above">  
 
-        <span mdTooltip="Pause" mdTooltipPosition="above">
+                <button md-icon-button (click)="onNext()">
+                    
+                    <md-icon>skip_next</md-icon>
+                    
+                </button>
 
-            <button md-icon-button (click)="onPause()" *ngIf="info.state === 'playing'">
-                
-                <md-icon color="accent">pause</md-icon>
-                
-            </button>
+            </span>
 
-        </span>
+        </div>
 
-        <span mdTooltip="Stop" mdTooltipPosition="above">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 
-            <button md-icon-button (click)="onStop()">
-            
-                <md-icon color="warn">stops</md-icon>
+            <div class="player-volume">
 
-            </button>
-
-        </span>
-
-        <span mdTooltip="Previous" mdTooltipPosition="above">
-
-            <button md-icon-button>
-                
-                <md-icon>skip_previous</md-icon>
-                
-            </button>  
-              
-        </span>
-
-        <span mdTooltip="Next" mdTooltipPosition="above">  
-
-            <button md-icon-button (click)="onNext()">
-                
-                <md-icon>skip_next</md-icon>
-                
-            </button>
-
-        </span>
-
-        <span class="pull-right">
-
-             <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>
-
-        </span>
-
-    </div>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-        <div class="row">
-
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-left">
-
-                <small *ngIf="info.track">{{info.track.name}}</small>
-
-            </div>
-
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
-
-                <small>00:00 / 10:52</small>
+                <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>                
 
             </div>
 
         </div>
 
-        <md-progress-bar color="primary" [value]="progressValue" [mode]="progressMode" [bufferValue]="progressBuffer"></md-progress-bar>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left">
+
+                    <small *ngIf="info.track">{{info.track.name}}</small>
+
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <md-progress-bar color="primary" [value]="progressValue" [mode]="progressMode" [bufferValue]="progressBuffer"></md-progress-bar>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

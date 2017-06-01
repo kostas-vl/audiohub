@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
 import { SocketService } from '../../socket/socket.service';
 import { IMountFolder, MountFolder } from './models/mount-folder';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-add-dialog',
@@ -13,7 +14,8 @@ export class AddDialogComponent {
     public selectedAction = 0;
     public mountFolder: IMountFolder = new MountFolder();
     public folder = { name: '', path: '' };
-    public downloadDetails = { path: '', url: '' };
+    public downloadDetails = { system: '', url: '', fileFormat: 'mp3' };
+    public systemsControl: FormControl;
     public addOptions = [
         {
             label: 'Mount Network Folder',
@@ -27,6 +29,11 @@ export class AddDialogComponent {
             label: 'Download',
             value: 2
         }
+    ];
+    public fileFormatOptions = [
+        'mp3',
+        'mp4',
+        'wav'
     ];
 
     constructor(
