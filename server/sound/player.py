@@ -1,6 +1,6 @@
 """ Contains event handlers for manipulating the player """
-import enum
 import collections
+import enum
 import pygame as pg
 import sound.playlist as pl
 from flask_socketio import emit
@@ -16,6 +16,8 @@ class PlayerStateEnum(enum.Enum):
 
 
 class PlayerInfo():
+    """ Class that holds information about a music player """
+
     def __init__(self):
         self.track = ''
         self.volume = 100
@@ -121,8 +123,9 @@ class Player():
 
     def volume(self, value):
         """ A method that sets the volume of the player """
-        pg.mixer.music.set_volume(value / 100)
-        self.info.volume = value
+        if value:
+            pg.mixer.music.set_volume(value / 100)
+            self.info.volume = value
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """
@@ -130,14 +133,9 @@ class Player():
         return playlist and isinstance(playlist, collections.Sequence)
 
 
-
-# audio player initialization and configuration
-AUDIO_PLAYER = Player()
-
-
 def emit_player_info():
     """ A function that sends the entry that is currently playing """
-    info = dict(AUDIO_PLAYER.info)
+    info = dict(PLAYER.info)
     emit('player info', info, broadcast=True)
 
 
@@ -155,7 +153,7 @@ def player_info(_):
 @SOCKET_IO.on('play', namespace='/server')
 def play_audio(_):
     """ A function that starts playing the first track on the playlist """
-    AUDIO_PLAYER.play()
+    PLAYER.play()
     emit_player_info()
 
 
@@ -169,7 +167,7 @@ def play_now(data):
     # start playing
     if isinstance(entries, collections.Sequence) and entries:
         track = entries[0]
-        AUDIO_PLAYER.play(track)
+        PLAYER.play(track)
         emit_player_info()
 
 
@@ -180,42 +178,42 @@ def play_all(_):
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track
-        AUDIO_PLAYER.play_all()
+        PLAYER.play_all()
         emit_player_info()
 
 
 @SOCKET_IO.on('pause', namespace='/server')
 def pause_audio(_):
     """ event handler for pausing the audio player """
-    AUDIO_PLAYER.pause()
+    PLAYER.pause()
     emit_player_info()
 
 
 @SOCKET_IO.on('stop', namespace='/server')
 def stop_audio(_):
     """ event handler for stoping the audio player """
-    AUDIO_PLAYER.stop()
+    PLAYER.stop()
     emit_player_info()
 
 
 @SOCKET_IO.on('next', namespace='/server')
 def next_track(_):
     """ starts playing the next track in the queue """
-    AUDIO_PLAYER.next()
+    PLAYER.next()
     emit_player_info()
 
 
 @SOCKET_IO.on('volume', namespace='/server')
 def volume_audio(data):
     """ event handler for controlling the volume of the audio player """
-    AUDIO_PLAYER.volume(data)
+    PLAYER.volume(data)
     emit_player_info()
 
 
 @SOCKET_IO.on('queue push', namespace='/server')
 def queue_push(data):
     """ event handler for pushing a new track on the queue """
-    AUDIO_PLAYER.add(data)
+    PLAYER.add(data)
     emit_player_info()
     emit_queue()
 
@@ -223,7 +221,7 @@ def queue_push(data):
 @SOCKET_IO.on('queue pop', namespace='/server')
 def queue_pop(data):
     """ event handler for poping a track from queue """
-    AUDIO_PLAYER.remove(data)
+    PLAYER.remove(data)
     emit_queue()
 
 
@@ -232,3 +230,7 @@ def queue(_):
     """ List queued tracks event handler """
     emit_player_info()
     emit_queue()
+
+
+# audio player initialization and configuration
+PLAYER = Player()
