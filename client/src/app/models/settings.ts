@@ -6,6 +6,6 @@ export interface ISettings {
 
 export class Settings implements ISettings {
 
-    public darkTheme = false;
+    public darkTheme = true;
 
 }

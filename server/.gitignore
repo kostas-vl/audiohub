@@ -14,5 +14,8 @@
 # Virtualenv
 venv/*
 
+# Mplayer
+mplayer/*
+
 # Exclude any executables
 **/*.exe

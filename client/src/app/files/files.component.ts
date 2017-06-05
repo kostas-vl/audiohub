@@ -16,6 +16,7 @@ export class FilesComponent implements OnInit {
     public currentSystem: IFileSystem;
     public currentSystemEntries: IFileSystem[];
     public currentSystemStack: string[] = [];
+    public addDialogShow = false;
     public loading = false;
     public asyncLoading = false;
 
@@ -74,13 +75,26 @@ export class FilesComponent implements OnInit {
     }
 
     public onOpenDialog() {
-        const dialog = this.mdDialog.open(AddDialogComponent);
-        dialog.afterClosed().subscribe(data => {
-            if (data) {
-                this.asyncLoading = true;
-                this.socket.emit(data.action, data.details);
-            }
-        });
+        this.addDialogShow = true;
+        // const dialog = this.mdDialog.open(AddDialogComponent);
+        // dialog.afterClosed().subscribe(data => {
+        //     if (data) {
+        //         this.asyncLoading = true;
+        //         this.socket.emit(data.action, data.details);
+        //     }
+        // });
+    }
+
+    public onCloseDialog() {
+        this.addDialogShow = false;
+    }
+
+    public onDialogComplete(data: any) {
+        if (data) {
+            this.onCloseDialog();
+            this.asyncLoading = true;
+            this.socket.emit(data.action, data.details);
+        }
     }
 
     public onRefresh() {

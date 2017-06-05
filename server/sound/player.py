@@ -1,4 +1,6 @@
 """ Contains event handlers for manipulating the player """
+import sys
+import subprocess
 import collections
 import enum
 import pygame as pg
@@ -27,6 +29,120 @@ class PlayerInfo():
         yield 'track', dict(self.track)
         yield 'volume', self.volume
         yield 'state', self.state.value
+
+
+class MPlayer():
+    """ Class that interops with the mplayer """
+
+    def __init__(self):
+        self.info = PlayerInfo()
+        self.mplayer_process = None
+
+    def add(self, entry):
+        """ Adds a new entry on the playlist """
+        if entry is not None:
+            playlist = pl.Playlist(entry)
+            playlist.active = True
+            pl.insert(playlist)
+
+    def remove(self, id):
+        """ A method that removes an entry from the playlist based on the provided id """
+        if id is not None:
+            playlist = pl.select_by_id(id)
+            playlist.active = False
+            pl.delete_by_id(id)
+
+    def remove_all(self):
+        """ A method that removes all entries from the playlist """
+        pl.delete_all()
+
+    def play(self, track=None):
+        """ A method that plays music based on the state of the player """
+        if (
+                (
+                    self.info.state == PlayerStateEnum.Paused or
+                    self.info.state == PlayerStateEnum.Stoped
+                ) and
+                track is None
+        ):
+            command = ' '.join(['pause', '\n'])
+            try:
+                self.mplayer_process.stdin.write(command)
+            except (TypeError, UnicodeEncodeError):
+                self.mplayer_process.stdin.write(command.encode('utf-8', 'ignore'))
+            self.mplayer_process.stdin.flush()
+            self.info.state = PlayerStateEnum.Playing
+
+        elif self.info.state == PlayerStateEnum.Init and track is None:
+            playlist = pl.select_active()
+            if playlist:
+                track = playlist.pop(0)
+                pg.mixer.music.load(track.path)
+                self.info.track = track
+                self.info.state = PlayerStateEnum.Playing
+                pg.mixer.music.play()
+
+        elif track is not None:
+            self.info.track = track
+            self.info.state = PlayerStateEnum.Playing
+            if self.mplayer_process is None:
+                self.mplayer_process = subprocess.Popen(
+                    ['mplayer.exe', '-slave', '-quiet', track.path],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    close_fds=(sys.platform != 'win32')
+                )
+            else:
+                load_command = ' '.join(['loadfile', track.path, '0', '\n'])
+                try:
+                    self.mplayer_process.stdin.write(load_command)
+                except (TypeError, UnicodeEncodeError):
+                    self.mplayer_process.stdin.write(load_command.encode('utf-8', 'ignore'))
+                self.mplayer_process.stdin.flush()
+
+    def pause(self):
+        """ A method that pauses the player """
+        if self.info.state == PlayerStateEnum.Playing:
+            command = ' '.join(['pause', '\n'])
+            try:
+                self.mplayer_process.stdin.write(command)
+            except (TypeError, UnicodeEncodeError):
+                self.mplayer_process.stdin.write(command.encode('utf-8', 'ignore'))
+            self.mplayer_process.stdin.flush()
+            self.info.state = PlayerStateEnum.Paused
+
+    def stop(self):
+        """ A method that stops the player """
+        if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
+            seek_command = ' '.join(['seek', '0', '2', '\n'])
+            try:
+                self.mplayer_process.stdin.write(seek_command)
+            except (TypeError, UnicodeEncodeError):
+                self.mplayer_process.stdin.write(seek_command.encode('utf-8', 'ignore'))
+            self.mplayer_process.stdin.flush()
+            pause_command = ' '.join(['pause', '\n'])
+            try:
+                self.mplayer_process.stdin.write(pause_command)
+            except (TypeError, UnicodeEncodeError):
+                self.mplayer_process.stdin.write(pause_command.encode('utf-8', 'ignore'))
+            self.mplayer_process.stdin.flush()
+            self.info.state = PlayerStateEnum.Stoped
+
+    def volume(self, value):
+        """ A method that sets the volume of the player """
+        if value:
+            volume_command = ' '.join(['volume', str(value), '1', '\n'])
+            try:
+                self.mplayer_process.stdin.write(volume_command)
+            except (TypeError, UnicodeEncodeError):
+                self.mplayer_process.stdin.write(volume_command.encode('utf-8', 'ignore'))
+            self.mplayer_process.stdin.flush()
+            self.info.volume = value
+
+    def has_entries(self):
+        """ A method that returns a boolean specifying whether there are entries on the playlist """
+        playlist = pl.select_active()
+        return playlist and isinstance(playlist, collections.Sequence)
 
 
 class Player():
@@ -67,14 +183,16 @@ class Player():
         ):
             pg.mixer.music.unpause()
             self.info.state = PlayerStateEnum.Playing
-        # elif self.info.state == PlayerStateEnum.Init and track is None:
-        #     playlist = pl.select_active()
-        #     if playlist:
-        #         track = playlist.pop()
-        #         pg.mixer.music.load(track.path)
-        #         self.info.track = track
-        #         self.info.state = PlayerStateEnum.Playing
-        #         pg.mixer.music.play()
+
+        elif self.info.state == PlayerStateEnum.Init and track is None:
+            playlist = pl.select_active()
+            if playlist:
+                track = playlist.pop(0)
+                pg.mixer.music.load(track.path)
+                self.info.track = track
+                self.info.state = PlayerStateEnum.Playing
+                pg.mixer.music.play()
+
         elif track is not None:
             pg.mixer.music.load(track.path)
             self.info.track = track
@@ -83,10 +201,9 @@ class Player():
 
     def play_all(self):
         """ A method that queues all the available songs of the playlist and then start playing """
-        # Checks if the player is paused or playing to stop it
-        if self.info.state == PlayerStateEnum.Paused or self.info.state == PlayerStateEnum.Playing:
-            self.stop()
-            self.info.state = PlayerStateEnum.Stoped
+        # Stop the player
+        self.stop()
+        self.info.state = PlayerStateEnum.Stoped
         # Get all the active tracks
         playlist = pl.select_active()
         # Checks if any track exists
@@ -163,8 +280,6 @@ def play_now(data):
         every source queued up until now
     """
     entries = pl.select_active_by_path(data['path'])
-    # if there are entries, the first entry is queued and the the audio player
-    # start playing
     if isinstance(entries, collections.Sequence) and entries:
         track = entries[0]
         PLAYER.play(track)
@@ -174,7 +289,6 @@ def play_now(data):
 @SOCKET_IO.on('play all', namespace='/server')
 def play_all(_):
     """ A function that plays all the active entries in the playlist table """
-    # gets all the active entries in the playlsit table
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track

@@ -48,16 +48,32 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+        <br>
+
         <div class="add-button-container pull-right">
 
-            <button md-raised-button color="primary" (click)="onOpenDialog()">
+            <button md-fab color="primary" (click)="onOpenDialog()" *ngIf="!addDialogShow">
 
-                <md-icon>add</md-icon> Add
+                <md-icon>add</md-icon>
+
+            </button>
+
+            <button md-fab color="primary" (click)="onCloseDialog()" *ngIf="addDialogShow">
+
+                <md-icon>close</md-icon>
 
             </button>
 
         </div>
 
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="addDialogShow">
+
+        <br>
+
+         <app-add-dialog (complete)="onDialogComplete($event)"></app-add-dialog>
+        
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="loading">

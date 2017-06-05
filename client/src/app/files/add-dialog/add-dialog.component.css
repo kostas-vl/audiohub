@@ -1,7 +1,7 @@
 .add-folder-dialog {
-    max-width: 600px;
+    /*max-width: 600px;*/
     max-height: 310px;
-    width: 600px;
+    /*width: 600px;*/
     height: 310px;
 }
 
@@ -9,9 +9,14 @@
     width: 100%;
 }
 
+.add-folder-dialog .dialog-select {
+    width: 100%;
+    padding-top: 15px;
+}
+
 .radio-group {
-  display: inline-flex;
-  flex-direction: column;
+  /*display: inline-flex;*/
+  /*flex-direction: column;*/
 }
 
 .radio-button {

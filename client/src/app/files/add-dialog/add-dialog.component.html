@@ -1,28 +1,12 @@
-<div class="row add-folder-dialog">
+<md-card>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <md-card-content>
 
-        <br>
+        <md-tab-group #tabGroup class="add-folder-dialog">
 
-        <md-select class="pull-right dialog-input" placeholder="Action" [(ngModel)]="selectedAction">
+            <md-tab label="Mount">
 
-            <md-option *ngFor="let option of addOptions" [value]="option.value">
-
-                {{option.label}}
-
-            </md-option>
-
-        </md-select>
-
-    </div>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-        <br>
-
-        <div [ngSwitch]="selectedAction">
-
-            <div *ngSwitchCase="0">
+                <br>
 
                 <md-input-container class="dialog-input">
 
@@ -48,9 +32,11 @@
 
                 </md-input-container>
 
-            </div>
+            </md-tab>
 
-            <div *ngSwitchCase="1">
+            <md-tab label="Local">
+
+                <br>
 
                 <md-input-container class="dialog-input">
 
@@ -64,9 +50,12 @@
 
                 </md-input-container>
 
-            </div>
+            </md-tab>
 
-            <div *ngSwitchCase="2">
+
+            <md-tab label="Download">
+
+                <br>
 
                 <md-input-container class="dialog-input">
 
@@ -80,28 +69,32 @@
 
                 </md-input-container>
 
-                <md-radio-group class="dialog-input radio-group" [(ngModel)]="downloadDetails.fileFormat">
+                <md-select class="dialog-select" placeholder="File Format" [(ngModel)]="downloadDetails.fileFormat">
+
+                    <md-option *ngFor="let option of fileFormatOptions" [value]="option">
+
+                        {{option}}
+
+                    </md-option>
+
+                </md-select>
+
+                <!--<md-radio-group [(ngModel)]="downloadDetails.fileFormat">
 
                     <md-radio-button class="radion-button" *ngFor="let option of fileFormatOptions" [value]="option">{{option}}</md-radio-button>
 
-                </md-radio-group>
+                </md-radio-group>-->
 
-            </div>
+            </md-tab>
 
-        </div>
+        </md-tab-group>
 
-    </div>
+    </md-card-content>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <md-card-actions>
 
-        <div class="pull-right">
+        <button md-button color="primary" (click)="onComplete()">Ok</button>
 
-            <button md-button color="primary" (click)="addFolder()">Add</button>
+    </md-card-actions>
 
-            <button md-button color="warn" (click)="cancel()">Cancel</button>
-
-        </div>
-
-    </div>
-
-</div>
+</md-card>

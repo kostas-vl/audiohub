@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
-import { SocketService } from '../../socket/socket.service';
-import { IMountFolder, MountFolder } from './models/mount-folder';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MdTabGroup } from "@angular/material";
+import { SocketService } from '../../socket/socket.service';
+import { IMountFolder, MountFolder } from '../../models/mount-folder';
+import { ILocalFolder, LocalFolder } from '../../models/local-folder';
+import { IDownloadDetails, DownloadDetails } from '../../models/download-details';
 
 @Component({
     selector: 'app-add-dialog',
@@ -11,10 +13,13 @@ import { FormControl } from '@angular/forms';
 })
 export class AddDialogComponent {
 
-    public selectedAction = 0;
+    @Output()
+    public complete: EventEmitter<{ action: string, details: any }> = new EventEmitter();
+    @ViewChild(MdTabGroup)
+    public tabGroupComponent: MdTabGroup;
     public mountFolder: IMountFolder = new MountFolder();
-    public folder = { name: '', path: '' };
-    public downloadDetails = { system: '', url: '', fileFormat: 'mp3' };
+    public folder: ILocalFolder = new LocalFolder();
+    public downloadDetails: IDownloadDetails = new DownloadDetails();
     public systemsControl: FormControl;
     public addOptions = [
         {
@@ -36,33 +41,25 @@ export class AddDialogComponent {
         'wav'
     ];
 
-    constructor(
-        private dialog: MdDialogRef<AddDialogComponent>,
-        private socket: SocketService
-    ) { }
+    constructor(private socket: SocketService) { }
 
-    public addFolder() {
-        switch (this.selectedAction) {
+    public onComplete() {
+        switch (this.tabGroupComponent.selectedIndex) {
             case 0:
-                this.dialog.close({ action: 'mount volume', details: this.mountFolder });
+                this.complete.emit({ action: 'mount volume', details: this.mountFolder });
                 break;
 
             case 1:
-                this.dialog.close({ action: 'add volume', details: this.folder });
+                this.complete.emit({ action: 'add volume', details: this.folder });
                 break;
 
             case 2:
-                this.dialog.close({ action: 'download', details: this.downloadDetails });
+                this.complete.emit({ action: 'download', details: this.downloadDetails });
                 break;
 
             default:
-                this.dialog.close();
                 break;
         }
-    }
-
-    public cancel() {
-        this.dialog.close();
     }
 
 }

@@ -21,7 +21,7 @@ def index():
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
     """ function that handles a new connection socket """
-    emit('my response', {'data': 'connected'})
+    print('Client connected')
 
 
 # Flask socket disconnect event handler
