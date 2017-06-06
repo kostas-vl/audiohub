@@ -72,9 +72,7 @@ def remove_volume(data):
         emits its contents
     """
     if data:
-        system = fs.select_by_id(data)
-        system.active = False
-        fs.update_by_id(system)
+        fs.delete_by_id(data)
         emit_available_systems()
 
 

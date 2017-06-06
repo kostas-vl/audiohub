@@ -39,6 +39,10 @@ class Player():
         self.info = PlayerInfo()
         self.mplayer_process = None
 
+    def init(self):
+        """ Initializes at a specified time the mplayer process """
+        self.mplayer_process = mpl.MplayerProcess()
+
     def add(self, entry):
         """ Adds a new entry on the playlist """
         if entry is not None:
@@ -46,12 +50,10 @@ class Player():
             playlist.active = True
             pl.insert(playlist)
 
-    def remove(self, id):
+    def remove(self, track_id):
         """ A method that removes an entry from the playlist based on the provided id """
-        if id is not None:
-            playlist = pl.select_by_id(id)
-            playlist.active = False
-            pl.delete_by_id(id)
+        if track_id:
+            pl.delete_by_id(track_id)
 
     def remove_all(self):
         """ A method that removes all entries from the playlist """
@@ -66,157 +68,56 @@ class Player():
                 ) and
                 track is None
         ):
-            self.mplayer_process = mpl.pause(self.mplayer_process)
+            self.mplayer_process.pause()
             self.info.state = PlayerStateEnum.Playing
 
-        elif self.info.state == PlayerStateEnum.Init and track is None:
-            playlist = pl.select_active()
-            if playlist:
-                track = playlist.pop(0)
-                pg.mixer.music.load(track.path)
-                self.info.track = track
-                self.info.state = PlayerStateEnum.Playing
-                pg.mixer.music.play()
+        # elif self.info.state == PlayerStateEnum.Init and track is None:
+        #     playlist = pl.select_active()
+        #     if playlist:
+        #         track = playlist.pop(0)
+        #         pg.mixer.music.load(track.path)
+        #         self.info.track = track
+        #         self.info.state = PlayerStateEnum.Playing
+        #         pg.mixer.music.play()
 
         elif track is not None:
             self.info.track = track
             self.info.state = PlayerStateEnum.Playing
-            if self.mplayer_process is None:
-                self.mplayer_process = mpl.spawn(track.path)
+            if not self.mplayer_process:
+                self.mplayer_process = mpl.MplayerProcess(track.path)
             else:
-                self.mplayer_process = mpl.loadfile(
-                    self.mplayer_process, track.path
-                )
-                self.volume(self.info.volume)
+                self.mplayer_process.loadfile(track.path)
+            self.volume(self.info.volume)
+            # if self.mplayer_process is None:
+            #     self.mplayer_process = mpl.spawn(track.path)
+            # else:
+            #     self.mplayer_process = mpl.loadfile(
+            #         self.mplayer_process, track.path
+            #     )
 
     def pause(self):
         """ A method that pauses the player """
         if self.info.state == PlayerStateEnum.Playing:
-            self.mplayer_process = mpl.pause(self.mplayer_process)
+            self.mplayer_process.pause()
             self.info.state = PlayerStateEnum.Paused
 
     def stop(self):
         """ A method that stops the player """
         if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
-            self.mplayer_process = mpl.seek(self.mplayer_process, 0, 2)
-            self.mplayer_process = mpl.pause(self.mplayer_process)
+            self.mplayer_process.seek(0, 2)
+            self.mplayer_process.pause()
             self.info.state = PlayerStateEnum.Stoped
 
     def volume(self, value):
         """ A method that sets the volume of the player """
         if value:
-            self.mplayer_process = mpl.volume(self.mplayer_process, value)
+            self.mplayer_process.volume(value)
             self.info.volume = value
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """
         playlist = pl.select_active()
         return playlist and isinstance(playlist, collections.Sequence)
-
-
-# class Player():
-#     """ Class that implements a basic music player """
-
-#     def __init__(self):
-#         self.info = PlayerInfo()
-#         if not pg.mixer.get_init():
-#             pg.mixer.pre_init()
-#             pg.mixer.init()
-
-#     def add(self, entry):
-#         """ Adds a new entry on the playlist """
-#         if entry is not None:
-#             playlist = pl.Playlist(entry)
-#             playlist.active = True
-#             pl.insert(playlist)
-
-#     def remove(self, id):
-#         """ A method that removes an entry from the playlist based on the provided id """
-#         if id is not None:
-#             playlist = pl.select_by_id(id)
-#             playlist.active = False
-#             pl.delete_by_id(id)
-
-#     def remove_all(self):
-#         """ A method that removes all entries from the playlist """
-#         pl.delete_all()
-
-#     def play(self, track=None):
-#         """ A method that plays music based on the state of the player """
-#         if (
-#                 (
-#                     self.info.state == PlayerStateEnum.Paused or
-#                     self.info.state == PlayerStateEnum.Stoped
-#                 ) and
-#                 track is None
-#         ):
-#             pg.mixer.music.unpause()
-#             self.info.state = PlayerStateEnum.Playing
-
-#         elif self.info.state == PlayerStateEnum.Init and track is None:
-#             playlist = pl.select_active()
-#             if playlist:
-#                 track = playlist.pop(0)
-#                 pg.mixer.music.load(track.path)
-#                 self.info.track = track
-#                 self.info.state = PlayerStateEnum.Playing
-#                 pg.mixer.music.play()
-
-#         elif track is not None:
-#             pg.mixer.music.load(track.path)
-#             self.info.track = track
-#             self.info.state = PlayerStateEnum.Playing
-#             pg.mixer.music.play()
-
-#     def play_all(self):
-#         """ A method that queues all the available songs of the playlist and then start playing """
-#         # Stop the player
-#         self.stop()
-#         self.info.state = PlayerStateEnum.Stoped
-#         # Get all the active tracks
-#         playlist = pl.select_active()
-#         # Checks if any track exists
-#         if playlist and isinstance(playlist, collections.Sequence):
-#             # Load the first track and queue the rest
-#             self.info.track = playlist.pop(0)
-#             pg.mixer.music.load(self.info.track.path)
-#             for entry in playlist:
-#                 pg.mixer.music.queue(entry.path)
-#         # Call the play function and set the state to playing
-#         pg.mixer.music.play()
-#         self.info.state = PlayerStateEnum.Playing
-
-#     def pause(self):
-#         """ A method that pauses the player """
-#         if self.info.state == PlayerStateEnum.Playing:
-#             pg.mixer.music.pause()
-#             self.info.state = PlayerStateEnum.Paused
-
-#     def stop(self):
-#         """ A method that stops the player """
-#         if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
-#             pg.mixer.music.rewind()
-#             self.pause()
-#             self.info.state = PlayerStateEnum.Stoped
-
-#     def next(self):
-#         """ A method that plays the next track on the playlist """
-#         pass
-
-#     def previous(self):
-#         """ A method that plays the previous track on the playlist """
-#         pass
-
-#     def volume(self, value):
-#         """ A method that sets the volume of the player """
-#         if value:
-#             pg.mixer.music.set_volume(value / 100)
-#             self.info.volume = value
-
-#     def has_entries(self):
-#         """ A method that returns a boolean specifying whether there are entries on the playlist """
-#         playlist = pl.select_active()
-#         return playlist and isinstance(playlist, collections.Sequence)
 
 
 def emit_player_info():

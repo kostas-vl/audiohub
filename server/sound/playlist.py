@@ -145,7 +145,7 @@ def delete_all():
         )
 
 
-def delete_by_id(id):
+def delete_by_id(playlist_id):
     """ A function that deletes an entry for the playlist data table
         that contains the provided id
     """
@@ -154,7 +154,7 @@ def delete_by_id(id):
             DATABASE.
             playlist.
             delete().
-            where(DATABASE.playlist.c.id == id)
+            where(DATABASE.playlist.c.id == playlist_id)
         )
 
 

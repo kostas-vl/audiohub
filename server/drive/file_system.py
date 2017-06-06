@@ -134,6 +134,14 @@ def update_collection(file_system_collection):
             collection.append(system)
     return [FileSystem(system) for system in collection]
 
+def delete_by_all():
+    """ A function that deletes all entries in the file systems data table """
+    with DATABASE.engine.connect() as conn:
+        conn.execute(
+            DATABASE.
+            file_systems.
+            delete()
+        )
 
 def delete_by_id(system_id):
     """ A function that deletes an entry for the file system data table
