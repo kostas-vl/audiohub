@@ -38,7 +38,7 @@ def main():
     settings.load()
     # Initializing database
     print("Initializing database schema image...")
-    DATABASE.init(settings.DATABASE_SETTINGS)
+    DATABASE.init(settings.DATABASE)
     # Flask APP Initialization
     print("Starting the flask socket-io server...")
     SOCKET_IO.run(

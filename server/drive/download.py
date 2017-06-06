@@ -1,5 +1,5 @@
 """ Contains functions for downloading an mp3 using youtube dl """
-import os
+import sys
 import subprocess
 import collections
 import drive.file_system as file_system
@@ -9,14 +9,17 @@ from enviroment import SOCKET_IO, emit
 def youtube_dl_command(path, url, file_format):
     """ A function that returns the command for downloading an mp3 with youtube dl """
     youtube_dl = ''
-    if os.name == 'nt':
+    if sys.platform == 'win32':
         youtube_dl = 'youtube-dl.exe'
-    elif os.name == 'posix':
+    elif sys.platform == 'linux':
         youtube_dl = 'youtube-dl'
-    return ''.join([
-        youtube_dl + ' ',
-        '--extract-audio --audio-format ' + file_format + ' -o ',
-        path + "'%(title)s.%(ext)s'" + ' ',
+    return ' '.join([
+        youtube_dl,
+        '--extract-audio',
+        '--audio-format',
+        file_format,
+        '-o',
+        path + "%(title)s.%(ext)s",
         url
     ])
 
