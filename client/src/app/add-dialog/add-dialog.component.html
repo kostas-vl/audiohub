@@ -4,7 +4,7 @@
 
         <md-tab-group #tabGroup class="add-folder-dialog">
 
-            <md-tab label="Mount">
+            <md-tab label="MOUNT">
 
                 <br>
 
@@ -34,7 +34,7 @@
 
             </md-tab>
 
-            <md-tab label="Local">
+            <md-tab label="LOCAL">
 
                 <br>
 
@@ -53,7 +53,7 @@
             </md-tab>
 
 
-            <md-tab label="Download">
+            <md-tab label="DOWNLOAD">
 
                 <br>
 
@@ -79,21 +79,15 @@
 
                 </md-select>
 
-                <!--<md-radio-group [(ngModel)]="downloadDetails.fileFormat">
-
-                    <md-radio-button class="radion-button" *ngFor="let option of fileFormatOptions" [value]="option">{{option}}</md-radio-button>
-
-                </md-radio-group>-->
-
             </md-tab>
 
         </md-tab-group>
 
     </md-card-content>
 
-    <md-card-actions>
+    <md-card-actions class="text-right">
 
-        <button md-button color="primary" (click)="onComplete()">Ok</button>
+        <button md-raised-button color="primary" (click)="onComplete()">OK</button>
 
     </md-card-actions>
 

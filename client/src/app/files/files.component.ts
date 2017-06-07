@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
-import { AddDialogComponent } from './add-dialog/add-dialog.component';
 
 @Component({
     selector: 'app-files',
@@ -16,7 +15,6 @@ export class FilesComponent implements OnInit {
     public currentSystem: IFileSystem;
     public currentSystemEntries: IFileSystem[];
     public currentSystemStack: string[] = [];
-    public addDialogShow = false;
     public loading = false;
     public asyncLoading = false;
 
@@ -67,34 +65,7 @@ export class FilesComponent implements OnInit {
             this.socket.emit('list dir', data.path);
         });
 
-        this.socket.subscribe('download finished', _ => {
-            this.asyncLoading = false;
-        });
-
         this.availableSystems();
-    }
-
-    public onOpenDialog() {
-        this.addDialogShow = true;
-        // const dialog = this.mdDialog.open(AddDialogComponent);
-        // dialog.afterClosed().subscribe(data => {
-        //     if (data) {
-        //         this.asyncLoading = true;
-        //         this.socket.emit(data.action, data.details);
-        //     }
-        // });
-    }
-
-    public onCloseDialog() {
-        this.addDialogShow = false;
-    }
-
-    public onDialogComplete(data: any) {
-        if (data) {
-            this.onCloseDialog();
-            this.asyncLoading = true;
-            this.socket.emit(data.action, data.details);
-        }
     }
 
     public onRefresh() {

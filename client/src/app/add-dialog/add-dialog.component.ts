@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MdTabGroup } from '@angular/material';
-import { SocketService } from '../../socket/socket.service';
-import { IMountFolder, MountFolder } from '../../models/mount-folder';
-import { ILocalFolder, LocalFolder } from '../../models/local-folder';
-import { IDownloadDetails, DownloadDetails } from '../../models/download-details';
+import { SocketService } from '../socket/socket.service';
+import { IMountFolder, MountFolder } from '../models/mount-folder';
+import { ILocalFolder, LocalFolder } from '../models/local-folder';
+import { IDownloadDetails, DownloadDetails } from '../models/download-details';
 
 @Component({
     selector: 'app-add-dialog',

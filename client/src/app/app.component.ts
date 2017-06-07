@@ -13,6 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private settingsSubscription: number;
     public darkTheme: boolean;
+    public addDialogShow = false;
+    public addDialogLoading = false;
 
     @ViewChild('sidenav')
     public sidenav: MdSidenav;
@@ -28,8 +30,20 @@ export class AppComponent implements OnInit, OnDestroy {
         this.darkTheme = this.settingsService.get().darkTheme;
         this.settingsSubscription = this.settingsService.subscribe(settings => this.darkTheme = settings.darkTheme);
         this.socket.connect();
+
+        this.socket.subscribe('mount volume success', _ => {
+            this.snackbar.open('Volume mounted!', '', { duration: 1500 });
+            this.addDialogLoading = false;
+        });
+
+        this.socket.subscribe('add volume success', _ => {
+            this.snackbar.open('Volume added!', '', { duration: 1500 });
+            this.addDialogLoading = false;
+        });
+
         this.socket.subscribe('download finished', data => {
-            this.snackbar.open('Download finished!', '', { duration: 1500, extraClasses: ['snack-bar-bg'] });
+            this.snackbar.open('Download finished!', '', { duration: 1500 });
+            this.addDialogLoading = false;
         });
     }
 
@@ -42,6 +56,22 @@ export class AppComponent implements OnInit, OnDestroy {
         if (url) {
             this.sidenav.toggle();
             this.router.navigateByUrl(url);
+        }
+    }
+
+    public onOpenDialog() {
+        this.addDialogShow = true;
+    }
+
+    public onCloseDialog() {
+        this.addDialogShow = false;
+    }
+
+    public onDialogComplete(data: any) {
+        if (data) {
+            this.onCloseDialog();
+            this.addDialogLoading = true;
+            this.socket.emit(data.action, data.details);
         }
     }
 
