@@ -1,10 +1,10 @@
-<div [class.app-dark]="darkTheme">
+<div [class.app-dark]="settings.darkTheme">
 
     <app-top-bar [sidenav]="sidenav"></app-top-bar>
 
     <md-sidenav-container>
 
-        <md-sidenav #sidenav class="sidenav" mode="over">
+        <md-sidenav #sidenav class="sidenav" [mode]="settings.sidenavMode">
 
             <md-nav-list class="sidenav-list">
 
@@ -41,8 +41,6 @@
 
                     <app-player></app-player>
 
-                    <md-progress-bar color="primary" value="0" mode="indeterminate" bufferValue="0" *ngIf="addDialogLoading"></md-progress-bar>
-
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -51,17 +49,19 @@
 
                     <div class="add-button-container pull-right">
 
-                        <button md-fab color="primary" (click)="onOpenDialog()" *ngIf="!addDialogShow">
+                        <button md-button color="primary" (click)="onOpenDialog()" *ngIf="!addDialogShow">
 
-                            <md-icon>add</md-icon>
+                            <md-icon>expand_more</md-icon>
+
+                        </button>
+
+                        <button md-button color="primary" (click)="onCloseDialog()" *ngIf="addDialogShow">
+
+                            <md-icon>expand_less</md-icon>
 
                         </button>
 
-                        <button md-fab color="primary" (click)="onCloseDialog()" *ngIf="addDialogShow">
-
-                            <md-icon>close</md-icon>
-
-                        </button>
+                        <md-progress-bar class="add-progress" color="primary" value="0" mode="indeterminate" bufferValue="0" *ngIf="addDialogLoading"></md-progress-bar>
 
                     </div>
 

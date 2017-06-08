@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdSidenav, MdSnackBar } from '@angular/material';
+import { ISettings } from './models/settings';
 import { SocketService } from './socket/socket.service';
 import { SettingsService } from './settings-service/settings.service';
 
@@ -12,7 +13,7 @@ import { SettingsService } from './settings-service/settings.service';
 export class AppComponent implements OnInit, OnDestroy {
 
     private settingsSubscription: number;
-    public darkTheme: boolean;
+    public settings: ISettings;
     public addDialogShow = false;
     public addDialogLoading = false;
 
@@ -27,8 +28,10 @@ export class AppComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
-        this.darkTheme = this.settingsService.get().darkTheme;
-        this.settingsSubscription = this.settingsService.subscribe(settings => this.darkTheme = settings.darkTheme);
+        this.settings = this.settingsService.get();
+        this.settingsSubscription = this.settingsService.subscribe(settings => {
+            this.settings = settings;
+        });
         this.socket.connect();
 
         this.socket.subscribe('mount volume success', _ => {

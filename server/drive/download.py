@@ -1,7 +1,9 @@
 """ Contains functions for downloading an mp3 using youtube dl """
 import sys
 import subprocess
+import threading
 import collections
+import gevent
 import drive.file_system as file_system
 from enviroment import SOCKET_IO, emit
 
@@ -35,8 +37,15 @@ def download_url(path, url, file_format):
         print(err)
 
 
+def download_async(path, url, file_format):
+    """ Spawns a new thread and calls the youtube dl """
+    download_url(path, url, file_format)
+    emit('download finished')
+    return
+
+
 @SOCKET_IO.on('download', namespace='/server')
-def download(data):
+def on_download(data):
     """ A function that downloads the provided url on the provided path """
     system_name = data['system']
     url = data['url']
@@ -46,3 +55,9 @@ def download(data):
         path = system[0].path
         download_url(path, url, file_format)
         emit('download finished')
+        # gevent.spawn(download_async, path, url, file_format)
+        # thread = threading.Thread(
+        #     target=download_async,
+        #     args=(path, url, file_format)
+        # )
+        # thread.start()

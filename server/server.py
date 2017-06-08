@@ -44,7 +44,9 @@ def main():
     # Flask APP Initialization
     print("Starting the flask socket-io server...")
     SOCKET_IO.run(
-        APP, host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 5000))
+        APP,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=int(os.getenv('PORT', 5000))
     )
     # Send out the current playlist
     emit('queue', playlist, broadcast=True)

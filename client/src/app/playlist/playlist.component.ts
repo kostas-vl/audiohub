@@ -36,7 +36,7 @@ export class PlaylistComponent implements OnInit {
     }
 
     public onPlayNow(entry: IPlaylist) {
-        this.socket.emit('play now', entry);
+        this.socket.emit('play', entry);
     }
 
 }

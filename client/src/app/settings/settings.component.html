@@ -14,9 +14,33 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
 
-        <br>
+        <md-slide-toggle class="settings-entry" [(ngModel)]="settings.darkTheme" (change)="onChange()">Dark Theme</md-slide-toggle>
 
-        <md-slide-toggle [(ngModel)]="settings.darkTheme" (change)="onChange()">Dark Theme</md-slide-toggle>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <md-select class="settings-entry" placeholder="Sidenav Mode" [(ngModel)]="settings.sidenavMode" (change)="onChange()">
+
+            <md-option value="over">
+
+                over
+
+            </md-option>
+
+            <md-option value="side">
+
+                side
+
+            </md-option>
+
+            <md-option value="push">
+
+                push
+
+            </md-option>            
+
+        </md-select>
 
     </div>
     

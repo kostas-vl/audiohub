@@ -20,6 +20,11 @@ body {
     min-height: 960px;
 }
 
+.add-progress {
+    padding-left: 1px;
+    width: 87px;
+}
+
 @media(max-width: 450px) {
     .sidenav {
         width: 100%;

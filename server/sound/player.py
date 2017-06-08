@@ -9,7 +9,6 @@ import sound.mplayer as mpl
 from flask_socketio import emit
 from enviroment import SOCKET_IO
 
-
 class PlayerStateEnum(enum.Enum):
     """ Enum that shows various player state values """
     Init = 'init'
@@ -37,7 +36,7 @@ class Player():
 
     def __init__(self):
         self.info = PlayerInfo()
-        self.mplayer_process = None
+        self.mplayer_process = mpl.MplayerProcess()
 
     def init(self):
         """ Initializes at a specified time the mplayer process """
@@ -59,41 +58,32 @@ class Player():
         """ A method that removes all entries from the playlist """
         pl.delete_all()
 
-    def play(self, track=None):
+    def play(self, data=None):
         """ A method that plays music based on the state of the player """
+        # Unpausing the player
         if (
                 (
                     self.info.state == PlayerStateEnum.Paused or
                     self.info.state == PlayerStateEnum.Stoped
                 ) and
-                track is None
+                data is None
         ):
             self.mplayer_process.pause()
             self.info.state = PlayerStateEnum.Playing
-
-        # elif self.info.state == PlayerStateEnum.Init and track is None:
-        #     playlist = pl.select_active()
-        #     if playlist:
-        #         track = playlist.pop(0)
-        #         pg.mixer.music.load(track.path)
-        #         self.info.track = track
-        #         self.info.state = PlayerStateEnum.Playing
-        #         pg.mixer.music.play()
-
-        elif track is not None:
-            self.info.track = track
+        # Loading a single track
+        elif data and isinstance(data, pl.Playlist):
+            self.info.track = data
             self.info.state = PlayerStateEnum.Playing
-            if not self.mplayer_process:
-                self.mplayer_process = mpl.MplayerProcess(track.path)
-            else:
-                self.mplayer_process.loadfile(track.path)
+            self.mplayer_process.loadfile(self.info.track.path)
             self.volume(self.info.volume)
-            # if self.mplayer_process is None:
-            #     self.mplayer_process = mpl.spawn(track.path)
-            # else:
-            #     self.mplayer_process = mpl.loadfile(
-            #         self.mplayer_process, track.path
-            #     )
+        # Loading a list of tracks
+        elif data and isinstance(data, collections.Sequence):
+            self.info.track = data[0]
+            self.info.state = PlayerStateEnum.Playing
+            self.mplayer_process.loadfile(self.info.track.path)
+            self.volume(self.info.volume)
+            for entry in data[1:len(data) - 1]:
+                self.mplayer_process.loadfile(entry.path, True)
 
     def pause(self):
         """ A method that pauses the player """
@@ -132,70 +122,67 @@ def emit_queue():
 
 
 @SOCKET_IO.on('player info', namespace='/server')
-def player_info(_):
+def on_player_info(_):
     """ A function that sends thew info of the player """
     emit_player_info()
 
 
 @SOCKET_IO.on('play', namespace='/server')
-def play_audio(_):
-    """ A function that starts playing the first track on the playlist """
-    PLAYER.play()
-    emit_player_info()
-
-
-@SOCKET_IO.on('play now', namespace='/server')
-def play_now(data):
+def on_play(data):
     """ A function that plays the track that is provided removing
         every source queued up until now
     """
-    entries = pl.select_active_by_path(data['path'])
-    if isinstance(entries, collections.Sequence) and entries:
-        track = entries[0]
-        PLAYER.play(track)
+    if data:
+        entries = pl.select_active_by_path(data['path'])
+        if isinstance(entries, collections.Sequence) and entries:
+            track = entries[0]
+            PLAYER.play(track)
+            emit_player_info()
+    else:
+        PLAYER.play()
         emit_player_info()
 
 
 @SOCKET_IO.on('play all', namespace='/server')
-def play_all(_):
+def on_play_all(_):
     """ A function that plays all the active entries in the playlist table """
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track
-        PLAYER.play_all()
+        PLAYER.play(playlist)
         emit_player_info()
 
 
 @SOCKET_IO.on('pause', namespace='/server')
-def pause_audio(_):
+def on_pause(_):
     """ event handler for pausing the audio player """
     PLAYER.pause()
     emit_player_info()
 
 
 @SOCKET_IO.on('stop', namespace='/server')
-def stop_audio(_):
+def on_stop(_):
     """ event handler for stoping the audio player """
     PLAYER.stop()
     emit_player_info()
 
 
 @SOCKET_IO.on('next', namespace='/server')
-def next_track(_):
+def on_next(_):
     """ starts playing the next track in the queue """
     PLAYER.next()
     emit_player_info()
 
 
 @SOCKET_IO.on('volume', namespace='/server')
-def volume_audio(data):
+def on_volume(data):
     """ event handler for controlling the volume of the audio player """
     PLAYER.volume(data)
     emit_player_info()
 
 
 @SOCKET_IO.on('queue push', namespace='/server')
-def queue_push(data):
+def on_queue_push(data):
     """ event handler for pushing a new track on the queue """
     PLAYER.add(data)
     emit_player_info()
@@ -203,14 +190,14 @@ def queue_push(data):
 
 
 @SOCKET_IO.on('queue pop', namespace='/server')
-def queue_pop(data):
+def on_queue_pop(data):
     """ event handler for poping a track from queue """
     PLAYER.remove(data)
     emit_queue()
 
 
 @SOCKET_IO.on('queue', namespace='/server')
-def queue(_):
+def on_queue(_):
     """ List queued tracks event handler """
     emit_player_info()
     emit_queue()

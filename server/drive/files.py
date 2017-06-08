@@ -19,20 +19,20 @@ def build_dir_tree(path):
 
 
 @SOCKET_IO.on('available systems', namespace='/server')
-def available_systems(data):
+def on_available_systems(data):
     """ A function that emits to all the connections all the available file systems """
     emit_available_systems()
 
 
 @SOCKET_IO.on('list dir', namespace='/server')
-def list_dir(data):
+def on_list_dir(data):
     """ A function that emits all the files and directories for the provided path """
     tree = build_dir_tree(data)
     emit('list dir', [dict(node) for node in tree])
 
 
 @SOCKET_IO.on('add volume', namespace='/server')
-def add_volume(data):
+def on_add_volume(data):
     """ A function that adds a volume on the list of available systems and then
         emits its contents
     """
@@ -47,7 +47,7 @@ def add_volume(data):
 
 
 @SOCKET_IO.on('mount volume', namespace='/server')
-def mount_volume(data):
+def on_mount_volume(data):
     """ A function that mounts a volume on the list of available systems
         and then emits its contents
     """
@@ -67,7 +67,7 @@ def mount_volume(data):
 
 
 @SOCKET_IO.on('remove volume', namespace='/server')
-def remove_volume(data):
+def on_remove_volume(data):
     """ A function that removes a volume from the list of available systems and then
         emits its contents
     """

@@ -1,5 +1,5 @@
 """ Contains functions for mounting and unmounting network file systems """
-import os
+import sys
 import subprocess
 
 
@@ -21,29 +21,25 @@ class NetworkFileSystem():
 
 def mount(details):
     """ A function that mounts a new network file system """
-    if os.name == 'nt':
-        return nt_mount(details)
-    elif os.name == 'posix':
-        return posix_mount(details)
-    elif os.name == 'java':
-        return java_mount(details)
+    if sys.platform == 'win32':
+        return win32_mount(details)
+    elif sys.platform == 'linux':
+        return linux_mount(details)
     else:
         return ''
 
 
 def unmount(details):
     """ A function that unmounts a network file system """
-    if os.name == 'nt':
-        nt_unmount(details)
-    elif os.name == 'posix':
-        posix_unmount(details)
-    elif os.name == 'java':
-        java_unmount(details)
+    if sys.platform == 'win32':
+        win32_unmount(details)
+    elif sys.platform == 'linux':
+        linux_unmount(details)
     else:
         pass
 
 
-def nt_mount(details):
+def win32_mount(details):
     """ A function that mounts a new network file system on a windows OS """
     try:
         persistent = 'yes' if details.persistent else 'no'
@@ -66,7 +62,7 @@ def nt_mount(details):
         return None
 
 
-def nt_unmount(details):
+def win32_unmount(details):
     """ A function that unmounts a network file system on a windows OS """
     try:
         path = '\\\\' + details.ip + '\\' + details.volume
@@ -81,21 +77,11 @@ def nt_unmount(details):
         return None
 
 
-def posix_mount(details):
+def linux_mount(details):
     """ A function that mounts a new network file system on a posix OS """
     pass
 
 
-def posix_unmount(details):
+def linux_unmount(details):
     """ A function that unmounts a network file system on a posix OS """
-    pass
-
-
-def java_mount(details):
-    """ JAVAAAAAAAA """
-    pass
-
-
-def java_unmount(details):
-    """ JAVAAAAAAAA """
     pass
