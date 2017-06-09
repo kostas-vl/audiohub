@@ -3,16 +3,18 @@ import json
 
 SETTINGS_FILE_NAME = './settings.json'
 
+SERVER = None
 DATABASE = None
 MPLAYER = None
 
 def load():
     """ Loads the application settings based on the registered file path """
-    global DATABASE, MPLAYER
+    global SERVER, DATABASE, MPLAYER
     try:
         with open(SETTINGS_FILE_NAME, 'r') as settings_file:
             content = settings_file.read()
             settings_dict = json.loads(content)
+            SERVER = settings_dict['server']
             DATABASE = settings_dict['database']
             MPLAYER = settings_dict['mplayer']
     except OSError as err:

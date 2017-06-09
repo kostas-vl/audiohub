@@ -1,11 +1,11 @@
 """ Contains functions for downloading an mp3 using youtube dl """
 import sys
 import subprocess
-import threading
 import collections
-import gevent
+import eventlet
 import drive.file_system as file_system
-from enviroment import SOCKET_IO, emit
+from flask_socketio import emit
+from enviroment import APP, SOCKET_IO
 
 
 def youtube_dl_command(path, url, file_format):
@@ -40,8 +40,13 @@ def download_url(path, url, file_format):
 def download_async(path, url, file_format):
     """ Spawns a new thread and calls the youtube dl """
     download_url(path, url, file_format)
+    with APP.test_request_context('/'):
+        SOCKET_IO.emit('download finished', namespace='/server')
+
+@SOCKET_IO.on('download finished', namespace='/server')
+def on_download_finished(_):
+    """ """
     emit('download finished')
-    return
 
 
 @SOCKET_IO.on('download', namespace='/server')
@@ -53,11 +58,12 @@ def on_download(data):
     system = file_system.select_by_name(system_name)
     if isinstance(system, collections.Sequence) and system:
         path = system[0].path
-        download_url(path, url, file_format)
-        emit('download finished')
+        # download_url(path, url, file_format)
+        # emit('download finished')
         # gevent.spawn(download_async, path, url, file_format)
         # thread = threading.Thread(
         #     target=download_async,
         #     args=(path, url, file_format)
         # )
         # thread.start()
+        eventlet.spawn(download_async, path, url, file_format)

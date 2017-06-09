@@ -39,13 +39,11 @@ def main():
     # Initializing database
     print("Initializing database schema image...")
     DATABASE.init(settings.DATABASE)
-    # Initializing the player
-    # player.PLAYER.init()
     # Flask APP Initialization
     print("Starting the flask socket-io server...")
     SOCKET_IO.run(
         APP,
-        host=os.getenv('IP', '0.0.0.0'),
+        host=os.getenv('IP', settings.SERVER['ip']),
         port=int(os.getenv('PORT', 5000))
     )
     # Send out the current playlist

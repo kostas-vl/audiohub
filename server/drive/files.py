@@ -2,7 +2,8 @@
 import os
 import drive.file_system as fs
 import drive.network as net
-from enviroment import SOCKET_IO, emit
+from flask_socketio import emit
+from enviroment import SOCKET_IO
 
 
 def build_dir_tree(path):

@@ -10,6 +10,10 @@ class MplayerProcess():
     def __init__(self):
         self.__process = None
 
+    def __del__(self):
+        if self.__process is None:
+            self.__process.terminate()
+
     def __execute(self, command):
         """ Executes the given command on a mplayer process """
         command.append('\n')
@@ -46,7 +50,8 @@ class MplayerProcess():
                 self.spawn(file)
             else:
                 append_valid_value = str(int(append))
-                self.__execute(['loadfile', "'" + file + "'", append_valid_value])
+                self.__execute(
+                    ['loadfile', "'" + file + "'", append_valid_value])
         except OSError:
             self.__process.terminate()
             self.spawn(file)

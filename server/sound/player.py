@@ -1,9 +1,6 @@
 """ Contains event handlers for manipulating the player """
-import sys
-import subprocess
 import collections
 import enum
-import pygame as pg
 import sound.playlist as pl
 import sound.mplayer as mpl
 from flask_socketio import emit
@@ -60,14 +57,11 @@ class Player():
 
     def play(self, data=None):
         """ A method that plays music based on the state of the player """
+        is_playing = not (
+            self.info.state == PlayerStateEnum.Paused or self.info.state == PlayerStateEnum.Stoped
+        )
         # Unpausing the player
-        if (
-                (
-                    self.info.state == PlayerStateEnum.Paused or
-                    self.info.state == PlayerStateEnum.Stoped
-                ) and
-                data is None
-        ):
+        if not is_playing and data is None:
             self.mplayer_process.pause()
             self.info.state = PlayerStateEnum.Playing
         # Loading a single track
@@ -103,6 +97,14 @@ class Player():
         if value:
             self.mplayer_process.volume(value)
             self.info.volume = value
+
+    def next(self):
+        """ A methods that moves to the next track on the queue """
+        pass
+
+    def previous(self):
+        """ A method that moves to the previous track on the queue """
+        pass
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """

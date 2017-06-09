@@ -1,5 +1,4 @@
 """ Contains constants for the application runtime """
-import pyglet
 from flask import Flask, render_template
 from flask_socketio import SocketIO, Namespace, emit
 
@@ -7,6 +6,3 @@ from flask_socketio import SocketIO, Namespace, emit
 APP = Flask(__name__)
 APP.config['SECRET_KEY'] = 'secret!'
 SOCKET_IO = SocketIO(APP)
-
-# Pyglet configuration
-pyglet.options['audio'] = ('openal', 'directsound')
