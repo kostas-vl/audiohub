@@ -6,3 +6,4 @@ from flask_socketio import SocketIO, Namespace, emit
 APP = Flask(__name__)
 APP.config['SECRET_KEY'] = 'secret!'
 SOCKET_IO = SocketIO(APP)
+CLIENTS = []

@@ -6,8 +6,9 @@ import sound.playlist as playlist
 import drive.files as files
 import drive.file_system as file_system
 import drive.download as download
+from flask import request
 from database.schema import DATABASE
-from enviroment import SOCKET_IO, APP, emit
+from enviroment import SOCKET_IO, APP, CLIENTS, emit
 
 
 # Default http route
@@ -21,14 +22,16 @@ def index():
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
     """ function that handles a new connection socket """
-    print('Client connected')
+    CLIENTS.append(request.sid)
+    print('client_connected::{0}'.format(request.sid))
 
 
 # Flask socket disconnect event handler
 @SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
     """ Function that handles a socket disconnect event """
-    print('Client disconnected')
+    CLIENTS.remove(request.sid)
+    print('client_disconnected::{0}'.format(request.sid))
 
 
 def main():

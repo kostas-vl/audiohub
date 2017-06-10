@@ -2,10 +2,10 @@
 import sys
 import subprocess
 import collections
-import eventlet
+import threading
 import drive.file_system as file_system
-from flask_socketio import emit
-from enviroment import APP, SOCKET_IO
+from flask import request, session
+from enviroment import APP, SOCKET_IO, CLIENTS, emit
 
 
 def youtube_dl_command(path, url, file_format):
@@ -38,10 +38,11 @@ def download_url(path, url, file_format):
 
 
 def download_async(path, url, file_format):
-    """ Spawns a new thread and calls the youtube dl """
+    """ Downloads a track with youtube dl and then send an emit when the call is finished """
     download_url(path, url, file_format)
     with APP.test_request_context('/'):
         SOCKET_IO.emit('download finished', namespace='/server')
+
 
 @SOCKET_IO.on('download finished', namespace='/server')
 def on_download_finished(_):
@@ -58,12 +59,8 @@ def on_download(data):
     system = file_system.select_by_name(system_name)
     if isinstance(system, collections.Sequence) and system:
         path = system[0].path
-        # download_url(path, url, file_format)
-        # emit('download finished')
-        # gevent.spawn(download_async, path, url, file_format)
-        # thread = threading.Thread(
-        #     target=download_async,
-        #     args=(path, url, file_format)
-        # )
-        # thread.start()
-        eventlet.spawn(download_async, path, url, file_format)
+        thread = threading.Thread(
+            target=download_async,
+            args=(path, url, file_format)
+        )
+        thread.start()        
