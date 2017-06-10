@@ -14,4 +14,4 @@ python -m virtualenv ../venv
 ..\venv\Scripts\activate
 
 # Installing all of the other dependencies
-python -m pip install -r ../requirements.txt
+python -m pip install -r requirements.txt
