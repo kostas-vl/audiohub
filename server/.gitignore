@@ -1,6 +1,9 @@
 # PYcache
 **/__pycache__/*
 
+# compiled static files
+/static
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

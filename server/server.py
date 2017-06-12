@@ -6,16 +6,23 @@ import sound.playlist as playlist
 import drive.files as files
 import drive.file_system as file_system
 import drive.download as download
-from flask import request
+from flask import request, send_from_directory
+from flask_socketio import join_room, leave_room
 from database.schema import DATABASE
 from enviroment import SOCKET_IO, APP, CLIENTS, emit
 
 
 # Default http route
 @APP.route('/')
-def index():
+def on_index():
     """ End point for the '/' path """
-    return 'Audiohub API running...'
+    return send_from_directory('static', 'index.html')
+
+
+@APP.route('/<path:path>')
+def on_static_file(path):
+    """ Serve any static file  """
+    return send_from_directory('static', path)
 
 
 # New flask socket connection event handler
@@ -23,7 +30,8 @@ def index():
 def on_connect():
     """ function that handles a new connection socket """
     CLIENTS.append(request.sid)
-    print('client_connected::{0}'.format(request.sid))
+    join_room(request.sid)
+    print('client_connected::{}'.format(request.sid))
 
 
 # Flask socket disconnect event handler
@@ -31,7 +39,8 @@ def on_connect():
 def on_disconnect():
     """ Function that handles a socket disconnect event """
     CLIENTS.remove(request.sid)
-    print('client_disconnected::{0}'.format(request.sid))
+    leave_room(request.sid)
+    print('client_disconnected::{}'.format(request.sid))
 
 
 def main():

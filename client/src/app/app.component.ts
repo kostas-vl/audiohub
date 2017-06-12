@@ -74,7 +74,6 @@ export class AppComponent implements OnInit, OnDestroy {
         if (data) {
             this.onCloseDialog();
             this.addDialogLoading = true;
-            console.log(data);
             this.socket.emit(data.action, data.details);
         }
     }

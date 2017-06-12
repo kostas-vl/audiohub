@@ -2,7 +2,6 @@
 import sys
 import subprocess
 import collections
-import threading
 import drive.file_system as file_system
 from flask import request, session
 from enviroment import APP, SOCKET_IO, CLIENTS, emit
@@ -37,30 +36,23 @@ def download_url(path, url, file_format):
         print(err)
 
 
-def download_async(path, url, file_format):
+def download_async(sid, path, url, file_format):
     """ Downloads a track with youtube dl and then send an emit when the call is finished """
     download_url(path, url, file_format)
     with APP.test_request_context('/'):
-        SOCKET_IO.emit('download finished', namespace='/server')
-
-
-@SOCKET_IO.on('download finished', namespace='/server')
-def on_download_finished(_):
-    """ """
-    emit('download finished')
+        SOCKET_IO.emit('download finished', namespace='/server', room=sid)
 
 
 @SOCKET_IO.on('download', namespace='/server')
 def on_download(data):
     """ A function that downloads the provided url on the provided path """
     system_name = data['system']
-    url = data['url']
-    file_format = data['fileFormat']
     system = file_system.select_by_name(system_name)
     if isinstance(system, collections.Sequence) and system:
-        path = system[0].path
-        thread = threading.Thread(
-            target=download_async,
-            args=(path, url, file_format)
+        SOCKET_IO.start_background_task(
+            download_async,
+            request.sid,
+            system[0].path,
+            data['url'],
+            data['fileFormat']
         )
-        thread.start()        

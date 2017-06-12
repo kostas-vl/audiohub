@@ -13,13 +13,13 @@ class FileSystem():
     date_created = None
     date_modified = None
 
-    def __init__(self,  *initial_data, **kwards):
+    def __init__(self, *initial_data, **kwords):
         for dictionary in initial_data:
             for key in dictionary:
                 setattr(self, key, dictionary[key])
 
-        for key in kwards:
-            setattr(self, key, kwards[key])
+        for key in kwords:
+            setattr(self, key, kwords[key])
 
     def __iter__(self):
         yield 'id', self.id
@@ -134,6 +134,7 @@ def update_collection(file_system_collection):
             collection.append(system)
     return [FileSystem(system) for system in collection]
 
+
 def delete_by_all():
     """ A function that deletes all entries in the file systems data table """
     with DATABASE.engine.connect() as conn:
@@ -142,6 +143,7 @@ def delete_by_all():
             file_systems.
             delete()
         )
+
 
 def delete_by_id(system_id):
     """ A function that deletes an entry for the file system data table
@@ -192,6 +194,7 @@ def select_by_path(path):
         )
         return list(map(lambda system: FileSystem(dict(system)), file_system_collection))
 
+
 def select_by_name(name):
     with DATABASE.engine.connect() as conn:
         file_system_collection = conn.execute(
@@ -199,6 +202,7 @@ def select_by_name(name):
             where(DATABASE.file_systems.c.name == name)
         )
         return list(map(lambda system: FileSystem(dict(system)), file_system_collection))
+
 
 def select_active():
     """ A function that returns all the active entries on the file systems data table """

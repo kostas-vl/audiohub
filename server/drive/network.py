@@ -5,18 +5,28 @@ import subprocess
 
 class NetworkFileSystem():
     """ Class representing a network file system details """
-    ip = ''
-    volume = ''
+    ip_address = ''
+    directory = ''
+    target_directory = ''
     user = ''
     password = ''
     persistent = True
 
-    def __init__(self, ip, volume, user, password='', persistent=False):
-        self.ip = ip
-        self.volume = volume
-        self.user = user
-        self.password = password
-        self.persistent = persistent
+    def __init__(self, *initial_data, **kwords):
+        for dictionary in initial_data:
+            for key, value in dictionary:
+                setattr(self, key, value)
+
+        for key in kwords:
+            setattr(self, key, kwords[key])
+
+    def __iter__(self):
+        yield 'ip', self.ip_address
+        yield 'directory', self.directory
+        yield 'target_directory', self.target_directory
+        yield 'user', self.user
+        yield 'password', self.password
+        yield 'persistent', self.persistent
 
 
 def mount(details):
@@ -43,20 +53,16 @@ def win32_mount(details):
     """ A function that mounts a new network file system on a windows OS """
     try:
         persistent = 'yes' if details.persistent else 'no'
-
+        path = '\\\\' + details.ip_address + '\\' + details.volume
         command = [
             'net use',
-            '\\\\' + details.ip + '\\' + details.volume,
+            path,
             details.password,
             '/user:' + details.user,
             '/persistent:' + persistent
         ]
-
-        result = subprocess.run(command, shell=True, check=True)
-        result.check_returncode()
-
-        return '\\\\' + details.ip + '\\' + details.volume + '\\'
-
+        subprocess.check_call(' '.join(command), shell=True)
+        return path + '\\'
     except subprocess.CalledProcessError as err:
         print(err)
         return None
@@ -65,23 +71,45 @@ def win32_mount(details):
 def win32_unmount(details):
     """ A function that unmounts a network file system on a windows OS """
     try:
-        path = '\\\\' + details.ip + '\\' + details.volume
-        command = 'net use {0} /delete'.format(path)
-
-        result = subprocess.run(command.split(), shell=True, check=True)
-        result.check_returncode()
-
+        path = '\\\\' + details.ip_address + '\\' + details.volume
+        command = ['net use', path, '/delete']
+        subprocess.check_call(' '.join(command), shell=True)
         return 0
-
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as err:
+        print(err)
         return None
 
 
 def linux_mount(details):
     """ A function that mounts a new network file system on a posix OS """
-    pass
+    try:
+        path = '//' + details.ip_address + '/' + details.volume
+        command = [
+            'mount',
+            '-t',
+            'cifs',
+            '-o',
+            'username=' + details.user,
+            'password=' + details.password,
+            path,
+            details.target_directory
+        ]
+        subprocess.check_call(' '.join(command), shell=True)
+        return details.target_directory + '/'
+    except subprocess.CalledProcessError as err:
+        print(err)
+        return None
 
 
 def linux_unmount(details):
     """ A function that unmounts a network file system on a posix OS """
-    pass
+    try:
+        command = [
+            'mount',
+            details.target_directory
+        ]
+        subprocess.check_call(' '.join(command), shell=True)
+        return 0
+    except subprocess.CalledProcessError as err:
+        print(err)
+        return None
