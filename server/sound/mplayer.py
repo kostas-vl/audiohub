@@ -16,15 +16,17 @@ class MplayerProcess():
 
     def __execute(self, command):
         """ Executes the given command on a mplayer process """
-        command.append('\n')
-        command_str = ' '.join(command)
-        try:
-            self.__process.stdin.write(command_str)
-        except (TypeError, UnicodeEncodeError):
-            self.__process.stdin.write(command_str.encode('utf-8', 'ignore'))
-        self.__process.stdin.flush()
+        if self.__process is not None:
+            command.append('\n')
+            command_str = ' '.join(command)
+            try:
+                self.__process.stdin.write(command_str)
+            except (TypeError, UnicodeEncodeError):
+                self.__process.stdin.write(
+                    command_str.encode('utf-8', 'ignore'))
+            self.__process.stdin.flush()
 
-    def spawn(self, file):
+    def spawn(self):
         """ Spawns a new mplayer process """
         execution_path = ''
         if sys.platform == 'win32':
@@ -35,8 +37,15 @@ class MplayerProcess():
             [
                 execution_path,
                 '-slave',
-                '-quiet',
-                file
+                '-slave',
+                '-idle',
+                '-really-quiet',
+                '-msglevel',
+                'global=4',
+                '-input',
+                'nodefault-bindings',
+                '-noconfig',
+                'all'
             ],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -47,39 +56,47 @@ class MplayerProcess():
         """ Executes a fileload command on a mplayer process """
         try:
             if self.__process is None:
-                self.spawn(file)
-            else:
-                append_valid_value = str(int(append))
-                self.__execute(
-                    ['loadfile', "'" + file + "'", append_valid_value])
+                self.spawn()
+            # else:
+            append_valid_value = str(int(append))
+            self.__execute(['loadfile', "'" + file + "'", append_valid_value])
         except OSError:
-            self.__process.terminate()
-            self.spawn(file)
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
 
     def pause(self):
         """ Executes a pause command on a mplayer process """
         try:
             self.__execute(['pause'])
         except OSError:
-            pass
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
 
     def stop(self):
         """ Executes a stop command on a mplayer process """
         try:
             self.__execute(['stop'])
         except OSError:
-            pass
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
 
     def seek(self, value, seek_type):
         """ Executes a seek command on a mplayer process """
         try:
             self.__execute(['seek', str(value), str(seek_type)])
         except OSError:
-            pass
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
 
     def volume(self, value):
         """ Executes a volume command on a mplayer process """
         try:
             self.__execute(['volume', str(value), '1'])
         except OSError:
-            pass
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
