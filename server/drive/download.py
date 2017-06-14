@@ -10,17 +10,20 @@ from enviroment import APP, SOCKET_IO, CLIENTS, emit
 def youtube_dl_command(path, url, file_format):
     """ A function that returns the command for downloading an mp3 with youtube dl """
     youtube_dl = ''
+    filepath = ''
     if sys.platform == 'win32':
         youtube_dl = 'youtube-dl.exe'
+        filepath = path + "%(title)s.%(ext)s"
     elif sys.platform == 'linux':
         youtube_dl = 'youtube-dl'
+        filepath = "'" + path + "%(title)s.%(ext)s" + "'"
     return ' '.join([
         youtube_dl,
         '--extract-audio',
         '--audio-format',
         file_format,
         '-o',
-        path + "%(title)s.%(ext)s",
+        filepath,
         url
     ])
 

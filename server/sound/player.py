@@ -108,11 +108,11 @@ class Player():
 
     def next(self):
         """ A methods that moves to the next track on the queue """
-        pass
+        self.mplayer_process.next()
 
     def previous(self):
         """ A method that moves to the previous track on the queue """
-        pass
+        self.mplayer_process.previous()
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """
@@ -176,6 +176,11 @@ def on_stop(_):
     PLAYER.stop()
     emit_player_info()
 
+@SOCKET_IO.on('previous', namespace='/server')
+def on_previous(_):
+    """ starts playing the previous track in the queue """
+    PLAYER.previous()
+    emit_player_info()
 
 @SOCKET_IO.on('next', namespace='/server')
 def on_next(_):

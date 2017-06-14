@@ -83,6 +83,24 @@ class MplayerProcess():
                 self.__process.terminate()
                 self.__process = None
 
+    def next(self):
+        """ Executes a next command on a mplayer process """
+        try:
+            self.__execute(['pt_step', '1'])
+        except OSError:
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
+
+    def previous(self):
+        """ Executes a previous command on a mplayer process """
+        try:
+            self.__execute(['pt_step', '-1'])
+        except OSError:
+            if self.__process is not None:
+                self.__process.terminate()
+                self.__process = None
+
     def seek(self, value, seek_type):
         """ Executes a seek command on a mplayer process """
         try:

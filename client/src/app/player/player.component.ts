@@ -58,6 +58,10 @@ export class PlayerComponent implements OnInit {
         this.setProgressMode(this.info.state);
     }
 
+    public onPrevious() {
+        this.socket.emit('previous');
+    }
+
     public onNext() {
         this.socket.emit('next');
     }
