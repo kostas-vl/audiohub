@@ -6,6 +6,7 @@ import sound.mplayer as mpl
 from flask_socketio import emit
 from enviroment import SOCKET_IO
 
+
 class PlayerStateEnum(enum.Enum):
     """ Enum that shows various player state values """
     Init = 'init'
@@ -72,11 +73,19 @@ class Player():
             self.volume(self.info.volume)
         # Loading a list of tracks
         elif data and isinstance(data, collections.Sequence):
-            self.info.track = data[0]
             self.info.state = PlayerStateEnum.Playing
+            self.mplayer_process.stop()
             for entry in data:
                 self.mplayer_process.loadfile(entry.path, True)
             self.volume(self.info.volume)
+            self.info.track = pl.Playlist(
+                id=-1,
+                name='All Playlist...',
+                type='file',
+                active=True,
+                date_created=None,
+                date_modified=None
+            )
 
     def pause(self):
         """ A method that pauses the player """

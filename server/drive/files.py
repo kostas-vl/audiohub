@@ -10,12 +10,10 @@ def build_dir_tree(path):
     """ A function that returns all the directories and files for the provided path """
     entries = os.listdir(path)
     tree = []
-
     for entry in entries:
         system_type = 'directory' if os.path.isdir(path + entry) else 'file'
         fse = fs.FileSystem(name=entry, type=system_type, path=path + entry)
         tree.append(fse)
-
     return tree
 
 

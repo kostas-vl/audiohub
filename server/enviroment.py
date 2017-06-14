@@ -5,5 +5,5 @@ from flask_socketio import SocketIO, Namespace, emit
 # Initializing the flask and flask-socketio apps
 APP = Flask(__name__, static_url_path='/static')
 APP.config['SECRET_KEY'] = 'secret!'
-SOCKET_IO = SocketIO(APP, async_mode='threading')
+SOCKET_IO = SocketIO(APP)
 CLIENTS = []
