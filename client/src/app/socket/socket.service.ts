@@ -16,9 +16,9 @@ export class SocketService {
     public connect() {
         if (!this.socketInstance) {
             if (!environment.webSocketUrl) {
-                environment.webSocketUrl = 'ws://' + (this.platform as any).location.origin + '/server';
+                environment.webSocketUrl = 'ws://' + (this.platform as any).location.host + '/server';
             }
-            this.socketInstance = io.connect(environment.webSocketUrl);
+            this.socketInstance = io.connect(environment.webSocketUrl, { transports: ['websocket'] });
         }
     }
 
