@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
 
@@ -20,7 +20,6 @@ export class FilesComponent implements OnInit {
 
     constructor(
         private socket: SocketService,
-        private mdDialog: MdDialog,
         private mdSnackBar: MdSnackBar
     ) { }
 

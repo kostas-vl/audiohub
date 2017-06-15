@@ -6,8 +6,25 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MaterialModule } from '@angular/material';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
+import {
+    MdIconModule,
+    MdTooltipModule,
+    MdButtonModule,
+    MdInputModule,
+    MdSelectModule,
+    MdCheckboxModule,
+    MdSlideToggleModule,
+    MdSliderModule,
+    MdProgressSpinnerModule,
+    MdProgressBarModule,
+    MdSnackBarModule,
+    MdTabsModule,
+    MdListModule,
+    MdToolbarModule,
+    MdCardModule,
+    MdSidenavModule,
+} from '@angular/material';
 
 /* Audiohub services */
 import { SocketService } from './socket/socket.service';
@@ -81,9 +98,24 @@ const appRoutes: Routes = [
         BrowserAnimationsModule,
         FormsModule,
         HttpModule,
-        MaterialModule,
         RouterModule.forRoot(appRoutes),
-        Ng2BootstrapModule.forRoot()
+        Ng2BootstrapModule.forRoot(),
+        MdIconModule,
+        MdTooltipModule,
+        MdButtonModule,
+        MdInputModule,
+        MdSelectModule,
+        MdCheckboxModule,
+        MdSlideToggleModule,
+        MdSliderModule,
+        MdProgressSpinnerModule,
+        MdProgressBarModule,
+        MdSnackBarModule,
+        MdTabsModule,
+        MdListModule,
+        MdToolbarModule,
+        MdCardModule,
+        MdSidenavModule
     ],
     entryComponents: [
         AddDialogComponent

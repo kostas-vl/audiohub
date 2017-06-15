@@ -8,6 +8,6 @@ export interface ISettings {
 export class Settings implements ISettings {
 
     public darkTheme = true;
-    public sidenavMode: 'over' | 'side' | 'push' = 'over';
+    public sidenavMode: 'over' | 'side' | 'push' = 'side';
 
 }
