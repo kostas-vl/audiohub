@@ -71,6 +71,8 @@ class Player():
             self.info.track = data
             self.info.state = PlayerStateEnum.Playing
             self.mplayer_process.loadfile(self.info.track.path)
+            if not is_playing and sys.platform == 'linux':
+                self.mplayer_process.pause()
             self.volume(self.info.volume)
         # Loading a list of tracks
         elif data and isinstance(data, collections.Sequence):
@@ -78,7 +80,6 @@ class Player():
             self.mplayer_process.stop()
             for entry in data:
                 self.mplayer_process.loadfile(entry.path, True)
-            self.volume(self.info.volume)
             self.info.track = pl.Playlist(
                 id=-1,
                 name='All Playlist...',
@@ -87,6 +88,9 @@ class Player():
                 date_created=None,
                 date_modified=None
             )
+            if not is_playing and sys.platform == 'linux':
+                self.mplayer_process.pause()
+            self.volume(self.info.volume)
 
     def pause(self):
         """ A method that pauses the player """
