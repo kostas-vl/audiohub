@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import * as io from 'socket.io-client';
 
@@ -7,10 +9,15 @@ export class SocketService {
 
     public socketInstance: SocketIOClient.Socket;
 
-    public constructor() { }
+    public constructor(private platform: PlatformLocation) {
+
+    }
 
     public connect() {
         if (!this.socketInstance) {
+            if (!environment.webSocketUrl) {
+                environment.webSocketUrl = 'ws://' + (this.platform as any).location.origin + '/server';
+            }
             this.socketInstance = io.connect(environment.webSocketUrl);
         }
     }
