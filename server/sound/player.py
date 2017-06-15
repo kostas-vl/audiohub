@@ -1,4 +1,5 @@
 """ Contains event handlers for manipulating the player """
+import sys
 import collections
 import enum
 import sound.playlist as pl
@@ -109,16 +110,22 @@ class Player():
     def next(self):
         """ A methods that moves to the next track on the queue """
         if self.info.track.id == -1:
-            self.mplayer_process.next()
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
+                # experimental code for linux
+                if sys.platform == 'linux':
+                    self.mplayer_process.pause()
+            self.mplayer_process.next()
 
     def previous(self):
         """ A method that moves to the previous track on the queue """
         if self.info.track.id == -1:
-            self.mplayer_process.previous()
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
+                # experimental code for linux
+                if sys.platform == 'linux':
+                    self.mplayer_process.pause()
+            self.mplayer_process.previous()
 
     def has_entries(self):
         """ A method that returns a boolean specifying whether there are entries on the playlist """
