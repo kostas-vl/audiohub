@@ -71,6 +71,7 @@ class Player():
             self.info.track = data
             self.info.state = PlayerStateEnum.Playing
             self.mplayer_process.loadfile(self.info.track.path)
+            # experimental code for the linux platform
             if not is_playing and sys.platform == 'linux':
                 self.mplayer_process.pause()
             self.volume(self.info.volume)
@@ -88,6 +89,7 @@ class Player():
                 date_created=None,
                 date_modified=None
             )
+            # experimental code for the linux platform
             if not is_playing and sys.platform == 'linux':
                 self.mplayer_process.pause()
             self.volume(self.info.volume)

@@ -68,7 +68,11 @@ export class FilesComponent implements OnInit {
     }
 
     public onRefresh() {
-        this.socket.emit('list dir', this.currentPath());
+        if (this.currentSystemStack.length === 0) {
+            this.availableSystems();
+        } else {
+            this.socket.emit('list dir', this.currentPath());
+        }
     }
 
     public onHome() {
