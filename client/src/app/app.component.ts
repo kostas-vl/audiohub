@@ -42,6 +42,9 @@ export class AppComponent implements OnInit, OnDestroy {
         // connect to the server socket
         this.socket.connect();
 
+        // configure socket bindings for the settings service
+        this.settingsService.configure();
+
         // subscribe an event handler on the 'mount volume success' event
         this.socket.subscribe('mount volume success', _ => {
             this.snackbar.open('Volume mounted!', '', { duration: 1500 });
@@ -59,6 +62,9 @@ export class AppComponent implements OnInit, OnDestroy {
             this.snackbar.open('Download finished!', '', { duration: 1500 });
             this.addDialogLoading = false;
         });
+
+        // send request for the settings of the user
+        this.socket.emit('user settings');
     }
 
     /**

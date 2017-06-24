@@ -1,7 +1,7 @@
 """ Wrapper class on an mplayer slave process """
 import sys
 import subprocess
-import settings.container as settings
+import configuration.application_settings as app_settings
 
 
 class MplayerProcess():
@@ -30,9 +30,9 @@ class MplayerProcess():
         """ Spawns a new mplayer process """
         execution_path = ''
         if sys.platform == 'win32':
-            execution_path = settings.MPLAYER['win32ExecutionPath']
+            execution_path = app_settings.MPLAYER['win32ExecutionPath']
         else:
-            execution_path = settings.MPLAYER['linuxExecutionPath']
+            execution_path = app_settings.MPLAYER['linuxExecutionPath']
         self.__process = subprocess.Popen(
             [
                 execution_path,

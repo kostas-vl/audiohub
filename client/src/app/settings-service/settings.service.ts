@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ISettings, Settings } from '../models/settings';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class SettingsService {
@@ -7,7 +8,26 @@ export class SettingsService {
     private subscribers: Array<(settings: ISettings) => void> = [];
     private settings: ISettings = new Settings();
 
-    constructor() { }
+    constructor(private socket: SocketService) { }
+
+    /**
+     * executes all the subscribed callbacks
+     */
+    private broadcastChanges() {
+        for (const callback of this.subscribers) {
+            callback(this.settings);
+        }
+    }
+
+    /**
+     * registers handlers for event messages from the server socket
+     */
+    public configure() {
+        this.socket.subscribe('user settings', (data: ISettings) => {
+            this.settings = data;
+            this.broadcastChanges();
+        });
+    }
 
     /**
      * add a callback to the subscriptions list, so that is executed when a change in settings occures
@@ -39,9 +59,8 @@ export class SettingsService {
      */
     public set(settings: ISettings) {
         this.settings = settings;
-        for (const callback of this.subscribers) {
-            callback(this.settings);
-        }
+        this.broadcastChanges();
+        this.socket.emit('user settings changed', this.settings);
     }
 
 }

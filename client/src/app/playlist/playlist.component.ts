@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IPlaylist } from '../models/playlist';
+import { IPlaylist, Playlist } from '../models/playlist';
 import { SocketService } from '../socket/socket.service';
 
 @Component({

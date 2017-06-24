@@ -125,7 +125,7 @@ def update_by_id(data):
     if isinstance(data, UserSettings):
         with DATABASE.engine.connect() as conn:
             settings = dict(data)
-            settings['date_creted'] = datetime.datetime.strptime(
+            settings['date_created'] = datetime.datetime.strptime(
                 settings['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
             )
             settings['date_modified'] = datetime.datetime.now()
@@ -134,7 +134,7 @@ def update_by_id(data):
                 user_settings.
                 update().
                 where(DATABASE.user_settings.c.identity == data.identity).
-                values(data)
+                values(settings)
             )
             return UserSettings(settings)
     # Update a collection

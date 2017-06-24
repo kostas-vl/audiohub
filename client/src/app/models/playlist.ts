@@ -5,19 +5,19 @@ export interface IPlaylist {
     type: 'file' | 'directory';
     path: string;
     active: number;
-    dateCreated: Date | string;
-    dateModified: Date | string;
+    date_created: Date | string;
+    date_modified: Date | string;
 
 }
 
 export class Playlist implements IPlaylist {
 
-    public identity: number;
-    public name: string;
-    public type: 'file' | 'directory';
-    public path: string;
-    public active: number;
-    public dateCreated: Date | string;
-    public dateModified: Date | string;
+    public identity = 0;
+    public name = '';
+    public type: 'file' | 'directory' = 'file';
+    public path = '';
+    public active = 0;
+    public date_created: Date | string = '';
+    public date_modified: Date | string = '';
 
 }

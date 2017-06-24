@@ -1,10 +1,11 @@
 """ The initial file of the application """
 import os
-import settings.container as settings
 import models.users as usr
 import models.user_settings as stt
 import models.file_system
 import models.playlist
+import configuration.application_settings as app_settings
+import configuration.settings as settings
 import sound.player as player
 import drive.files as files
 import drive.download as download
@@ -85,15 +86,15 @@ def main():
     """ The main source of the application execution """
     # Loading settings
     print("Loading settings...")
-    settings.load()
+    app_settings.load()
     # Initializing database
     print("Initializing database schema image...")
-    DATABASE.init(settings.DATABASE)
+    DATABASE.init(app_settings.DATABASE)
     # Flask APP Initialization
     print("Starting the flask socket-io server...")
     SOCKET_IO.run(
         APP,
-        host=os.getenv('IP', settings.SERVER['ip']),
+        host=os.getenv('IP', app_settings.SERVER['ip']),
         port=int(os.getenv('PORT', 5000))
     )
 
