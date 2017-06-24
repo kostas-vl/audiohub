@@ -2,7 +2,7 @@
 import sys
 import collections
 import enum
-import sound.playlist as pl
+import models.playlist as pl
 import sound.mplayer as mpl
 from flask_socketio import emit
 from enviroment import SOCKET_IO
@@ -48,10 +48,10 @@ class Player():
             playlist.active = True
             pl.insert(playlist)
 
-    def remove(self, track_id):
-        """ A method that removes an entry from the playlist based on the provided id """
-        if track_id:
-            pl.delete_by_id(track_id)
+    def remove(self, id):
+        """ A method that removes an entry from the playlist based on the provided key """
+        if id:
+            pl.delete_by_id(id)
 
     def remove_all(self):
         """ A method that removes all entries from the playlist """
@@ -82,7 +82,7 @@ class Player():
             for entry in data:
                 self.mplayer_process.loadfile(entry.path, True)
             self.info.track = pl.Playlist(
-                id=-1,
+                key=-1,
                 name='All Playlist...',
                 type='file',
                 active=True,
@@ -115,7 +115,7 @@ class Player():
 
     def next(self):
         """ A methods that moves to the next track on the queue """
-        if self.info.track.id == -1:
+        if self.info.track.key == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
                 # experimental code for linux
@@ -125,7 +125,7 @@ class Player():
 
     def previous(self):
         """ A method that moves to the previous track on the queue """
-        if self.info.track.id == -1:
+        if self.info.track.key == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
                 # experimental code for linux
@@ -147,7 +147,11 @@ def emit_player_info():
 
 def emit_queue():
     """ A functions that sends the currently active tracks """
-    emit('queue', [dict(entry) for entry in pl.select_active()])
+    try:
+        emit('queue', [dict(entry) for entry in pl.select_active()])
+    except Exception as err:
+        print(err)
+        raise err
 
 
 @SOCKET_IO.on('player info', namespace='/server')

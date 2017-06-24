@@ -43,6 +43,9 @@ export class AddDialogComponent {
 
     constructor(private socket: SocketService) { }
 
+    /**
+     * sends the appropriate event message, based on the currently edited, by the user, tab
+     */
     public onComplete() {
         switch (this.tabGroupComponent.selectedIndex) {
             case 0:

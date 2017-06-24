@@ -1,6 +1,6 @@
 """ Contains all the file oriented event handlers for the socket io server namespace """
 import os
-import drive.file_system as fs
+import models.file_system as fs
 import drive.network as net
 from flask_socketio import emit
 from enviroment import SOCKET_IO
@@ -8,12 +8,13 @@ from enviroment import SOCKET_IO
 
 def build_dir_tree(path):
     """ A function that returns all the directories and files for the provided path """
-    entries = os.listdir(path)
     tree = []
-    for entry in entries:
-        system_type = 'directory' if os.path.isdir(path + entry) else 'file'
-        fse = fs.FileSystem(name=entry, type=system_type, path=path + entry)
-        tree.append(fse)
+    if path:
+        entries = os.listdir(path)
+        for entry in entries:
+            system_type = 'directory' if os.path.isdir(path + entry) else 'file'
+            fse = fs.FileSystem(name=entry, type=system_type, path=path + entry)
+            tree.append(fse)
     return tree
 
 

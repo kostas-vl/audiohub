@@ -27,49 +27,80 @@ export class AppComponent implements OnInit, OnDestroy {
         private snackbar: MdSnackBar
     ) { }
 
+    /**
+     * implementation of the ngOnInit method, of the OnInit base class
+     */
     public ngOnInit() {
+        // initialize the settigns model
         this.settings = this.settingsService.get();
+
+        // subscribe a callback on the event of a settings change, and store the produced index
         this.settingsSubscription = this.settingsService.subscribe(settings => {
             this.settings = settings;
         });
+
+        // connect to the server socket
         this.socket.connect();
 
+        // subscribe an event handler on the 'mount volume success' event
         this.socket.subscribe('mount volume success', _ => {
             this.snackbar.open('Volume mounted!', '', { duration: 1500 });
             this.addDialogLoading = false;
         });
 
+        // subscribe an event handler on the 'add volume success' event
         this.socket.subscribe('add volume success', _ => {
             this.snackbar.open('Volume added!', '', { duration: 1500 });
             this.addDialogLoading = false;
         });
 
+        // subscribe an event handler on the 'download finished' event
         this.socket.subscribe('download finished', data => {
             this.snackbar.open('Download finished!', '', { duration: 1500 });
             this.addDialogLoading = false;
         });
     }
 
+    /**
+     * implements the ngOnDestroy method, of the OnDestroy base class
+     */
     public ngOnDestroy() {
+        // remove the subscription callback from the settings service
         this.settingsService.unsubscribe(this.settingsSubscription);
+
+        // disconnect from the server socket
         this.socket.disconnect();
     }
 
-    public onItemClick(url: string) {
+    /**
+     * navigates the user to a view of his choices from the list of the sidenav
+     * @param {string} url of the new view
+     */
+    public onSidenavItemClick(url: string) {
         if (url) {
             this.sidenav.toggle();
             this.router.navigateByUrl(url);
         }
     }
 
+    /**
+     * displays the add dialog
+     */
     public onOpenDialog() {
         this.addDialogShow = true;
     }
 
+    /**
+     * hides the add dialog
+     */
     public onCloseDialog() {
         this.addDialogShow = false;
     }
 
+    /**
+     * closes the add dialog and emits the action and details provided by it
+     * @param {any} data object containing the action and details
+     */
     public onDialogComplete(data: any) {
         if (data) {
             this.onCloseDialog();

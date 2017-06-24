@@ -1,15 +1,16 @@
 """ The initial file of the application """
 import os
 import settings.container as settings
+import models.users as usr
+import models.file_system
+import models.playlist
 import sound.player as player
-import sound.playlist as playlist
 import drive.files as files
-import drive.file_system as file_system
 import drive.download as download
 from flask import request, send_from_directory
 from flask_socketio import join_room, leave_room
 from database.schema import DATABASE
-from enviroment import SOCKET_IO, APP, CLIENTS, emit
+from enviroment import SOCKET_IO, APP, emit
 
 
 # Default http route
@@ -29,7 +30,21 @@ def on_static_file(path):
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
     """ function that handles a new connection socket """
-    CLIENTS.append(request.sid)
+    # try:
+    #     users = usr.select_by_ip(request.host)
+    #     if users:
+    #         for user in users:
+    #             user.session_id = request.sid
+    #             user.active = True
+    #         usr.update(users)
+    #     else:
+    #         user = usr.User()
+    #         user.session_id = request.sid
+    #         user.user_ip = request.host
+    #         user.active = True
+    #         usr.insert(user)
+    # except Exception as err:
+    #     print(err)
     join_room(request.sid)
     print('client_connected::{}'.format(request.sid))
 
@@ -38,7 +53,13 @@ def on_connect():
 @SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
     """ Function that handles a socket disconnect event """
-    CLIENTS.remove(request.sid)
+    # try:
+    #     users = usr.select_by_ip(request.host)
+    #     for user in users:
+    #         user.active = False
+    #     usr.update(users)
+    # except Exception as err:
+    #     print(err)
     leave_room(request.sid)
     print('client_disconnected::{}'.format(request.sid))
 
@@ -58,8 +79,6 @@ def main():
         host=os.getenv('IP', settings.SERVER['ip']),
         port=int(os.getenv('PORT', 5000))
     )
-    # Send out the current playlist
-    emit('queue', playlist, broadcast=True)
 
 
 if __name__ == '__main__':

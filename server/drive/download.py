@@ -2,9 +2,9 @@
 import sys
 import subprocess
 import collections
-import drive.file_system as file_system
-from flask import request, session
-from enviroment import APP, SOCKET_IO, CLIENTS, emit
+import models.file_system as fs
+from flask import request
+from enviroment import APP, SOCKET_IO
 
 
 def youtube_dl_command(path, url, file_format):
@@ -50,7 +50,7 @@ def download_async(sid, path, url, file_format):
 def on_download(data):
     """ A function that downloads the provided url on the provided path """
     system_name = data['system']
-    system = file_system.select_by_name(system_name)
+    system = fs.select_by_name(system_name)
     if isinstance(system, collections.Sequence) and system:
         SOCKET_IO.start_background_task(
             download_async,

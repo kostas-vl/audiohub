@@ -13,10 +13,16 @@ export class SettingsComponent implements OnInit {
 
     constructor(private settingsService: SettingsService) { }
 
+    /**
+     * implamentation of the ngOnInit method, of the OnInit base class
+     */
     ngOnInit() {
         this.settings = this.settingsService.get();
     }
 
+    /**
+     * updates the new changes on the settings service
+     */
     public onChange() {
         this.settingsService.set(this.settings);
     }

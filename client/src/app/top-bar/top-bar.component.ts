@@ -12,7 +12,9 @@ export class TopBarComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {
-    }
+    /**
+     * implementation of the ngOnInit method, of the OnInit base class
+     */
+    ngOnInit() { }
 
 }

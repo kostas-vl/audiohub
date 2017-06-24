@@ -1,6 +1,6 @@
 export interface IPlaylist {
 
-    id: number;
+    identity: number;
     name: string;
     type: 'file' | 'directory';
     path: string;
@@ -12,7 +12,7 @@ export interface IPlaylist {
 
 export class Playlist implements IPlaylist {
 
-    public id: number;
+    public identity: number;
     public name: string;
     public type: 'file' | 'directory';
     public path: string;

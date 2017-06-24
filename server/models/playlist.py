@@ -1,28 +1,25 @@
 """ File containing code that revolves around the playlist data table """
 import datetime
+from base.model import Model
 from database.schema import DATABASE, select, func, Integer
 
 
-class Playlist():
+class Playlist(Model):
     """ A class representing the playlist data table """
-    id = None
-    name = None
-    type = None
-    path = None
-    active = None
-    date_created = None
-    date_modified = None
 
-    def __init__(self, *initial_data, **kwards):
-        for dictionary in initial_data:
-            for key in dictionary:
-                setattr(self, key, dictionary[key])
-
-        for key in kwards:
-            setattr(self, key, kwards[key])
+    def __init__(self, *initial_data, **kwords):
+        self.identity = None
+        self.name = None
+        self.type = None
+        self.path = None
+        self.active = None
+        self.date_created = None
+        self.date_modified = None
+        self.init_from_dict(initial_data)
+        self.init_from_kwords(kwords)
 
     def __iter__(self):
-        yield 'id', self.id
+        yield 'identity', self.identity
         yield 'name', self.name
         yield 'type', self.type
         yield 'path', self.path
@@ -37,7 +34,7 @@ def new_id():
         max_id = conn.execute(
             select([
                 func.max(
-                    DATABASE.playlist.c.id, type_=Integer
+                    DATABASE.playlist.c.identity, type_=Integer
                 ).label('max')
             ])
         ).scalar()
@@ -48,7 +45,7 @@ def insert(playlist):
     """ A function that inserts a new entry on the playlist data table """
     with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
-        entry['id'] = new_id()
+        entry['identity'] = new_id()
         entry['date_created'] = datetime.datetime.now()
         entry['date_modified'] = datetime.datetime.now()
         conn.execute(
@@ -64,7 +61,7 @@ def insert_collection(playlist_collection):
         id_interval = 0
         for playlist in playlist_collection:
             entry = dict(playlist)
-            entry['id'] = new_id() + id_interval
+            entry['identity'] = new_id() + id_interval
             entry['date_created'] = datetime.datetime.now()
             entry['date_modified'] = datetime.datetime.now()
             collection.append(entry)
@@ -89,7 +86,7 @@ def update_by_id(playlist):
             DATABASE.
             playlist.
             update().
-            where(DATABASE.playlist.c.id == entry['id']).
+            where(DATABASE.playlist.c.identity == entry['identity']).
             values(entry)
         )
         return Playlist(entry)
@@ -145,7 +142,7 @@ def delete_all():
         )
 
 
-def delete_by_id(playlist_id):
+def delete_by_id(id):
     """ A function that deletes an entry for the playlist data table
         that contains the provided id
     """
@@ -154,7 +151,7 @@ def delete_by_id(playlist_id):
             DATABASE.
             playlist.
             delete().
-            where(DATABASE.playlist.c.id == playlist_id)
+            where(DATABASE.playlist.c.identity == id)
         )
 
 
@@ -178,7 +175,7 @@ def select_by_id(id):
     with DATABASE.engine.connect() as conn:
         playlist_collection = conn.execute(
             select([DATABASE.playlist]).
-            where(DATABASE.playlist.c.id == id)
+            where(DATABASE.playlist.c.identity == id)
         )
         return Playlist(dict(playlist_collection.fetchone()))
 
