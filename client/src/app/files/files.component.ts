@@ -42,7 +42,7 @@ export class FilesComponent implements OnInit {
         this.loading = true;
 
         // subscribes an event handler for the 'available systems' event
-        this.socket.subscribe('available systems', (data: IFileSystem[]) => {
+        this.socket.subscribe('available systems', (data: IFileSystem[]) => {3
             this.systems = data;
             this.currentSystemEntries = this.systems;
             this.currentSystemStack = [];

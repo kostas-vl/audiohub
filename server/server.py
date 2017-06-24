@@ -2,6 +2,7 @@
 import os
 import settings.container as settings
 import models.users as usr
+import models.user_settings as stt
 import models.file_system
 import models.playlist
 import sound.player as player
@@ -30,21 +31,32 @@ def on_static_file(path):
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
     """ function that handles a new connection socket """
-    # try:
-    #     users = usr.select_by_ip(request.host)
-    #     if users:
-    #         for user in users:
-    #             user.session_id = request.sid
-    #             user.active = True
-    #         usr.update(users)
-    #     else:
-    #         user = usr.User()
-    #         user.session_id = request.sid
-    #         user.user_ip = request.host
-    #         user.active = True
-    #         usr.insert(user)
-    # except Exception as err:
-    #     print(err)
+    try:
+        users = usr.select_by_ip(request.host)
+        if users:
+            # Loop through the users and update them
+            for user in users:
+                user.session_id = request.sid
+                user.active = True
+                user_settings = stt.select_by_user_id(user.identity)
+                if user_settings:
+                    user.settings = user_settings[0]
+                else:
+                    user.settings = stt.UserSettings()
+            usr.update_by_id(users)
+        else:
+            # Initialize and insert new user
+            user = usr.User()
+            user.session_id = request.sid
+            user.user_ip = request.host
+            user.active = True
+            user = usr.insert(user)
+            # Initialize and insert new user settings
+            user_settings = stt.UserSettings()
+            user_settings.user_id = user.identity
+            user.settings = stt.insert(user_settings)
+    except Exception as err:
+        print(err)
     join_room(request.sid)
     print('client_connected::{}'.format(request.sid))
 
@@ -53,13 +65,18 @@ def on_connect():
 @SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
     """ Function that handles a socket disconnect event """
-    # try:
-    #     users = usr.select_by_ip(request.host)
-    #     for user in users:
-    #         user.active = False
-    #     usr.update(users)
-    # except Exception as err:
-    #     print(err)
+    try:
+        users = usr.select_by_ip(request.host)
+        for user in users:
+            user.active = False
+            user_settings = stt.select_by_user_id(user.identity)
+            if user_settings:
+                user.settings = user_settings[0]
+            else:
+                user.settings = stt.UserSettings()
+        usr.update_by_id(users)
+    except Exception as err:
+        print(err)
     leave_room(request.sid)
     print('client_disconnected::{}'.format(request.sid))
 

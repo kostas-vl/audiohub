@@ -51,7 +51,12 @@ class Database():
                     nullable=False,
                     onupdate=date_created_update
                 ),
-                Column('date_modified', DateTime)
+                Column(
+                    'date_modified',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                )
             )
             return systems
 
@@ -72,7 +77,12 @@ class Database():
                     nullable=False,
                     onupdate=date_created_update
                 ),
-                Column('date_modified', DateTime)
+                Column(
+                    'date_modified',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                )
             )
             return playlist
 
@@ -91,6 +101,12 @@ class Database():
                     DateTime,
                     nullable=False,
                     onupdate=date_created_update
+                ),
+                Column(
+                    'date_modified',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
                 )
             )
             return users
@@ -105,7 +121,19 @@ class Database():
                 Column('user_id', Integer, nullable=False),
                 Column('sound_direction', String, nullable=False),
                 Column('dark_theme', Boolean, nullable=False),
-                Column('sidenav_mode', String, nullable=False)
+                Column('sidenav_mode', String, nullable=False),
+                Column(
+                    'date_created',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                ),
+                Column(
+                    'date_modified',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                )
             )
             return user_settings
 
