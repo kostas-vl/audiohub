@@ -1,24 +1,21 @@
 """ Contains functions for mounting and unmounting network file systems """
 import sys
 import subprocess
+from base.model import Model
 
 
-class NetworkFileSystem():
+class NetworkFileSystem(Model):
     """ Class representing a network file system details """
-    ip_address = ''
-    directory = ''
-    target_directory = ''
-    user = ''
-    password = ''
-    persistent = True
 
     def __init__(self, *initial_data, **kwords):
-        for dictionary in initial_data:
-            for key, value in dictionary:
-                setattr(self, key, value)
-
-        for key in kwords:
-            setattr(self, key, kwords[key])
+        self.ip_address = ''
+        self.directory = ''
+        self.target_directory = ''
+        self.user = ''
+        self.password = ''
+        self.persistent = True
+        self.init_from_dict(initial_data)
+        self.init_from_kwords(kwords)
 
     def __iter__(self):
         yield 'ip', self.ip_address

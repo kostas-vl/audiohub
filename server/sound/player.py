@@ -49,7 +49,7 @@ class Player():
             pl.insert(playlist)
 
     def remove(self, id):
-        """ A method that removes an entry from the playlist based on the provided key """
+        """ A method that removes an entry from the playlist based on the provided id """
         if id:
             pl.delete_by_id(id)
 
@@ -82,7 +82,7 @@ class Player():
             for entry in data:
                 self.mplayer_process.loadfile(entry.path, True)
             self.info.track = pl.Playlist(
-                key=-1,
+                identity=-1,
                 name='All Playlist...',
                 type='file',
                 active=True,
@@ -115,7 +115,7 @@ class Player():
 
     def next(self):
         """ A methods that moves to the next track on the queue """
-        if self.info.track.key == -1:
+        if self.info.track.identity == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
                 # experimental code for linux
@@ -125,7 +125,7 @@ class Player():
 
     def previous(self):
         """ A method that moves to the previous track on the queue """
-        if self.info.track.key == -1:
+        if self.info.track.identity == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
                 # experimental code for linux
