@@ -17,6 +17,7 @@ body {
 }
 
 .children-components {
+    padding-top: 15px;
     min-height: 960px;
 }
 

@@ -30,9 +30,9 @@ class MplayerProcess():
         """ Spawns a new mplayer process """
         execution_path = ''
         if sys.platform == 'win32':
-            execution_path = app_settings.MPLAYER['win32ExecutionPath']
+            execution_path = app_settings.INSTANCE.mplayer.win32_path
         else:
-            execution_path = app_settings.MPLAYER['linuxExecutionPath']
+            execution_path = app_settings.INSTANCE.mplayer.linux_path
         self.__process = subprocess.Popen(
             [
                 execution_path,

@@ -33,13 +33,14 @@ import { SocketService } from './socket/socket.service';
 import { AppComponent } from './app.component';
 import { LoaderComponent } from './loader/loader.component';
 import { PlayerComponent } from './player/player.component';
-import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { FilesComponent } from './files/files.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { StreamComponent } from './stream/stream.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsService } from './settings-service/settings.service';
+import { DownloadComponent } from './download/download.component';
+import { SystemsComponent } from './systems/systems.component';
 
 export class HammerJsConfiguration extends HammerGestureConfig {
 
@@ -66,6 +67,14 @@ const appRoutes: Routes = [
         component: StreamComponent
     },
     {
+        path: 'systems',
+        component: SystemsComponent
+    },
+    {
+        path: 'download',
+        component: DownloadComponent
+    },
+    {
         path: 'settings',
         component: SettingsComponent
     },
@@ -88,10 +97,11 @@ const appRoutes: Routes = [
         TopBarComponent,
         PlayerComponent,
         PlaylistComponent,
-        AddDialogComponent,
         FilesComponent,
         StreamComponent,
         SettingsComponent,
+        DownloadComponent,
+        SystemsComponent,
     ],
     imports: [
         BrowserModule,
@@ -117,9 +127,7 @@ const appRoutes: Routes = [
         MdCardModule,
         MdSidenavModule
     ],
-    entryComponents: [
-        AddDialogComponent
-    ],
+    entryComponents: [],
     providers: [
         SettingsService,
         SocketService,

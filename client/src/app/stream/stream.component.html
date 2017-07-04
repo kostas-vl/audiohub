@@ -1,3 +1,37 @@
-<p>
-    stream works!
-</p>
+<div class="streams-card row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <md-toolbar color="primary">
+
+            Streams
+
+        </md-toolbar>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <md-card>
+
+            <md-card-content>
+
+                <md-input-container class="streams-input">
+
+                    <input mdInput type="text" placeholder="Url" [(ngModel)]="url">
+
+                </md-input-container>
+
+            </md-card-content>
+
+            <md-card-actions class="text-right">
+
+                <button md-button color="primary" (click)="onRequestStream(url)">OK</button>
+
+            </md-card-actions>
+
+        </md-card>
+
+    </div>    
+
+</div>

@@ -1,13 +1,18 @@
 {
     "server": {
-        "ip": "0.0.0.0"
+        "ip_address": "0.0.0.0",
+        "port": "5000"
     },
     "database": {
-        "connectionString": "sqlite:///audiohub.db",
+        "connection_string": "sqlite:///audiohub.db",
         "echo": true
     },
-    "mplayer":{
-        "win32ExecutionPath": "mplayer.exe",
-        "linuxExecutionPath": "mplayer"
+    "mplayer": {
+        "win32_path": "mplayer.exe",
+        "linux_path": "mplayer"
+    },
+    "youtube": {
+        "win32_path": "youtube-dl.exe",
+        "linux_path": "youtube-dl"
     }
 }

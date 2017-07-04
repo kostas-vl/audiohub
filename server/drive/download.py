@@ -2,6 +2,7 @@
 import sys
 import subprocess
 import collections
+import configuration.application_settings as app_settings
 import models.file_system as fs
 from flask import request
 from enviroment import APP, SOCKET_IO
@@ -12,10 +13,10 @@ def youtube_dl_command(path, url, file_format):
     youtube_dl = ''
     filepath = ''
     if sys.platform == 'win32':
-        youtube_dl = 'youtube-dl.exe'
+        youtube_dl = app_settings.INSTANCE.youtube.win32_path
         filepath = path + "%(title)s.%(ext)s"
     elif sys.platform == 'linux':
-        youtube_dl = 'youtube-dl'
+        youtube_dl = app_settings.INSTANCE.youtube.linux_path
         filepath = "'" + path + "%(title)s.%(ext)s" + "'"
     return ' '.join([
         youtube_dl,

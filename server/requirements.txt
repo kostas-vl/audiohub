@@ -1,5 +1,6 @@
 pylint
 autopep8
+pydub
 flask
 flask-socketio
 eventlet

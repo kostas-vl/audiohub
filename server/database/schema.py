@@ -18,8 +18,8 @@ class Database():
     def init(self, database_settings):
         """ A function that initializes the apps database """
         # Get the database connection options from the settings
-        self.connection_string = database_settings['connectionString']
-        echo = database_settings['echo']
+        self.connection_string = database_settings.connection_string
+        echo = database_settings.echo
         if self.connection_string:
             # Initializing the database engine and nmetadata
             self.engine = create_engine(self.connection_string, echo=echo)

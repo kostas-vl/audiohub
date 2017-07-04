@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IPlaylist, Playlist } from '../models/playlist';
+import { IPlaylist, Playlist, Playlist2, Playlist3 } from '../models/playlist';
 import { SocketService } from '../socket/socket.service';
 
 @Component({
@@ -11,6 +11,7 @@ export class PlaylistComponent implements OnInit {
 
     public loading: boolean;
     public playlist: IPlaylist[] = [];
+    public streamSource: any = null;
 
     constructor(private socket: SocketService) { }
 
@@ -56,6 +57,7 @@ export class PlaylistComponent implements OnInit {
      */
     public onPlayNow(entry: IPlaylist) {
         this.socket.emit('play', entry);
+        // this.socket.emit('channel stream', entry);
     }
 
 }

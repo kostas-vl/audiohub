@@ -1,0 +1,12 @@
+.download-card {
+    padding-top: 20px;
+}
+
+.download-card .download-input {
+    width: 100%;
+}
+
+.download-card .download-select {
+    width: 100%;
+    padding-top: 20px;
+}

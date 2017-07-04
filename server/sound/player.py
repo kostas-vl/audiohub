@@ -2,10 +2,11 @@
 import sys
 import collections
 import enum
+import pafy
 import models.playlist as pl
 import sound.mplayer as mpl
 from flask_socketio import emit
-from enviroment import SOCKET_IO
+from enviroment import APP, SOCKET_IO
 
 
 class PlayerStateEnum(enum.Enum):
@@ -138,6 +139,12 @@ class Player():
         playlist = pl.select_active()
         return playlist and isinstance(playlist, collections.Sequence)
 
+    def load_stream(self, url):
+        """ Loads a stream to mplayer """
+        stream = pafy.new(url)
+        best_audio = stream.getbestaudio(preftype="webm")
+        print(best_audio.url)
+
 
 def emit_player_info():
     """ A function that sends the entry that is currently playing """
@@ -241,6 +248,17 @@ def on_queue(_):
     """ List queued tracks event handler """
     emit_player_info()
     emit_queue()
+
+
+@SOCKET_IO.on('load stream', namespace='/server')
+def on_load_stream(data):
+    """ Load an incoming stream to mplayer """
+    try:
+        if data:
+            PLAYER.load_stream(data)
+    except Exception as err:
+        print(err)
+        raise err
 
 
 # audio player initialization and configuration

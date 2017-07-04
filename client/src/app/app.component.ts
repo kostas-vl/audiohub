@@ -89,30 +89,4 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * displays the add dialog
-     */
-    public onOpenDialog() {
-        this.addDialogShow = true;
-    }
-
-    /**
-     * hides the add dialog
-     */
-    public onCloseDialog() {
-        this.addDialogShow = false;
-    }
-
-    /**
-     * closes the add dialog and emits the action and details provided by it
-     * @param {any} data object containing the action and details
-     */
-    public onDialogComplete(data: any) {
-        if (data) {
-            this.onCloseDialog();
-            this.addDialogLoading = true;
-            this.socket.emit(data.action, data.details);
-        }
-    }
-
 }

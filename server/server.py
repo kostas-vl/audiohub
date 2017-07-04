@@ -6,13 +6,14 @@ import models.file_system
 import models.playlist
 import configuration.application_settings as app_settings
 import configuration.settings as settings
+import sound.channel as channel
 import sound.player as player
 import drive.files as files
 import drive.download as download
 from flask import request, send_from_directory
 from flask_socketio import join_room, leave_room
 from database.schema import DATABASE
-from enviroment import SOCKET_IO, APP, emit
+from enviroment import SOCKET_IO, APP
 
 
 # Default http route
@@ -86,16 +87,16 @@ def main():
     """ The main source of the application execution """
     # Loading settings
     print("Loading settings...")
-    app_settings.load()
+    app_settings.INSTANCE.load()
     # Initializing database
     print("Initializing database schema image...")
-    DATABASE.init(app_settings.DATABASE)
+    DATABASE.init(app_settings.INSTANCE.database)
     # Flask APP Initialization
     print("Starting the flask socket-io server...")
     SOCKET_IO.run(
         APP,
-        host=os.getenv('IP', app_settings.SERVER['ip']),
-        port=int(os.getenv('PORT', 5000))
+        host=os.getenv('IP', app_settings.INSTANCE.server.ip_address),
+        port=int(os.getenv('PORT', int(app_settings.INSTANCE.server.port)))
     )
 
 
