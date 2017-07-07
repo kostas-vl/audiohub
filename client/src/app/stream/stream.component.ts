@@ -9,7 +9,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 })
 export class StreamComponent implements OnInit {
 
-    public url: string | null = null;
+    public url: string = null;
 
     constructor(
         private pageLoader: PageLoaderService,
