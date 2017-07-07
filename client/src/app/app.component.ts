@@ -4,6 +4,7 @@ import { MdSidenav, MdSnackBar } from '@angular/material';
 import { ISettings } from './models/settings';
 import { SocketService } from './socket/socket.service';
 import { SettingsService } from './settings-service/settings.service';
+import { PageLoaderService } from './page-loader-service/page-loader.service';
 
 @Component({
     selector: 'app-root',
@@ -14,14 +15,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private settingsSubscription: number;
     public settings: ISettings;
-    public addDialogShow = false;
-    public addDialogLoading = false;
 
     @ViewChild('sidenav')
     public sidenav: MdSidenav;
 
     constructor(
         private router: Router,
+        private pageLoader: PageLoaderService,
         private socket: SocketService,
         private settingsService: SettingsService,
         private snackbar: MdSnackBar
@@ -48,19 +48,25 @@ export class AppComponent implements OnInit, OnDestroy {
         // subscribe an event handler on the 'mount volume success' event
         this.socket.subscribe('mount volume success', _ => {
             this.snackbar.open('Volume mounted!', '', { duration: 1500 });
-            this.addDialogLoading = false;
+            this.pageLoader.stop();
         });
 
         // subscribe an event handler on the 'add volume success' event
         this.socket.subscribe('add volume success', _ => {
             this.snackbar.open('Volume added!', '', { duration: 1500 });
-            this.addDialogLoading = false;
+            this.pageLoader.stop();
         });
 
         // subscribe an event handler on the 'download finished' event
         this.socket.subscribe('download finished', data => {
             this.snackbar.open('Download finished!', '', { duration: 1500 });
-            this.addDialogLoading = false;
+            this.pageLoader.stop();
+        });
+
+        // subscribe an event handler on the 'stream loaded' event
+        this.socket.subscribe('load stream complete', data => {
+            this.snackbar.open('Stream Loaded!', '', { duration: 1500 });
+            this.pageLoader.stop();
         });
 
         // send request for the settings of the user

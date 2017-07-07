@@ -1,12 +1,13 @@
 """ Contains event handlers for manipulating the player """
 import sys
+import datetime
 import collections
 import enum
 import pafy
 import models.playlist as pl
 import sound.mplayer as mpl
 from flask_socketio import emit
-from enviroment import APP, SOCKET_IO
+from enviroment import SOCKET_IO
 
 
 class PlayerStateEnum(enum.Enum):
@@ -49,10 +50,10 @@ class Player():
             playlist.active = True
             pl.insert(playlist)
 
-    def remove(self, id):
+    def remove(self, playlist_id):
         """ A method that removes an entry from the playlist based on the provided id """
-        if id:
-            pl.delete_by_id(id)
+        if playlist_id:
+            pl.delete_by_id(playlist_id)
 
     def remove_all(self):
         """ A method that removes all entries from the playlist """
@@ -87,8 +88,8 @@ class Player():
                 name='All Playlist...',
                 type='file',
                 active=True,
-                date_created=None,
-                date_modified=None
+                date_created=datetime.datetime.now(),
+                date_modified=datetime.datetime.now()
             )
             # experimental code for the linux platform
             if not is_playing and sys.platform == 'linux':
@@ -141,9 +142,20 @@ class Player():
 
     def load_stream(self, url):
         """ Loads a stream to mplayer """
-        stream = pafy.new(url)
-        best_audio = stream.getbestaudio(preftype="webm")
-        print(best_audio.url)
+        if url:
+            stream = pafy.new(url)
+            best_audio = stream.getbestaudio(preftype="webm")
+            self.mplayer_process.loadfile(best_audio.url)
+            self.mplayer_process.volume(self.info.volume)
+            self.info.track = pl.Playlist(
+                identity=-1,
+                name='(Streaming) ' + stream.title,
+                type='file',
+                active=True,
+                date_created=datetime.datetime.now(),
+                date_modified=datetime.datetime.now()
+            )
+            self.info.state = PlayerStateEnum.Playing
 
 
 def emit_player_info():
@@ -251,14 +263,12 @@ def on_queue(_):
 
 
 @SOCKET_IO.on('load stream', namespace='/server')
-def on_load_stream(data):
+def on_load_stream(url):
     """ Load an incoming stream to mplayer """
-    try:
-        if data:
-            PLAYER.load_stream(data)
-    except Exception as err:
-        print(err)
-        raise err
+    if url:
+        PLAYER.load_stream(url)
+        emit_player_info()
+        emit('load stream complete')
 
 
 # audio player initialization and configuration

@@ -1,6 +1,8 @@
 pylint
 autopep8
+youtube-dl
 pydub
+pafy
 flask
 flask-socketio
 eventlet

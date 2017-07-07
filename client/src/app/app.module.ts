@@ -27,6 +27,8 @@ import {
 } from '@angular/material';
 
 /* Audiohub services */
+import { SettingsService } from './settings-service/settings.service';
+import { PageLoaderService } from './page-loader-service/page-loader.service';
 import { SocketService } from './socket/socket.service';
 
 /* Audiohub components */
@@ -38,9 +40,9 @@ import { FilesComponent } from './files/files.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { StreamComponent } from './stream/stream.component';
 import { SettingsComponent } from './settings/settings.component';
-import { SettingsService } from './settings-service/settings.service';
 import { DownloadComponent } from './download/download.component';
 import { SystemsComponent } from './systems/systems.component';
+import { PageLoaderComponent } from './page-loader/page-loader.component';
 
 export class HammerJsConfiguration extends HammerGestureConfig {
 
@@ -102,6 +104,7 @@ const appRoutes: Routes = [
         SettingsComponent,
         DownloadComponent,
         SystemsComponent,
+        PageLoaderComponent,
     ],
     imports: [
         BrowserModule,
@@ -130,6 +133,7 @@ const appRoutes: Routes = [
     entryComponents: [],
     providers: [
         SettingsService,
+        PageLoaderService,
         SocketService,
         {
             provide: HAMMER_GESTURE_CONFIG,
