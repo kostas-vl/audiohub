@@ -11,15 +11,25 @@ def build_dir_tree(path):
     tree = []
     if path:
         entries = os.listdir(path)
+        available_formats = ['.wav', '.mp3', '.mp4']
         for entry in entries:
-            system_type = 'directory' if os.path.isdir(path + entry) else 'file'
-            fse = fs.FileSystem(name=entry, type=system_type, path=path + entry)
-            tree.append(fse)
+            fse = fs.FileSystem(
+                name=entry,
+                path=path + entry
+            )
+            if os.path.isdir(path + entry):
+                fse.type = 'directory'
+                tree.append(fse)
+            else:
+                _, ext = os.path.splitext(path + entry)
+                if ext in available_formats:
+                    fse.type = 'file'
+                    tree.append(fse)
     return tree
 
 
 @SOCKET_IO.on('available systems', namespace='/server')
-def on_available_systems(data):
+def on_available_systems(_):
     """ A function that emits to all the connections all the available file systems """
     emit_available_systems()
 

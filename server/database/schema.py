@@ -1,6 +1,6 @@
 """ Contains functions that initialize the database schema """
 import datetime
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, Boolean, MetaData, create_engine, select, delete, bindparam, func
+from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, create_engine
 
 
 class Database():
@@ -13,6 +13,7 @@ class Database():
         self.user_settings = None
         self.file_systems = None
         self.playlist = None
+        self.streams = None
         self.connection_string = None
 
     def init(self, database_settings):
@@ -25,10 +26,11 @@ class Database():
             self.engine = create_engine(self.connection_string, echo=echo)
             self.metadata = MetaData()
             # Initializing the database tables
-            self.users = self.users_init()
-            self.user_settings = self.user_settings_init()
-            self.file_systems = self.file_systems_init()
-            self.playlist = self.playlist_init()
+            self.users_init()
+            self.user_settings_init()
+            self.file_systems_init()
+            self.playlist_init()
+            self.streams_init()
             # Create the tables
             self.metadata.create_all(self.engine)
         else:
@@ -37,7 +39,7 @@ class Database():
     def file_systems_init(self):
         """ A method that initialized the file_systems table """
         if self.engine and self.metadata:
-            systems = Table(
+            self.file_systems = Table(
                 'file_systems',
                 self.metadata,
                 Column('identity', Integer, primary_key=True),
@@ -56,14 +58,12 @@ class Database():
                     DateTime,
                     nullable=False,
                     onupdate=date_created_update
-                )
-            )
-            return systems
+                ))
 
     def playlist_init(self):
         """ A method that intializes the playlist table """
         if self.engine and self.metadata:
-            playlist = Table(
+            self.playlist = Table(
                 'playlist',
                 self.metadata,
                 Column('identity', Integer, primary_key=True),
@@ -82,14 +82,12 @@ class Database():
                     DateTime,
                     nullable=False,
                     onupdate=date_created_update
-                )
-            )
-            return playlist
+                ))
 
     def users_init(self):
         """ A method taht initializes the users table """
         if self.engine and self.metadata:
-            users = Table(
+            self.users = Table(
                 'users',
                 self.metadata,
                 Column('identity', Integer, primary_key=True),
@@ -107,14 +105,12 @@ class Database():
                     DateTime,
                     nullable=False,
                     onupdate=date_created_update
-                )
-            )
-            return users
+                ))
 
     def user_settings_init(self):
         """ A method that initializes the user details table """
         if self.engine and self.metadata:
-            user_settings = Table(
+            self.user_settings = Table(
                 'user_settings',
                 self.metadata,
                 Column('identity', Integer, primary_key=True),
@@ -133,9 +129,24 @@ class Database():
                     DateTime,
                     nullable=False,
                     onupdate=date_created_update
-                )
-            )
-            return user_settings
+                ))
+
+    def streams_init(self):
+        """ A method that initializes the streams table """
+        if self.engine and self.metadata:
+            self.streams = Table(
+                'streams',
+                self.metadata,
+                Column('identity', String, primary_key=True),
+                Column('title', String, nullable=False),
+                Column('url', String, nullable=False),
+                Column('player_url', String, nullable=False),
+                Column(
+                    'date_created',
+                    DateTime,
+                    nullable=False,
+                    onupdate=date_created_update
+                ))
 
 
 def date_created_update(context):

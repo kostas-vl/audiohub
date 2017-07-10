@@ -5,6 +5,7 @@ import collections
 import enum
 import pafy
 import models.playlist as pl
+import models.streams as strm
 import sound.mplayer as mpl
 from flask_socketio import emit
 from enviroment import SOCKET_IO
@@ -143,19 +144,43 @@ class Player():
     def load_stream(self, url):
         """ Loads a stream to mplayer """
         if url:
-            stream = pafy.new(url)
-            best_audio = stream.getbestaudio(preftype="webm")
+            video = pafy.new(url)
+            best_audio = video.getbestaudio(preftype="webm")
             self.mplayer_process.loadfile(best_audio.url)
             self.mplayer_process.volume(self.info.volume)
             self.info.track = pl.Playlist(
                 identity=-1,
-                name='(Streaming) ' + stream.title,
+                name='(Streaming) ' + video.title,
                 type='file',
                 active=True,
                 date_created=datetime.datetime.now(),
                 date_modified=datetime.datetime.now()
             )
             self.info.state = PlayerStateEnum.Playing
+            stream = strm.Stream(
+                title=video.title,
+                url=url,
+                player_url=best_audio.url
+            )
+            strm.insert(stream)
+
+    def load_registered_stream(self, identity):
+        """ Load a registered stream to mplayer """
+        if identity:
+            streams = strm.select_by_id(identity)
+            if streams:
+                stream = streams[0]
+                self.mplayer_process.loadfile(stream.player_url)
+                self.mplayer_process.volume(self.info.volume)
+                self.info.track = pl.Playlist(
+                    identity=-1,
+                    name='(Streaming) ' + stream.title,
+                    type='file',
+                    active=True,
+                    date_created=datetime.datetime.now(),
+                    date_modified=datetime.datetime.now()
+                )
+                self.info.state = PlayerStateEnum.Playing
 
 
 def emit_player_info():
@@ -171,6 +196,15 @@ def emit_queue():
     except Exception as err:
         print(err)
         raise err
+
+
+def emit_stream_history():
+    """ A function that sends all registered streams """
+    try:
+        emit('stream history', [dict(entry) for entry in strm.select()])
+    except Exception as err:
+        print(err)
+        raise(err)
 
 
 @SOCKET_IO.on('player info', namespace='/server')
@@ -262,6 +296,12 @@ def on_queue(_):
     emit_queue()
 
 
+@SOCKET_IO.on('stream history', namespace='/server')
+def on_stream_history(_):
+    """ List all registered streams """
+    emit_stream_history()
+
+
 @SOCKET_IO.on('load stream', namespace='/server')
 def on_load_stream(url):
     """ Load an incoming stream to mplayer """
@@ -269,6 +309,17 @@ def on_load_stream(url):
         PLAYER.load_stream(url)
         emit_player_info()
         emit('load stream complete')
+        emit_stream_history()
+
+
+@SOCKET_IO.on('load registered stream', namespace='/server')
+def on_load_registered_stream(identity):
+    """ Load an incomgin registered stream to mplayer """
+    if identity:
+        PLAYER.load_registered_stream(identity)
+        emit_player_info()
+        emit('load stream complete')
+        emit_stream_history()
 
 
 # audio player initialization and configuration

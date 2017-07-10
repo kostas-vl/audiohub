@@ -1,7 +1,8 @@
 """ File containing code that revolves around the playlist data table """
 import datetime
+from sqlalchemy import Integer, select, func
 from base.model import Model
-from database.schema import DATABASE, select, func, Integer
+from database.schema import DATABASE
 
 
 class Playlist(Model):

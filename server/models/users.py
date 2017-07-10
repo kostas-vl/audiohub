@@ -2,7 +2,8 @@
 import collections
 import datetime
 from base.model import Model
-from database.schema import DATABASE, Integer, select, func
+from database.schema import DATABASE
+from sqlalchemy import Integer, select, func
 
 
 class User(Model):
@@ -194,7 +195,7 @@ def delete_all():
         conn.execute(DATABASE.users.delete())
 
 
-def delete_by_id(id):
+def delete_by_id(file_id):
     """ A function that removes an entry from the users data table
         that contains the provided id
     """
@@ -203,7 +204,7 @@ def delete_by_id(id):
             DATABASE.
             users.
             delete().
-            where(DATABASE.users.c.identity == id)
+            where(DATABASE.users.c.identity == file_id)
         )
 
 

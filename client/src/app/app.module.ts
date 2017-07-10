@@ -44,17 +44,6 @@ import { DownloadComponent } from './download/download.component';
 import { SystemsComponent } from './systems/systems.component';
 import { PageLoaderComponent } from './page-loader/page-loader.component';
 
-export class HammerJsConfiguration extends HammerGestureConfig {
-
-    public override = {
-        'swipe': {
-            velocity: 0.4,
-            threshold: 20
-        }
-    };
-
-}
-
 const appRoutes: Routes = [
     {
         path: 'playlist',
@@ -134,11 +123,7 @@ const appRoutes: Routes = [
     providers: [
         SettingsService,
         PageLoaderService,
-        SocketService,
-        {
-            provide: HAMMER_GESTURE_CONFIG,
-            useClass: HammerJsConfiguration
-        }
+        SocketService
     ],
     bootstrap: [
         AppComponent

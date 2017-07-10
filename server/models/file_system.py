@@ -1,8 +1,9 @@
 """ File containing code that revolves around the file systems data table """
 import collections
 import datetime
+from sqlalchemy import Integer, select, func
 from base.model import Model
-from database.schema import DATABASE, select, func, Integer
+from database.schema import DATABASE
 
 
 class FileSystem(Model):

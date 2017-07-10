@@ -1,7 +1,8 @@
 """ Contains the user settings class implementation and functions for database interaction """
 import collections
 import datetime
-from database.schema import DATABASE, select, func, Integer
+from sqlalchemy import Integer, select, func
+from database.schema import DATABASE
 from base.model import Model
 
 
