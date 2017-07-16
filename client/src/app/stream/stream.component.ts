@@ -48,7 +48,7 @@ export class StreamComponent implements OnInit {
      */
     public onLoad(stream: IStream) {
         if (stream && stream.identity) {
-            this.socket.emit('load registered stream', stream.identity);
+            this.socket.emit('load stream', stream.url);
         }
     }
 

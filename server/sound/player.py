@@ -39,6 +39,29 @@ class Player():
     def __init__(self):
         self.info = PlayerInfo()
         self.mplayer_process = mpl.MplayerProcess()
+        self.streams_cache = []
+
+    def __load_stream(self, url):
+        """ Loads a stream to mplayer """
+        if url:
+            video = pafy.new(url)
+            best_audio = video.getbestaudio(preftype="webm")
+            self.mplayer_process.loadfile(best_audio.url)
+            self.mplayer_process.volume(self.info.volume)
+            self.info.track = pl.Playlist(
+                identity=-1,
+                name='(Streaming) ' + video.title,
+                type='file',
+                active=True,
+                date_created=datetime.datetime.now(),
+                date_modified=datetime.datetime.now()
+            )
+            self.info.state = PlayerStateEnum.Playing
+            stream = strm.Stream(
+                title=video.title,
+                url=url,
+                player_url=best_audio.url
+            )
 
     def init(self):
         """ Initializes at a specified time the mplayer process """
@@ -143,44 +166,41 @@ class Player():
 
     def load_stream(self, url):
         """ Loads a stream to mplayer """
+        # Checking if a url is given
         if url:
-            video = pafy.new(url)
-            best_audio = video.getbestaudio(preftype="webm")
-            self.mplayer_process.loadfile(best_audio.url)
+            stream = None
+            streams = strm.select_by_url(url)
+            # Check if there are streams in the database with the same url and in cache
+            if streams and streams[0].identity in self.streams_cache:
+                stream = streams[0]
+            else:
+                # Add the track in memory
+                video = pafy.new(url)
+                best_audio = video.getbestaudio(preftype="webm")
+                # Insert or get from the database the stream information
+                if streams:
+                    stream = streams[0]
+                else:
+                    stream = strm.Stream(
+                        title=video.title,
+                        url=url,
+                        player_url=best_audio.url
+                    )
+                    strm.insert(stream)
+                # Add it to the player stream cache
+                self.streams_cache.append(stream.identity)
+            # Load the file and start the playback
+            self.mplayer_process.loadfile(stream.player_url)
             self.mplayer_process.volume(self.info.volume)
             self.info.track = pl.Playlist(
                 identity=-1,
-                name='(Streaming) ' + video.title,
+                name='(Streaming) ' + stream.title,
                 type='file',
                 active=True,
                 date_created=datetime.datetime.now(),
                 date_modified=datetime.datetime.now()
             )
             self.info.state = PlayerStateEnum.Playing
-            stream = strm.Stream(
-                title=video.title,
-                url=url,
-                player_url=best_audio.url
-            )
-            strm.insert(stream)
-
-    def load_registered_stream(self, identity):
-        """ Load a registered stream to mplayer """
-        if identity:
-            streams = strm.select_by_id(identity)
-            if streams:
-                stream = streams[0]
-                self.mplayer_process.loadfile(stream.player_url)
-                self.mplayer_process.volume(self.info.volume)
-                self.info.track = pl.Playlist(
-                    identity=-1,
-                    name='(Streaming) ' + stream.title,
-                    type='file',
-                    active=True,
-                    date_created=datetime.datetime.now(),
-                    date_modified=datetime.datetime.now()
-                )
-                self.info.state = PlayerStateEnum.Playing
 
 
 def emit_player_info():
@@ -307,16 +327,6 @@ def on_load_stream(url):
     """ Load an incoming stream to mplayer """
     if url:
         PLAYER.load_stream(url)
-        emit_player_info()
-        emit('load stream complete')
-        emit_stream_history()
-
-
-@SOCKET_IO.on('load registered stream', namespace='/server')
-def on_load_registered_stream(identity):
-    """ Load an incomgin registered stream to mplayer """
-    if identity:
-        PLAYER.load_registered_stream(identity)
         emit_player_info()
         emit('load stream complete')
         emit_stream_history()

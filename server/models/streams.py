@@ -78,3 +78,16 @@ def select_by_id(identity):
             where(DATABASE.streams.c.identity == identity)
         )
         return list(map(lambda x: Stream(dict(x)), streams))
+
+
+def select_by_url(url):
+    """ A function that returns all the entries on the stream data table that contain
+        the provided url
+    """
+    with DATABASE.engine.connect() as conn:
+        streams = conn.execute(
+            sql.
+            select([DATABASE.streams]).
+            where(DATABASE.streams.c.url == url)
+        )
+        return list(map(lambda x: Stream(dict(x)), streams))
