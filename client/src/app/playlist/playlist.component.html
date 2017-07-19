@@ -36,29 +36,43 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!loading">
 
-        <md-nav-list *ngFor="let entry of playlist">
+        <md-card>
 
-            <md-list-item (click)="onPlayNow(entry)">
+            <md-card-content>
 
-                <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
+                <p class="text-center" [hidden]="playlist.length > 0">
 
-                <h4 md-line>{{entry.name}}</h4>
+                    No entry in the playlist...
 
-                <p md-line>{{entry.path}}</p>
-                
-                <span mdTooltip="remove" mdTooltipPosition="above">
+                </p>
 
-                    <button md-icon-button (click)="onRemove(entry)">
+                <md-nav-list *ngFor="let entry of playlist">
 
-                        <md-icon color="warn">delete</md-icon>
+                    <md-list-item (click)="onPlayNow(entry)">
 
-                    </button>
+                        <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
 
-                </span>
+                        <h4 md-line>{{entry.name}}</h4>
 
-            </md-list-item>
+                        <p md-line>{{entry.path}}</p>
+                        
+                        <span mdTooltip="remove" mdTooltipPosition="above">
 
-        </md-nav-list>
+                            <button md-icon-button (click)="onRemove(entry)">
+
+                                <md-icon color="warn">delete</md-icon>
+
+                            </button>
+
+                        </span>
+
+                    </md-list-item>
+
+                </md-nav-list>
+
+            </md-card-content>
+
+        </md-card>
 
     </div>
 

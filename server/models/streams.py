@@ -28,7 +28,7 @@ class Stream(Model):
 
 
 def insert(data):
-    """ A function taht inserts new entries on the stream data table """
+    """ A function that inserts new entries on the stream data table """
     # Insert a single entry
     if isinstance(data, Stream) and data:
         with DATABASE.engine.connect() as conn:
@@ -54,6 +54,46 @@ def insert(data):
             )
             return list(map(Stream, stream_collection))
     # Insert nothing
+    else:
+        return None
+
+
+def update(data):
+    """ A function that updates entries of the stream data table """
+    # Update a single entry
+    if isinstance(data, Stream):
+        with DATABASE.engine.connect() as conn:
+            stream = dict(data)
+            stream['date_created'] = datetime.datetime.strptime(
+                stream['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+            )
+            conn.execute(
+                DATABASE.
+                streams.
+                update().
+                where(DATABASE.streams.c.identity == data.identity).
+                values(stream)
+            )
+            return Stream(stream)
+    # Update a collection
+    elif isinstance(data, collections.Sequence):
+        with DATABASE.engine.connect() as conn:
+            stream_collection = []
+            for entry in data:
+                stream = dict(entry)
+                stream['date_created'] = datetime.datetime.strptime(
+                    stream['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
+                )
+                conn.execute(
+                    DATABASE.
+                    streams.
+                    update().
+                    where(DATABASE.streams.c.identity == entry.identity).
+                    values(stream)
+                )
+                stream_collection.append(stream)
+            return list(map(Stream, stream_collection))
+    # Update nothing
     else:
         return None
 

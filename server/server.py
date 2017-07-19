@@ -26,7 +26,11 @@ def on_index():
 @APP.route('/<path:path>')
 def on_static_file(path):
     """ Serve any static file  """
-    return send_from_directory('static', path)
+    resource = os.path.join('static', path)
+    if os.path.isfile(resource):
+        return send_from_directory('static', path)
+    else:
+        return send_from_directory('static', 'index.html')
 
 
 # New flask socket connection event handler

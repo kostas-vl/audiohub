@@ -177,9 +177,10 @@ class Player():
                 # Add the track in memory
                 video = pafy.new(url)
                 best_audio = video.getbestaudio(preftype="webm")
-                # Insert or get from the database the stream information
+                # Insert or update to the database the stream information
                 if streams:
-                    stream = streams[0]
+                    streams[0].player_url = best_audio.url
+                    stream = strm.update(streams[0])
                 else:
                     stream = strm.Stream(
                         title=video.title,

@@ -1,5 +1,5 @@
-<div [class.app-light]="!settings.dark_theme">
-    
+<div [class.app-dark]="settings.dark_theme" [class.app-light]="!settings.dark_theme">
+
     <app-page-loader></app-page-loader>
 
     <app-top-bar [sidenav]="sidenav"></app-top-bar>
@@ -13,42 +13,42 @@
                 <md-list-item (click)="onSidenavItemClick('/playlist')">
 
                     <md-icon>album</md-icon>
-                    <h4 md-line>Playlist</h4>
+                    <span md-line>PLAYLIST</span>
 
                 </md-list-item>
 
                 <md-list-item (click)="onSidenavItemClick('/files')">
 
                     <md-icon>insert_drive_file</md-icon>
-                    <h4 md-line>Files</h4>
+                    <span md-line>FILES</span>
 
                 </md-list-item>
 
                 <md-list-item (click)="onSidenavItemClick('/stream')">
 
                     <md-icon>airplay</md-icon>
-                    <h4 md-line>Streams</h4>
+                    <span md-line>STREAMS</span>
 
                 </md-list-item>
 
                 <md-list-item (click)="onSidenavItemClick('/systems')">
 
                     <md-icon>settings_system_daydream</md-icon>
-                    <h4 md-line>Systems</h4>
+                    <span md-line>SYSTEMS</span>
 
                 </md-list-item>
 
                 <md-list-item (click)="onSidenavItemClick('/download')">
 
                     <md-icon>file_download</md-icon>
-                    <h4 md-line>Download</h4>
+                    <span md-line>DOWNLOAD</span>
 
                 </md-list-item>
 
                 <md-list-item (click)="onSidenavItemClick('/settings')">
 
                     <md-icon>settings</md-icon>
-                    <h4 md-line>Settings</h4>
+                    <span md-line>SETTINGS</span>
 
                 </md-list-item>
 
@@ -64,7 +64,7 @@
 
                     <app-player></app-player>
 
-                </div>                
+                </div>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
 

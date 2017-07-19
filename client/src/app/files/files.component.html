@@ -40,47 +40,51 @@
 
     </div>    
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="loading">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-        <app-loader loading="true"></app-loader>
+        <md-card>
+           
+            <app-loader [loading]="loading"></app-loader>
 
-    </div>
+            <md-card-content *ngIf="!loading">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!loading">
+                <md-nav-list *ngFor="let entry of currentSystemEntries">
 
-        <md-nav-list *ngFor="let entry of currentSystemEntries">
+                    <md-list-item (click)="onEntry(entry)">
 
-            <md-list-item (click)="onEntry(entry)">
+                        <md-icon md-list-avatar class="system-button" *ngIf="currentSystemStack.length == 0">settings_system_daydream</md-icon>
 
-                <md-icon md-list-avatar class="system-button" *ngIf="currentSystemStack.length == 0">settings_system_daydream</md-icon>
+                        <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory' && currentSystemStack.length > 0">folder</md-icon>
 
-                <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory' && currentSystemStack.length > 0">folder</md-icon>
+                        <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
 
-                <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
+                        <h4 md-line>{{entry.name}}</h4>
 
-                <h4 md-line>{{entry.name}}</h4>
+                        <p md-line>{{entry.path}}</p>
 
-                <p md-line>{{entry.path}}</p>
+                        <button md-icon-button *ngIf="entry.type === 'file'" (click)="onAdd(entry)">
 
-                <button md-icon-button *ngIf="entry.type === 'file'" (click)="onAdd(entry)">
+                            <md-icon>playlist_add</md-icon>
 
-                    <md-icon>playlist_add</md-icon>
+                        </button>
 
-                </button>
+                        <div mdTooltip="disconnect" mdTooltipPosition="above">
 
-                <div mdTooltip="disconnect" mdTooltipPosition="above">
+                            <button md-icon-button *ngIf="currentSystemStack.length === 0" (click)="onDisconect(entry)">
 
-                    <button md-icon-button *ngIf="currentSystemStack.length === 0" (click)="onDisconect(entry)">
+                                <md-icon color="warn">do_not_disturb</md-icon>
 
-                        <md-icon color="warn">do_not_disturb</md-icon>
+                            </button>
 
-                    </button>
+                        </div>
 
-                </div>
+                    </md-list-item>
 
-            </md-list-item>
+                </md-nav-list>
 
-        </md-nav-list>
+            </md-card-content>
+
+        </md-card>
 
     </div>
 

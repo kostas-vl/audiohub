@@ -4,7 +4,7 @@
 
         <md-toolbar color="primary">
 
-            Download
+            DOWNLOAD
 
         </md-toolbar>
 
@@ -18,17 +18,17 @@
 
                 <md-input-container class="download-input">
 
-                    <input mdInput placeholder="System" [(ngModel)]="details.system">
+                    <input mdInput placeholder="SYSTEM" [(ngModel)]="details.system">
 
                 </md-input-container>
 
                 <md-input-container class="download-input">
 
-                    <input mdInput placeholder="Url" [(ngModel)]="details.url">
+                    <input mdInput placeholder="URL" [(ngModel)]="details.url">
 
                 </md-input-container>
 
-                <md-select class="download-select" placeholder="File Format" [(ngModel)]="details.fileFormat">
+                <md-select class="download-select" placeholder="FILE FORMAT" [(ngModel)]="details.fileFormat">
 
                     <md-option *ngFor="let option of formatOptions" [value]="option">
 

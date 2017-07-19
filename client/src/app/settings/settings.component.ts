@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../settings-service/settings.service';
-import { ISettings } from '../models/settings';
+import { ISettings, Settings } from '../models/settings';
 
 @Component({
     selector: 'app-settings',
@@ -9,7 +9,7 @@ import { ISettings } from '../models/settings';
 })
 export class SettingsComponent implements OnInit {
 
-    public settings: ISettings;
+    public settings: ISettings = new Settings();
 
     constructor(private settingsService: SettingsService) { }
 
@@ -18,6 +18,11 @@ export class SettingsComponent implements OnInit {
      */
     ngOnInit() {
         this.settings = this.settingsService.get();
+
+        // subscribe to the settings servive inorder to handle any changes
+        this.settingsService.subscribe(newSettings => {
+            this.settings = newSettings;
+        });
     }
 
     /**

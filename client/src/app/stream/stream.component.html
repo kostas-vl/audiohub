@@ -4,7 +4,7 @@
 
         <md-toolbar color="primary">
 
-            Streams
+            STREAMS
 
         </md-toolbar>
 
@@ -24,7 +24,7 @@
 
                         <md-input-container class="streams-input">
 
-                            <input mdInput type="text" placeholder="Url" [(ngModel)]="url">
+                            <input mdInput type="text" placeholder="URL" [(ngModel)]="url">
 
                         </md-input-container>
 
@@ -66,7 +66,11 @@
 
             <md-card-actions class="text-right">
 
-                <button md-button color="primary" (click)="onRequestStream(url)">OK</button>
+                <div [hidden]="tabGroup.selectedIndex !== 0">
+
+                    <button md-button color="primary" (click)="onRequestStream(url)">OK</button>
+
+                </div>
 
             </md-card-actions>
 
