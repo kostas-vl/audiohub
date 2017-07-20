@@ -6,7 +6,7 @@
 
         <md-toolbar color="primary">
 
-            SETTINGS
+            Settings
 
         </md-toolbar>
 
@@ -18,25 +18,25 @@
 
             <md-card-content>
 
-                <md-slide-toggle [(ngModel)]="settings.dark_theme" (change)="onChange()">DARK THEME</md-slide-toggle>
+                <md-slide-toggle [(ngModel)]="settings.dark_theme" (change)="onChange()">Dark Theme</md-slide-toggle>
 
-                <md-select class="settings-select" placeholder="SIDENAV MODE" [(ngModel)]="settings.sidenav_mode" (change)="onChange()">
+                <md-select class="settings-select" placeholder="Menu Animation Mode" [(ngModel)]="settings.sidenav_mode" (change)="onChange()">
 
                     <md-option value="over">
 
-                        OVER
+                        over
 
                     </md-option>
 
                     <md-option value="side">
 
-                        SIDE
+                        side
 
                     </md-option>
 
                     <md-option value="push">
 
-                        PUSH
+                        push
 
                     </md-option>
 

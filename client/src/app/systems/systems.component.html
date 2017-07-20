@@ -4,7 +4,7 @@
 
         <md-toolbar color="primary">
 
-            SYSTEMS
+            Systems
 
         </md-toolbar>
 
@@ -16,33 +16,33 @@
 
             <md-card-content>
 
-                <md-tab-group #tabGroup class="systems-card-dialog">
+                <md-tab-group #tabGroup>
 
-                    <md-tab label="MOUNT">
+                    <md-tab label="Mount">
 
                         <br>
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="IP ADDRESS" [(ngModel)]="mountFolder.ip">
+                            <input mdInput placeholder="IP Address" [(ngModel)]="mountFolder.ip">
 
                         </md-input-container>
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="VOLUME" [(ngModel)]="mountFolder.volume">
+                            <input mdInput placeholder="Volume" [(ngModel)]="mountFolder.volume">
 
                         </md-input-container>
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="USERNAME" [(ngModel)]="mountFolder.user">
+                            <input mdInput placeholder="Username" [(ngModel)]="mountFolder.user">
 
                         </md-input-container>
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="PASSWORD" type="password" [(ngModel)]="mountFolder.password">
+                            <input mdInput placeholder="Password" type="password" [(ngModel)]="mountFolder.password">
 
                         </md-input-container>
 
@@ -54,13 +54,13 @@
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="NAME" [(ngModel)]="folder.name">
+                            <input mdInput placeholder="Name" [(ngModel)]="folder.name">
 
                         </md-input-container>
 
                         <md-input-container class="systems-card-input">
 
-                            <input mdInput placeholder="PATH" [(ngModel)]="folder.path">
+                            <input mdInput placeholder="Path" [(ngModel)]="folder.path">
 
                         </md-input-container>
 
@@ -72,7 +72,7 @@
 
             <md-card-actions class="text-right">
 
-                <button md-button color="primary" (click)="onComplete(tabGroup.selectedIndex)">OK</button>
+                <button md-button color="primary" (click)="onComplete(tabGroup.selectedIndex)">Ok</button>
 
             </md-card-actions>
 

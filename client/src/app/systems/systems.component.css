@@ -2,13 +2,6 @@
     padding-top: 20px;
 }
 
-.systems-card-dialog {
-    /*max-width: 600px;*/
-    max-height: 320px;
-    /*width: 600px;*/
-    height: 320px;
-}
-
-.systems-card-dialog .systems-card-input {
+.systems-card-input {
     width: 100%;
 }

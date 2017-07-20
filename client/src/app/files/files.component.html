@@ -48,6 +48,12 @@
 
             <md-card-content *ngIf="!loading">
 
+                <p class="text-center" [hidden]="currentSystemEntries.length > 0">
+
+                    No entries found...
+
+                </p>
+
                 <md-nav-list *ngFor="let entry of currentSystemEntries">
 
                     <md-list-item (click)="onEntry(entry)">

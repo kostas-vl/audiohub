@@ -13,7 +13,7 @@ export class FilesComponent implements OnInit {
     public systems: IFileSystem[] = [];
     public selectedSystem: IFileSystem;
     public currentSystem: IFileSystem;
-    public currentSystemEntries: IFileSystem[];
+    public currentSystemEntries: IFileSystem[] = [];
     public currentSystemStack: string[] = [];
     public loading = false;
     public asyncLoading = false;
