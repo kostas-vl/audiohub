@@ -60,7 +60,7 @@
 
             <div class="player-volume">
 
-                <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>                
+                <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>
 
             </div>
 
@@ -70,9 +70,23 @@
 
             <div class="row">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 
-                    <small *ngIf="info.track">{{info.track.name}}</small>
+                    <div class="track-name">
+
+                        <small *ngIf="info.track">{{info.track.name}}</small>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
+
+                    <div class="track-time">
+
+                        <small *ngIf="info.track">{{info.currentTimeStr}} / {{info.timeStr}}</small>
+
+                    </div>
 
                 </div>
 

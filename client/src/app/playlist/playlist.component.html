@@ -1,5 +1,5 @@
 <div class="playlist-card row">
-   
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
         <md-toolbar color="primary">
@@ -26,19 +26,15 @@
 
         </md-toolbar>
 
-    </div>    
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="loading">
-
-        <app-loader loading="true"></app-loader>
-
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!loading">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
         <md-card>
 
-            <md-card-content>
+            <app-loader [loading]="loading"></app-loader>
+
+            <md-card-content *ngIf="!loading">
 
                 <p class="text-center" [hidden]="playlist.length > 0">
 
@@ -55,7 +51,7 @@
                         <h4 md-line>{{entry.name}}</h4>
 
                         <p md-line>{{entry.path}}</p>
-                        
+
                         <span mdTooltip="remove" mdTooltipPosition="above">
 
                             <button md-icon-button (click)="onRemove(entry)">

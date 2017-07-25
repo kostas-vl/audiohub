@@ -8,7 +8,10 @@
     # Activating it
     .\venv\Scripts\activate
 
-    # Installing all of the other dependencies
+    # Installing all of the dev dependencies
+    python -m pip install -r requirements.dev.txt
+
+    # Installing all of the deploy dependencies
     python -m pip install -r requirements.txt
 
     # Deactivating it

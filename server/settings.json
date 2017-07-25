@@ -7,12 +7,19 @@
         "connection_string": "sqlite:///audiohub.db",
         "echo": true
     },
-    "mplayer": {
-        "win32_path": "mplayer.exe",
-        "linux_path": "mplayer"
-    },
     "youtube": {
         "win32_path": "youtube-dl.exe",
         "linux_path": "youtube-dl"
+    },
+    "backend": [
+        {
+            "name": "mplayer",
+            "win32_path": "mplayer.exe",
+            "linux_path": "mplayer"
+        }
+    ],
+    "mplayer": {
+        "win32_path": "mplayer.exe",
+        "linux_path": "mplayer"
     }
 }

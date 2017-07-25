@@ -24,7 +24,7 @@ export class PlayerComponent implements OnInit {
     private setProgressMode(state: 'init' | 'playing' | 'paused' | 'stoped') {
         switch (state) {
             case 'playing':
-                this.progressMode = 'buffer';
+                this.progressMode = 'determinate';
                 break;
             case 'paused':
             case 'stoped':
@@ -45,38 +45,20 @@ export class PlayerComponent implements OnInit {
             this.info = info;
             this.setProgressMode(this.info.state);
         });
-        // subscribe an event handler for the 'channel stream' event
-        this.socket.subscribe('channel stream', (buffer: ArrayBuffer) => {
-            // creating the audio context
-            const context = new AudioContext();
-
-            const container = {
-                data: Array.apply(null, new Uint32Array(buffer)),
-                contentType: 'audio/x-wav'
-            };
-            const typedData = JSON.parse(JSON.stringify(container));
-            const typedBuffer = new Uint32Array(typedData.data).buffer;
-
-            // decoding the audio data and handling the success and error events
-            context
-                .decodeAudioData(typedBuffer)
-                .then((audioBuffer: AudioBuffer) => {
-                    // create a new buffer source
-                    const node = context.createBufferSource();
-
-                    // assign the audio buffer to the source bufer
-                    node.buffer = audioBuffer;
-
-                    // connect to the context destination
-                    node.connect(context.destination);
-
-                    // start playback
-                    node.start(0);
-                })
-                .catch(reason => console.log(reason));
+        // subscribe an event handler for the 'current time' event
+        this.socket.subscribe('current time', (data: { currentTime: number, currentTimeStr: string }) => {
+            this.info.currentTime = data.currentTime;
+            this.info.currentTimeStr = data.currentTimeStr;
+            this.progressValue = (this.info.currentTime / this.info.time) * 100;
         });
         // sends an event message for the current state of the player, on the server
         this.socket.emit('player info');
+        // create a timer point to request the curernt time of the playback
+        setInterval(() => {
+            if (this.info.state === 'playing') {
+                this.socket.emit('current time');
+            }
+        }, 1000);
     }
 
     /**

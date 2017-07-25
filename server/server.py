@@ -6,7 +6,6 @@ import models.file_system
 import models.playlist
 import configuration.application_settings as app_settings
 import configuration.settings as settings
-import sound.channel as channel
 import sound.player as player
 import drive.files as files
 import drive.download as download
@@ -16,7 +15,6 @@ from database.schema import DATABASE
 from enviroment import SOCKET_IO, APP
 
 
-# Default http route
 @APP.route('/')
 def on_index():
     """ End point for the '/' path """
@@ -33,7 +31,6 @@ def on_static_file(path):
         return send_from_directory('static', 'index.html')
 
 
-# New flask socket connection event handler
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
     """ function that handles a new connection socket """
@@ -67,7 +64,6 @@ def on_connect():
     print('client_connected::{}'.format(request.sid))
 
 
-# Flask socket disconnect event handler
 @SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
     """ Function that handles a socket disconnect event """
@@ -88,15 +84,18 @@ def on_disconnect():
 
 
 def main():
-    """ The main source of the application execution """
+    """ The main source of the application execution """    
     # Loading settings
-    print("Loading settings...")
+    print('Loading settings...')
     app_settings.INSTANCE.load()
+    # Initializing player
+    print('Initializing player instance...')
+    player.INSTANCE.init()
     # Initializing database
-    print("Initializing database schema image...")
+    print('Initializing database schema image...')
     DATABASE.init(app_settings.INSTANCE.database)
     # Flask APP Initialization
-    print("Starting the flask socket-io server...")
+    print('Starting the flask socket-io server...')
     SOCKET_IO.run(
         APP,
         host=os.getenv('IP', app_settings.INSTANCE.server.ip_address),
