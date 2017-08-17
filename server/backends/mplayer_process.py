@@ -31,9 +31,9 @@ class MplayerProcess(BackendProcess):
         try:
             execution_path = ''
             if sys.platform == 'win32':
-                execution_path = app_settings.INSTANCE.mplayer.win32_path
+                execution_path = app_settings.INSTANCE.backend.win32_path
             else:
-                execution_path = app_settings.INSTANCE.mplayer.linux_path
+                execution_path = app_settings.INSTANCE.backend.linux_path
             self.process_handler = subprocess.Popen(
                 [
                     execution_path,
@@ -91,23 +91,29 @@ class MplayerProcess(BackendProcess):
         """ Executes a command to get the length of the file in seconds """
         self.__execute(['get_time_length'])
         if self.process_handler is not None:
-            result_bytes = self.process_handler.stdout.readline()
-            result_str = result_bytes.decode('utf-8')
-            seconds_str = result_str.replace('ANS_LENGTH=', '')
-            return float(seconds_str)
-        else:
-            return None
+            try:
+                if self.process_handler.stdout.readable():
+                    result_bytes = self.process_handler.stdout.readline()
+                    result_str = result_bytes.decode('utf-8')
+                    seconds_str = result_str.replace('ANS_LENGTH=', '')
+                    return float(seconds_str)
+            except IOError:
+                return None
+        return None
 
     def current_time(self):
         """ Executes a command to get the current time on the playback of the player proccess """
-        self.__execute(['get_time_pos'])
+        self.__execute(['get_time_pos'])        
         if self.process_handler is not None:
-            result_bytes = self.process_handler.stdout.readline()
-            result_str = result_bytes.decode('utf-8')
-            seconds_str = result_str.replace('ANS_TIME_POSITION=', '')
-            return float(seconds_str)
-        else:
-            return None
+            try:
+                if self.process_handler.stdout.readable():
+                    result_bytes = self.process_handler.stdout.readline()
+                    result_str = result_bytes.decode('utf-8')
+                    seconds_str = result_str.replace('ANS_TIME_POSITION=', '')
+                    return float(seconds_str)
+            except IOError:
+                return None
+        return None
 
     def volume(self, value):
         """ Executes a command to set the volume of the mplayer process to the provided value """

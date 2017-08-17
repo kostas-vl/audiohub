@@ -169,7 +169,11 @@ class Player():
         is_playing = self.info.state == PlayerStateEnum.Playing
         track_ended = self.info.current_time >= self.info.time - 1
         if is_playing and not track_ended:
-            self.info.current_time = self.backend_process.current_time()
+            current_time = self.backend_process.current_time()
+            if current_time is None:
+                self.stop()
+            else:
+                self.info.current_time = current_time
             self.info.current_time_str = convert_seconds_to_time_str(
                 self.info.current_time
             )

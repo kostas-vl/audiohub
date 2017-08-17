@@ -16,10 +16,11 @@
             "name": "mplayer",
             "win32_path": "mplayer.exe",
             "linux_path": "mplayer"
+        },
+        {
+            "name": "mpv",
+            "win32_path": "mpv.exe",
+            "linux_path": "mpv"
         }
-    ],
-    "mplayer": {
-        "win32_path": "mplayer.exe",
-        "linux_path": "mplayer"
-    }
+    ]    
 }

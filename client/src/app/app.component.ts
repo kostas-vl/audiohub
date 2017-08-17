@@ -66,9 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // subscribe an event handler on the 'stream loaded' event
         this.socket.subscribe('load stream complete', data => {
             this.snackbar.open('Stream Loaded!', '', { duration: 1500 });
-            setTimeout(() => {
-                this.pageLoader.stop();
-            }, 1500);
+            setTimeout(() => this.pageLoader.stop(), 1500);
         });
 
         // send request for the settings of the user

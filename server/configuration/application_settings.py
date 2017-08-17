@@ -33,15 +33,6 @@ class DatabaseSettings(BaseSettings):
         self.init_from_dict(initargs)
 
 
-class MplayerSettings(BaseSettings):
-    """ Contains static information for the mplayer options """
-
-    def __init__(self, *initargs):
-        self.win32_path = None
-        self.linux_path = None
-        self.init_from_dict(initargs)
-
-
 class YoutubeSettings(BaseSettings):
     """ Contains static information for the youtube-dl options """
 
@@ -108,7 +99,6 @@ class AppSettings():
         self.settings_file_name = './settings.json'
         self.server = None
         self.database = None
-        self.mplayer = None
         self.youtube = None
         self.backend = None
 
@@ -124,8 +114,6 @@ class AppSettings():
                 self.server = ServerSettings(settings_dict['server'])
                 # Assign the database settings
                 self.database = DatabaseSettings(settings_dict['database'])
-                # Assign the mplayer settings
-                self.mplayer = MplayerSettings(settings_dict['mplayer'])
                 # Assign the youtube-dl settings
                 self.youtube = YoutubeSettings(settings_dict['youtube'])
                 # Assign the backend settings

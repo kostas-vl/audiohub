@@ -10,6 +10,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 })
 export class StreamComponent implements OnInit {
 
+    public loading = false;
     public url: string = null;
     public streamHistory: IStream[] = [];
 
@@ -22,9 +23,12 @@ export class StreamComponent implements OnInit {
      * implementation of the ngOnInit method, of the OnInit base class
      */
     ngOnInit() {
+        this.loading = true;
+
         // subscribes an event handler for the 'stream history' event
         this.socket.subscribe('stream history', (history: IStream[]) => {
             this.streamHistory = history;
+            setTimeout(() => this.loading = false, 500);
         });
 
         // send an event message for the list of the stream history
@@ -57,6 +61,7 @@ export class StreamComponent implements OnInit {
      * request the stream history
      */
     public onRefresh() {
+        this.loading = true;
         this.socket.emit('stream history');
     }
 

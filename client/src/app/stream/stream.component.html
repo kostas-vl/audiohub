@@ -44,19 +44,25 @@
 
                         </div>
 
-                        <md-nav-list *ngFor="let entry of streamHistory">
+                        <app-loader [loading]="loading"></app-loader>
 
-                            <md-list-item (click)="onLoad(entry)">
+                        <div *ngIf="!loading">
 
-                                <md-icon md-list-avatar color="warn">airplay</md-icon>
+                            <md-nav-list *ngFor="let entry of streamHistory">
 
-                                <h4 md-line>{{entry.title}}</h4>
+                                <md-list-item (click)="onLoad(entry)">
 
-                                <p md-line>{{entry.url}}</p>
+                                    <md-icon md-list-avatar color="warn">airplay</md-icon>
 
-                            </md-list-item>
+                                    <h4 md-line>{{entry.title}}</h4>
 
-                        </md-nav-list>
+                                    <p md-line>{{entry.url}}</p>
+
+                                </md-list-item>
+
+                            </md-nav-list>
+
+                        </div>
 
                     </md-tab>
 

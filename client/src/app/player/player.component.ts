@@ -24,7 +24,8 @@ export class PlayerComponent implements OnInit {
     private setProgressMode(state: 'init' | 'playing' | 'paused' | 'stoped') {
         switch (state) {
             case 'playing':
-                this.progressMode = 'determinate';
+                this.progressMode = 'buffer';
+                this.progressBuffer = 0;
                 break;
             case 'paused':
             case 'stoped':
