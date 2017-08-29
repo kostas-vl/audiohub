@@ -1,11 +1,15 @@
-""" Contains functions for mounting and unmounting network file systems """
+"""
+Contains functions for mounting and unmounting network file systems
+"""
 import sys
 import subprocess
 from base.model import Model
 
 
 class NetworkFileSystem(Model):
-    """ Class representing a network file system details """
+    """
+    Class representing a network file system details
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.ip_address = ''
@@ -27,7 +31,9 @@ class NetworkFileSystem(Model):
 
 
 def mount(details):
-    """ A function that mounts a new network file system """
+    """
+    A function that mounts a new network file system
+    """
     if sys.platform == 'win32':
         return win32_mount(details)
     elif sys.platform == 'linux':
@@ -37,7 +43,9 @@ def mount(details):
 
 
 def unmount(details):
-    """ A function that unmounts a network file system """
+    """
+    A function that unmounts a network file system
+    """
     if sys.platform == 'win32':
         win32_unmount(details)
     elif sys.platform == 'linux':
@@ -47,7 +55,9 @@ def unmount(details):
 
 
 def win32_mount(details):
-    """ A function that mounts a new network file system on a windows OS """
+    """
+    A function that mounts a new network file system on a windows OS
+    """
     try:
         persistent = 'yes' if details.persistent else 'no'
         path = '\\\\' + details.ip_address + '\\' + details.volume
@@ -66,7 +76,9 @@ def win32_mount(details):
 
 
 def win32_unmount(details):
-    """ A function that unmounts a network file system on a windows OS """
+    """
+    A function that unmounts a network file system on a windows OS
+    """
     try:
         path = '\\\\' + details.ip_address + '\\' + details.volume
         command = ['net use', path, '/delete']
@@ -78,7 +90,9 @@ def win32_unmount(details):
 
 
 def linux_mount(details):
-    """ A function that mounts a new network file system on a posix OS """
+    """
+    A function that mounts a new network file system on a posix OS
+    """
     try:
         path = '//' + details.ip_address + '/' + details.volume
         command = [
@@ -99,7 +113,9 @@ def linux_mount(details):
 
 
 def linux_unmount(details):
-    """ A function that unmounts a network file system on a posix OS """
+    """
+    A function that unmounts a network file system on a posix OS
+    """
     try:
         command = [
             'mount',

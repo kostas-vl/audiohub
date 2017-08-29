@@ -1,4 +1,6 @@
-""" Contains all the file oriented event handlers for the socket io server namespace """
+"""
+Contains all the file oriented event handlers for the socket io server namespace
+"""
 import os
 import models.file_system as fs
 import drive.network as net
@@ -7,7 +9,9 @@ from enviroment import SOCKET_IO
 
 
 def build_dir_tree(path):
-    """ A function that returns all the directories and files for the provided path """
+    """
+    A function that returns all the directories and files for the provided path
+    """
     tree = []
     if path:
         entries = os.listdir(path)
@@ -30,21 +34,26 @@ def build_dir_tree(path):
 
 @SOCKET_IO.on('available systems', namespace='/server')
 def on_available_systems(_):
-    """ A function that emits to all the connections all the available file systems """
+    """
+    A function that emits to all the connections all the available file systems
+    """
     emit_available_systems()
 
 
 @SOCKET_IO.on('list dir', namespace='/server')
 def on_list_dir(data):
-    """ A function that emits all the files and directories for the provided path """
+    """
+    A function that emits all the files and directories for the provided path
+    """
     tree = build_dir_tree(data)
     emit('list dir', [dict(node) for node in tree])
 
 
 @SOCKET_IO.on('add volume', namespace='/server')
 def on_add_volume(data):
-    """ A function that adds a volume on the list of available systems and then
-        emits its contents
+    """
+    A function that adds a volume on the list of available systems and then
+    emits its contents
     """
     if os.path.isdir(data['path']):
         file_system = fs.insert(fs.FileSystem(
@@ -58,8 +67,9 @@ def on_add_volume(data):
 
 @SOCKET_IO.on('mount volume', namespace='/server')
 def on_mount_volume(data):
-    """ A function that mounts a volume on the list of available systems
-        and then emits its contents
+    """
+    A function that mounts a volume on the list of available systems
+    and then emits its contents
     """
     details = net.NetworkFileSystem(
         ip=data['ip'],
@@ -78,8 +88,9 @@ def on_mount_volume(data):
 
 @SOCKET_IO.on('remove volume', namespace='/server')
 def on_remove_volume(data):
-    """ A function that removes a volume from the list of available systems and then
-        emits its contents
+    """
+    A function that removes a volume from the list of available systems and then
+    emits its contents
     """
     if data:
         fs.delete_by_id(data)
@@ -87,5 +98,7 @@ def on_remove_volume(data):
 
 
 def emit_available_systems():
-    """ A function that emits the list of available systems """
+    """
+    A function that emits the list of available systems
+    """
     emit('available systems', [dict(entry) for entry in fs.select_active()])

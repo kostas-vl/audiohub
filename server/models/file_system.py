@@ -1,4 +1,6 @@
-""" File containing code that revolves around the file systems data table """
+"""
+File containing code that revolves around the file systems data table
+"""
 import collections
 import datetime
 from sqlalchemy import Integer, select, func
@@ -7,7 +9,9 @@ from database.schema import DATABASE
 
 
 class FileSystem(Model):
-    """ A class representing the file systems data table """
+    """
+    A class representing the file systems data table
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.identity = None
@@ -31,7 +35,9 @@ class FileSystem(Model):
 
 
 def new_id():
-    """ A function that produces a new id for the file systems data table """
+    """
+    A function that produces a new id for the file systems data table
+    """
     with DATABASE.engine.connect() as conn:
         max_id = conn.execute(
             select([
@@ -44,10 +50,13 @@ def new_id():
 
 
 def insert(data):
-    """ A function that inserts a new entry on the file systems data table """
-    with DATABASE.engine.connect() as conn:
-        # Insert a single entry
-        if isinstance(data, FileSystem):
+    """
+    A function that inserts a new entry on the file systems data table
+    """
+
+    # Insert a single entry
+    if isinstance(data, FileSystem):
+        with DATABASE.engine.connect() as conn:
             system = dict(data)
             system['identity'] = new_id()
             system['date_created'] = datetime.datetime.now()
@@ -56,8 +65,9 @@ def insert(data):
                 DATABASE.file_systems.insert(), system
             )
             return FileSystem(system)
-        # Insert a collection
-        elif isinstance(data, collections.Sequence):
+    # Insert a collection
+    elif isinstance(data, collections.Sequence):
+        with DATABASE.engine.connect() as conn:
             collection = []
             id_interval = 0
             for entry in data:
@@ -71,16 +81,18 @@ def insert(data):
                 DATABASE.file_systems.insert(), collection
             )
             return [FileSystem(entry) for entry in collection]
-        # Insert nothing
-        else:
-            return None
+    # Insert nothing
+    else:
+        return None
 
 
 def update(data):
-    """ A function that updates a collection of entries on the file systems data table """
-    with DATABASE.engine.connect() as conn:
-        # Update single entry
-        if isinstance(data, FileSystem):
+    """
+    A function that updates a collection of entries on the file systems data table
+    """
+    # Update single entry
+    if isinstance(data, FileSystem):
+        with DATABASE.engine.connect() as conn:
             system = dict(data)
             if isinstance(system['date_created'], str):
                 system['date_created'] = datetime.datetime.strptime(
@@ -94,8 +106,9 @@ def update(data):
                 values(system)
             )
             return FileSystem(system)
-        # Update a collection
-        elif isinstance(data, collections.Sequence):
+    # Update a collection
+    elif isinstance(data, collections.Sequence):
+        with DATABASE.engine.connect() as conn:
             collection = []
             for entry in data:
                 system = dict(entry)
@@ -112,14 +125,15 @@ def update(data):
                 )
                 collection.append(system)
             return [FileSystem(system) for system in collection]
-        # Update nothing
-        else:
-            return None
+    # Update nothing
+    else:
+        return None
 
 
 def update_by_id(file_system):
-    """ A function that updates an entry on the file systems data table
-        that contains the provided file system id
+    """
+    A function that updates an entry on the file systems data table
+    that contains the provided file system id
     """
     with DATABASE.engine.connect() as conn:
         system = dict(file_system)
@@ -138,8 +152,9 @@ def update_by_id(file_system):
 
 
 def update_by_path(file_system):
-    """ A function that updates an entry on the file systems data table
-        that contains the provided file system path
+    """
+    A function that updates an entry on the file systems data table
+    that contains the provided file system path
     """
     with DATABASE.engine.connect() as conn:
         system = dict(file_system)
@@ -159,27 +174,31 @@ def update_by_path(file_system):
 
 
 def delete_all():
-    """ A function that deletes all entries in the file systems data table """
+    """
+    A function that deletes all entries in the file systems data table
+    """
     with DATABASE.engine.connect() as conn:
         conn.execute(DATABASE.file_systems.delete())
 
 
-def delete_by_id(id):
-    """ A function that deletes an entry for the file system data table
-        that contains the provided id
+def delete_by_id(identity):
+    """
+    A function that deletes an entry for the file system data table
+    that contains the provided id
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
             DATABASE.
             file_systems.
             delete().
-            where(DATABASE.file_systems.c.identity == id)
+            where(DATABASE.file_systems.c.identity == identity)
         )
 
 
 def delete_by_path(path):
-    """ A function that deletes an entry for the file system data table
-        that contains the provided system path
+    """
+    A function that deletes an entry for the file system data table
+    that contains the provided system path
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
@@ -190,21 +209,23 @@ def delete_by_path(path):
         )
 
 
-def select_by_id(id):
-    """ A function that returns all the entries on the file systems data table
-        that contain the provided system id
+def select_by_id(identity):
+    """
+    A function that returns all the entries on the file systems data table
+    that contain the provided system id
     """
     with DATABASE.engine.connect() as conn:
         file_system_collection = conn.execute(
             select([DATABASE.file_systems]).
-            where(DATABASE.file_systems.c.identity == id)
+            where(DATABASE.file_systems.c.identity == identity)
         )
         return FileSystem(dict(file_system_collection.fetchone()))
 
 
 def select_by_path(path):
-    """ A function that returns all the entries of the file systems data table
-        that contain the provided system path
+    """
+    A function that returns all the entries of the file systems data table
+    that contain the provided system path
     """
     with DATABASE.engine.connect() as conn:
         file_system_collection = conn.execute(
@@ -215,8 +236,9 @@ def select_by_path(path):
 
 
 def select_by_name(name):
-    """ A function that returns all the entires of the file systems data table
-        that contain the provided system name
+    """
+    A function that returns all the entires of the file systems data table
+    that contain the provided system name
     """
     with DATABASE.engine.connect() as conn:
         file_system_collection = conn.execute(
@@ -227,7 +249,9 @@ def select_by_name(name):
 
 
 def select_active():
-    """ A function that returns all the active entries on the file systems data table """
+    """
+    A function that returns all the active entries on the file systems data table
+    """
     with DATABASE.engine.connect() as conn:
         file_system_collection = conn.execute(
             select([DATABASE.file_systems]).

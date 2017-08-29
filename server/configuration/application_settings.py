@@ -1,14 +1,20 @@
-""" Contains functions that load and manipulate settings """
+"""
+Contains functions that load and manipulate settings
+"""
 import os
 import sys
 import json
 
 
 class BaseSettings():
-    """ Contains base methods for the applcation settings """
+    """
+    Contains base methods for the applcation settings
+    """
 
     def init_from_dict(self, args):
-        """ Initializes the classes attributes based on the content of the provided dictionary """
+        """
+        Initializes the classes attributes based on the content of the provided dictionary
+        """
         for dictionary in args:
             for key in dictionary:
                 if hasattr(self, key):
@@ -16,7 +22,9 @@ class BaseSettings():
 
 
 class ServerSettings(BaseSettings):
-    """ Contains static information for the server options """
+    """
+    Contains static information for the server options
+    """
 
     def __init__(self, *initargs):
         self.ip_address = None
@@ -25,7 +33,9 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    """ Contains static information for the database options """
+    """
+    Contains static information for the database options
+    """
 
     def __init__(self, *initargs):
         self.connection_string = None
@@ -34,7 +44,9 @@ class DatabaseSettings(BaseSettings):
 
 
 class YoutubeSettings(BaseSettings):
-    """ Contains static information for the youtube-dl options """
+    """
+    Contains static information for the youtube-dl options
+    """
 
     def __init__(self, *initargs):
         self.win32_path = None
@@ -43,7 +55,9 @@ class YoutubeSettings(BaseSettings):
 
 
 class BackendSettings(BaseSettings):
-    """ Contains static information for the backend player options """
+    """
+    Contains static information for the backend player options
+    """
 
     def __init__(self, backends):
         self.name = None
@@ -74,26 +88,32 @@ class BackendSettings(BaseSettings):
                 break
 
     def __reset_attrs(self):
-        """ A method that resets the values of the attributes """
+        """
+        A method that resets the values of the attributes
+        """
         self.name = None
         self.win32_path = None
         self.linux_path = None
 
     def __check_win32_access(self):
-        """ A method that checks if the specified backend is accessible
-            in the current windows platform
+        """
+        A method that checks if the specified backend is accessible
+        in the current windows platform
         """
         return os.path.isfile(self.win32_path) and os.access(self.win32_path, os.X_OK)
 
     def __check_linux_access(self):
-        """ A method that checks if the specified backend is accessible
-            in the current linux platform 
         """
-        return False
+        A method that checks if the specified backend is accessible
+        in the current linux platform
+        """
+        return os.path.isfile(self.linux_path) and os.access(self.linux_path, os.X_OK)
 
 
 class AppSettings():
-    """ Contains static settings for the application """
+    """
+    Contains static settings for the application
+    """
 
     def __init__(self):
         self.settings_file_name = './settings.json'
@@ -103,7 +123,9 @@ class AppSettings():
         self.backend = None
 
     def load(self):
-        """ A method that loads all the application settings from the settings file """
+        """
+        A method that loads all the application settings from the settings file
+        """
         try:
             # Opening the settings file
             with open(self.settings_file_name, 'r') as settings_file:

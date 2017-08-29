@@ -1,5 +1,6 @@
 # PYcache
 **/__pycache__/*
+**/*.pyc
 
 # compiled static files
 /static

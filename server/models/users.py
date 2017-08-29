@@ -1,4 +1,6 @@
-""" Contains the user class implementation """
+"""
+Contains the user class implementation
+"""
 import collections
 import datetime
 from base.model import Model
@@ -7,7 +9,9 @@ from sqlalchemy import Integer, select, func
 
 
 class User(Model):
-    """ Class that contains the information of a user """
+    """
+    Class that contains the information of a user
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.identity = None
@@ -31,7 +35,9 @@ class User(Model):
 
 
 def new_id():
-    """ A function that produces a new id for the users data table """
+    """
+    A function that produces a new id for the users data table
+    """
     with DATABASE.engine.connect() as conn:
         max_id = conn.execute(
             select([
@@ -44,7 +50,9 @@ def new_id():
 
 
 def insert(data):
-    """ A function that inserts new entries on the users data table """
+    """
+    A function that inserts new entries on the users data table
+    """
     with DATABASE.engine.connect() as conn:
         # Insert a single entry
         if isinstance(data, User) and data:
@@ -81,7 +89,9 @@ def insert(data):
 
 
 def update(data):
-    """ A function that updates entries on the users data table """
+    """
+    A function that updates entries on the users data table
+    """
     # Update a single entry
     if isinstance(data, User):
         with DATABASE.engine.connect() as conn:
@@ -125,8 +135,9 @@ def update(data):
 
 
 def update_by_id(data):
-    """ A function that updates an entry on the users data table
-        that contains the provided user id
+    """
+    A function that updates an entry on the users data table
+    that contains the provided user id
     """
     if isinstance(data, User):
         with DATABASE.engine.connect() as conn:
@@ -169,7 +180,9 @@ def update_by_id(data):
 
 
 def delete(data):
-    """ A function that deletes entries from the users data table """
+    """
+    A function that deletes entries from the users data table
+    """
     if isinstance(data, User):
         with DATABASE.engine.connect() as conn:
             conn.execute(
@@ -190,14 +203,17 @@ def delete(data):
 
 
 def delete_all():
-    """ A function that deletes all entries in the users date table """
+    """
+    A function that deletes all entries in the users date table
+    """
     with DATABASE.engine.connect() as conn:
         conn.execute(DATABASE.users.delete())
 
 
 def delete_by_id(file_id):
-    """ A function that removes an entry from the users data table
-        that contains the provided id
+    """
+    A function that removes an entry from the users data table
+    that contains the provided id
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
@@ -209,7 +225,9 @@ def delete_by_id(file_id):
 
 
 def select_by_id(user_id):
-    """ A function that returns the entry on the user data table with the provided id """
+    """
+    A function that returns the entry on the user data table with the provided id
+    """
     with DATABASE.engine.connect() as conn:
         collection = conn.execute(
             select([DATABASE.users]).
@@ -219,7 +237,9 @@ def select_by_id(user_id):
 
 
 def select_by_ip(user_ip):
-    """ A function that returns the entry on the user data table with the provided session id """
+    """
+    A function that returns the entry on the user data table with the provided session id
+    """
     with DATABASE.engine.connect() as conn:
         collection = conn.execute(
             select([DATABASE.users]).
@@ -229,7 +249,9 @@ def select_by_ip(user_ip):
 
 
 def select_active():
-    """ A function that returns all active users from the users data table """
+    """
+    A function that returns all active users from the users data table
+    """
     with DATABASE.engine.connect() as conn:
         collection = conn.execute(
             select([DATABASE.users]).

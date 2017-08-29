@@ -1,4 +1,6 @@
-""" Contains the user settings class implementation and functions for database interaction """
+"""
+Contains the user settings class implementation and functions for database interaction
+"""
 import collections
 import datetime
 from sqlalchemy import Integer, select, func
@@ -7,7 +9,9 @@ from base.model import Model
 
 
 class UserSettings(Model):
-    """ Class that contains the information for the settings of a user """
+    """
+    Class that contains the information for the settings of a user
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.identity = None
@@ -31,7 +35,9 @@ class UserSettings(Model):
 
 
 def new_id():
-    """ A function that produces a new id for the user settings data table """
+    """
+    A function that produces a new id for the user settings data table
+    """
     with DATABASE.engine.connect() as conn:
         max_id = conn.execute(
             select([
@@ -44,7 +50,9 @@ def new_id():
 
 
 def insert(data):
-    """ A function that inserts new entries on the user settings data table """
+    """
+    A function that inserts new entries on the user settings data table
+    """
     # Insert a signle entry
     if isinstance(data, UserSettings):
         with DATABASE.engine.connect() as conn:
@@ -79,7 +87,9 @@ def insert(data):
 
 
 def update(data):
-    """ A function that updates entries on the user settings data table """
+    """
+    A function that updates entries on the user settings data table
+    """
     # Update a single entry
     if isinstance(data, UserSettings):
         with DATABASE.engine.connect() as conn:
@@ -119,8 +129,9 @@ def update(data):
 
 
 def update_by_id(data):
-    """ A function that updates an entry on the user settings data table
-        that contains the provided id
+    """
+    A function that updates an entry on the user settings data table
+    that contains the provided id
     """
     # Update single entry
     if isinstance(data, UserSettings):
@@ -163,7 +174,9 @@ def update_by_id(data):
 
 
 def delete(data):
-    """ A function that deletes entries from the user settings data table """
+    """
+    A function that deletes entries from the user settings data table
+    """
     if isinstance(data, UserSettings):
         with DATABASE.engine.connect() as conn:
             conn.execute(
@@ -186,26 +199,31 @@ def delete(data):
 
 
 def delete_all():
-    """ A function that deletes all entries in the users date table """
+    """
+    A function that deletes all entries in the users date table
+    """
     with DATABASE.engine.connect() as conn:
         conn.execute(DATABASE.user_settings.delete())
 
 
-def delete_by_id(id):
-    """ A function that removes an entry from the user settings data table
-        that contains the provided id
+def delete_by_id(identity):
+    """
+    A function that removes an entry from the user settings data table
+    that contains the provided id
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
             DATABASE.
             user_settings.
             delete().
-            where(DATABASE.user_settings.c.identity == id)
+            where(DATABASE.user_settings.c.identity == identity)
         )
 
 
 def select_by_id(settings_id):
-    """ A function that returns the entry on the user settings data table with the provided id """
+    """
+    A function that returns the entry on the user settings data table with the provided id
+    """
     with DATABASE.engine.connect() as conn:
         collection = conn.execute(
             select([DATABASE.user_settings]).
@@ -215,8 +233,9 @@ def select_by_id(settings_id):
 
 
 def select_by_user_id(user_id):
-    """ A function that returns the entry on the user settings data table
-        with the provided user id
+    """
+    A function that returns the entry on the user settings data table
+    with the provided user id
     """
     with DATABASE.engine.connect() as conn:
         collection = conn.execute(

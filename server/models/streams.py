@@ -1,4 +1,6 @@
-""" Contains the streams class implementation """
+"""
+Contains the streams class implementation
+"""
 import collections
 import datetime
 import uuid
@@ -8,7 +10,9 @@ from database.schema import DATABASE
 
 
 class Stream(Model):
-    """ Class that contains the information of a stream """
+    """
+    Class that contains the information of a stream
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.identity = None
@@ -28,7 +32,9 @@ class Stream(Model):
 
 
 def insert(data):
-    """ A function that inserts new entries on the stream data table """
+    """
+    A function that inserts new entries on the stream data table
+    """
     # Insert a single entry
     if isinstance(data, Stream) and data:
         with DATABASE.engine.connect() as conn:
@@ -59,7 +65,9 @@ def insert(data):
 
 
 def update(data):
-    """ A function that updates entries of the stream data table """
+    """
+    A function that updates entries of the stream data table
+    """
     # Update a single entry
     if isinstance(data, Stream):
         with DATABASE.engine.connect() as conn:
@@ -99,7 +107,9 @@ def update(data):
 
 
 def select():
-    """ A function that returns all the entries on the stream data table """
+    """
+    A function that returns all the entries on the stream data table
+    """
     with DATABASE.engine.connect() as conn:
         streams = conn.execute(
             sql.select([DATABASE.streams])
@@ -108,8 +118,9 @@ def select():
 
 
 def select_by_id(identity):
-    """ A function that returns  all the entries on the stream data table that contain
-        the provided identity
+    """
+    A function that returns all the entries on the stream data table that contain
+    the provided identity
     """
     with DATABASE.engine.connect() as conn:
         streams = conn.execute(
@@ -121,8 +132,9 @@ def select_by_id(identity):
 
 
 def select_by_url(url):
-    """ A function that returns all the entries on the stream data table that contain
-        the provided url
+    """
+    A function that returns all the entries on the stream data table that contain
+    the provided url
     """
     with DATABASE.engine.connect() as conn:
         streams = conn.execute(

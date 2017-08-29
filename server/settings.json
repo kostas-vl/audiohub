@@ -15,7 +15,7 @@
         {
             "name": "mplayer",
             "win32_path": "mplayer.exe",
-            "linux_path": "mplayer"
+            "linux_path": "/usr/bin/mplayer"
         },
         {
             "name": "mpv",

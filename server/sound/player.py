@@ -1,4 +1,6 @@
-""" Contains event handlers for manipulating the player """
+"""
+Contains event handlers for manipulating the player
+"""
 import sys
 import datetime
 import collections
@@ -13,7 +15,9 @@ from backends.process_initiator import process_wrapper_init
 
 
 class PlayerStateEnum(enum.Enum):
-    """ Enum that shows various player state values """
+    """
+    Enum that shows various player state values
+    """
     Init = 'init'
     Stoped = 'stoped'
     Paused = 'paused'
@@ -21,7 +25,9 @@ class PlayerStateEnum(enum.Enum):
 
 
 class PlayerInfo():
-    """ Class that holds information about a music player """
+    """
+    Class that holds information about a music player
+    """
 
     def __init__(self):
         self.track = ''
@@ -43,7 +49,9 @@ class PlayerInfo():
 
 
 class Player():
-    """ Class that interops with the mplayer """
+    """
+    Class that interops with the mplayer
+    """
 
     def __init__(self):
         self.info = PlayerInfo()
@@ -51,28 +59,39 @@ class Player():
         self.streams_cache = []
 
     def init(self):
-        """ Sets when called specific attrs of the class """
+        """
+        Sets when called specific attrs of the class\
+        """
         self.backend_process = process_wrapper_init(
-            app_settings.INSTANCE.backend)
+            app_settings.INSTANCE.backend
+        )
 
     def add(self, entry):
-        """ Adds a new entry on the playlist """
+        """
+        Adds a new entry on the playlist
+        """
         if entry is not None:
             playlist = pl.Playlist(entry)
             playlist.active = True
             pl.insert(playlist)
 
     def remove(self, playlist_id):
-        """ A method that removes an entry from the playlist based on the provided id """
+        """
+        A method that removes an entry from the playlist based on the provided id
+        """
         if playlist_id:
             pl.delete_by_id(playlist_id)
 
     def remove_all(self):
-        """ A method that removes all entries from the playlist """
+        """
+        A method that removes all entries from the playlist
+        """
         pl.delete_all()
 
     def play(self, data=None):
-        """ A method that plays music based on the state of the player """
+        """
+        A method that plays music based on the state of the player
+        """
         is_playing = not (
             self.info.state == PlayerStateEnum.Paused or self.info.state == PlayerStateEnum.Stoped
         )
@@ -120,20 +139,26 @@ class Player():
             self.volume(self.info.volume)
 
     def pause(self):
-        """ A method that pauses the player """
+        """
+        A method that pauses the player
+        """
         if self.info.state == PlayerStateEnum.Playing:
             self.backend_process.pause()
             self.info.state = PlayerStateEnum.Paused
 
     def stop(self):
-        """ A method that stops the player """
+        """
+        A method that stops the player
+        """
         if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
             self.backend_process.seek(0)
             self.backend_process.pause()
             self.info.state = PlayerStateEnum.Stoped
 
     def volume(self, value):
-        """ A method that sets the volume of the player """
+        """
+        A method that sets the volume of the player
+        """
         if value:
             self.backend_process.volume(value)
             if self.info.state == PlayerStateEnum.Stoped:
@@ -145,7 +170,9 @@ class Player():
             self.info.volume = value
 
     def next(self):
-        """ A methods that moves to the next track on the queue """
+        """
+        A methods that moves to the next track on the queue
+        """
         if self.info.track.identity == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
@@ -155,7 +182,9 @@ class Player():
             self.backend_process.next()
 
     def previous(self):
-        """ A method that moves to the previous track on the queue """
+        """
+        A method that moves to the previous track on the queue
+        """
         if self.info.track.identity == -1:
             if self.info.state != PlayerStateEnum.Playing:
                 self.info.state = PlayerStateEnum.Playing
@@ -165,7 +194,9 @@ class Player():
             self.backend_process.previous()
 
     def current_time(self):
-        """ A method that returns the current time position of the playback on the player """
+        """
+        A method that returns the current time position of the playback on the player
+        """
         is_playing = self.info.state == PlayerStateEnum.Playing
         track_ended = self.info.current_time >= self.info.time - 1
         if is_playing and not track_ended:
@@ -180,12 +211,16 @@ class Player():
         return (self.info.current_time, self.info.current_time_str)
 
     def has_entries(self):
-        """ A method that returns a boolean specifying whether there are entries on the playlist """
+        """
+        A method that returns a boolean specifying whether there are entries on the playlist
+        """
         playlist = pl.select_active()
         return playlist and isinstance(playlist, collections.Sequence)
 
     def load_stream(self, url):
-        """ Loads a stream to mplayer """
+        """
+        Loads a stream to mplayer
+        """
         # Checking if a url is given
         if url:
             stream = None
@@ -228,7 +263,9 @@ class Player():
 
 
 def convert_seconds_to_time_str(value):
-    """ Converts the given seconds to a time string of format m:ss """
+    """
+    Converts the given seconds to a time string of format m:ss
+    """
     # Getting its float value
     time_float = float(value)
     # Getting the minutes and seconds
@@ -238,13 +275,17 @@ def convert_seconds_to_time_str(value):
 
 
 def emit_player_info():
-    """ A function that sends the entry that is currently playing """
+    """
+    A function that sends the entry that is currently playing
+    """
     info = dict(INSTANCE.info)
     emit('player info', info, broadcast=True)
 
 
 def emit_queue():
-    """ A functions that sends the currently active tracks """
+    """
+    A functions that sends the currently active tracks
+    """
     try:
         emit('queue', [dict(entry) for entry in pl.select_active()])
     except Exception as err:
@@ -253,7 +294,9 @@ def emit_queue():
 
 
 def emit_stream_history():
-    """ A function that sends all registered streams """
+    """
+    A function that sends all registered streams
+    """
     try:
         emit('stream history', [dict(entry) for entry in strm.select()])
     except Exception as err:
@@ -263,14 +306,17 @@ def emit_stream_history():
 
 @SOCKET_IO.on('player info', namespace='/server')
 def on_player_info(_):
-    """ A function that sends thew info of the player """
+    """
+    A function that sends thew info of the player
+    """
     emit_player_info()
 
 
 @SOCKET_IO.on('play', namespace='/server')
 def on_play(data):
-    """ A function that plays the track that is provided removing
-        every source queued up until now
+    """
+    A function that plays the track that is provided removing
+    every source queued up until now
     """
     if data:
         entries = pl.select_active_by_path(data['path'])
@@ -285,7 +331,9 @@ def on_play(data):
 
 @SOCKET_IO.on('play all', namespace='/server')
 def on_play_all(_):
-    """ A function that plays all the active entries in the playlist table """
+    """
+    A function that plays all the active entries in the playlist table
+    """
     playlist = pl.select_active()
     if isinstance(playlist, collections.Sequence) and playlist:
         # start playing and emit the current track
@@ -295,49 +343,63 @@ def on_play_all(_):
 
 @SOCKET_IO.on('pause', namespace='/server')
 def on_pause(_):
-    """ Event handler for pausing the audio player """
+    """
+    Event handler for pausing the audio player
+    """
     INSTANCE.pause()
     emit_player_info()
 
 
 @SOCKET_IO.on('stop', namespace='/server')
 def on_stop(_):
-    """ Event handler for stoping the audio player """
+    """
+    Event handler for stoping the audio player
+    """
     INSTANCE.stop()
     emit_player_info()
 
 
 @SOCKET_IO.on('previous', namespace='/server')
 def on_previous(_):
-    """ Starts playing the previous track in the queue """
+    """
+    Starts playing the previous track in the queue
+    """
     INSTANCE.previous()
     emit_player_info()
 
 
 @SOCKET_IO.on('next', namespace='/server')
 def on_next(_):
-    """ Starts playing the next track in the queue """
+    """
+    Starts playing the next track in the queue
+    """
     INSTANCE.next()
     emit_player_info()
 
 
 @SOCKET_IO.on('volume', namespace='/server')
 def on_volume(data):
-    """ Event handler for controlling the volume of the audio player """
+    """
+    Event handler for controlling the volume of the audio player
+    """
     INSTANCE.volume(data)
     emit_player_info()
 
 
 @SOCKET_IO.on('current time', namespace='/server')
 def on_current_time(_):
-    """ Event handler for fetching the current time on the audio player """
+    """
+    Event handler for fetching the current time on the audio player
+    """
     time, time_str = INSTANCE.current_time()
     emit('current time', {'currentTime': time, 'currentTimeStr': time_str})
 
 
 @SOCKET_IO.on('queue push', namespace='/server')
 def on_queue_push(data):
-    """ Event handler for pushing a new track on the queue """
+    """
+    Event handler for pushing a new track on the queue
+    """
     INSTANCE.add(data)
     emit_player_info()
     emit_queue()
@@ -345,27 +407,35 @@ def on_queue_push(data):
 
 @SOCKET_IO.on('queue pop', namespace='/server')
 def on_queue_pop(data):
-    """ Event handler for poping a track from queue """
+    """
+    Event handler for poping a track from queue
+    """
     INSTANCE.remove(data)
     emit_queue()
 
 
 @SOCKET_IO.on('queue', namespace='/server')
 def on_queue(_):
-    """ List queued tracks event handler """
+    """
+    List queued tracks event handler
+    """
     emit_player_info()
     emit_queue()
 
 
 @SOCKET_IO.on('stream history', namespace='/server')
 def on_stream_history(_):
-    """ List all registered streams """
+    """
+    List all registered streams
+    """
     emit_stream_history()
 
 
 @SOCKET_IO.on('load stream', namespace='/server')
 def on_load_stream(url):
-    """ Load an incoming stream to mplayer """
+    """
+    Load an incoming stream to mplayer
+    """
     if url:
         INSTANCE.load_stream(url)
         emit_player_info()

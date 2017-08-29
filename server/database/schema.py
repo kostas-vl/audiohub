@@ -1,10 +1,14 @@
-""" Contains functions that initialize the database schema """
+"""
+Contains functions that initialize the database schema
+"""
 import datetime
 from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, create_engine
 
 
 class Database():
-    """ Class representing the database and the database schema """
+    """
+    Class representing the database and the database schema
+    """
 
     def __init__(self):
         self.engine = None
@@ -17,7 +21,9 @@ class Database():
         self.connection_string = None
 
     def init(self, database_settings):
-        """ A function that initializes the apps database """
+        """
+        A function that initializes the apps database
+        """
         # Get the database connection options from the settings
         self.connection_string = database_settings.connection_string
         echo = database_settings.echo
@@ -37,7 +43,9 @@ class Database():
             raise NameError('Database Connection String not found!')
 
     def file_systems_init(self):
-        """ A method that initialized the file_systems table """
+        """
+        A method that initialized the file_systems table
+        """
         if self.engine and self.metadata:
             self.file_systems = Table(
                 'file_systems',
@@ -61,7 +69,9 @@ class Database():
                 ))
 
     def playlist_init(self):
-        """ A method that intializes the playlist table """
+        """
+        A method that intializes the playlist table
+        """
         if self.engine and self.metadata:
             self.playlist = Table(
                 'playlist',
@@ -85,7 +95,9 @@ class Database():
                 ))
 
     def users_init(self):
-        """ A method taht initializes the users table """
+        """
+        A method taht initializes the users table
+        """
         if self.engine and self.metadata:
             self.users = Table(
                 'users',
@@ -108,7 +120,9 @@ class Database():
                 ))
 
     def user_settings_init(self):
-        """ A method that initializes the user details table """
+        """
+        A method that initializes the user details table
+        """
         if self.engine and self.metadata:
             self.user_settings = Table(
                 'user_settings',
@@ -132,7 +146,9 @@ class Database():
                 ))
 
     def streams_init(self):
-        """ A method that initializes the streams table """
+        """
+        A method that initializes the streams table
+        """
         if self.engine and self.metadata:
             self.streams = Table(
                 'streams',
@@ -150,7 +166,9 @@ class Database():
 
 
 def date_created_update(context):
-    """ A function that changes the format of a datetime """
+    """
+    A function that changes the format of a datetime
+    """
     return datetime.datetime.strptime(
         context.current_parameters['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
     )

@@ -1,4 +1,6 @@
-""" File containing code that revolves around the playlist data table """
+"""
+File containing code that revolves around the playlist data table
+"""
 import datetime
 from sqlalchemy import Integer, select, func
 from base.model import Model
@@ -6,7 +8,9 @@ from database.schema import DATABASE
 
 
 class Playlist(Model):
-    """ A class representing the playlist data table """
+    """
+    A class representing the playlist data table
+    """
 
     def __init__(self, *initial_data, **kwords):
         self.identity = None
@@ -30,7 +34,9 @@ class Playlist(Model):
 
 
 def new_id():
-    """ A function that produces a new id for the playlist data table """
+    """
+    A function that produces a new id for the playlist data table
+    """
     with DATABASE.engine.connect() as conn:
         max_id = conn.execute(
             select([
@@ -43,7 +49,9 @@ def new_id():
 
 
 def insert(playlist):
-    """ A function that inserts a new entry on the playlist data table """
+    """
+    A function that inserts a new entry on the playlist data table
+    """
     with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
         entry['identity'] = new_id()
@@ -56,7 +64,9 @@ def insert(playlist):
 
 
 def insert_collection(playlist_collection):
-    """ A function that inserts a collection of entries on the playlist data table """
+    """
+    A function that inserts a collection of entries on the playlist data table
+    """
     with DATABASE.engine.connect() as conn:
         collection = []
         id_interval = 0
@@ -74,8 +84,9 @@ def insert_collection(playlist_collection):
 
 
 def update_by_id(playlist):
-    """ A function that updates an entry on the playlist data table
-        that contains tha provided playlist id
+    """
+    A function that updates an entry on the playlist data table
+    that contains tha provided playlist id
     """
     with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
@@ -94,8 +105,9 @@ def update_by_id(playlist):
 
 
 def update_by_path(playlist):
-    """ A function that updates an entry on the playlist data table
-        that contains the provided playlist path
+    """
+    A function that updates an entry on the playlist data table
+    that contains the provided playlist path
     """
     with DATABASE.engine.connect() as conn:
         entry = dict(playlist)
@@ -114,7 +126,9 @@ def update_by_path(playlist):
 
 
 def update_collection(playlist_collection):
-    """ A function that updates a collection of entries on the playlist data table """
+    """
+    A function that updates a collection of entries on the playlist data table
+    """
     collection = []
     with DATABASE.engine.connect() as conn:
         for playlist in playlist_collection:
@@ -134,7 +148,9 @@ def update_collection(playlist_collection):
 
 
 def delete_all():
-    """ A function that deletes all entries in the playlist data table """
+    """
+    A function that deletes all entries in the playlist data table
+    """
     with DATABASE.engine.connect() as conn:
         conn.execute(
             DATABASE.
@@ -143,22 +159,24 @@ def delete_all():
         )
 
 
-def delete_by_id(id):
-    """ A function that deletes an entry for the playlist data table
-        that contains the provided id
+def delete_by_id(identity):
+    """
+    A function that deletes an entry for the playlist data table
+    that contains the provided id
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
             DATABASE.
             playlist.
             delete().
-            where(DATABASE.playlist.c.identity == id)
+            where(DATABASE.playlist.c.identity == identity)
         )
 
 
 def delete_by_path(path):
-    """ A function that deletes an entry for the playlist data table
-        that contains the provided playlist path
+    """
+    A function that deletes an entry for the playlist data table
+    that contains the provided playlist path
     """
     with DATABASE.engine.connect() as conn:
         conn.execute(
@@ -169,21 +187,23 @@ def delete_by_path(path):
         )
 
 
-def select_by_id(id):
-    """ A function that returns all the entries on the playlist data table
-        that contain the provided playlist id
+def select_by_id(identity):
+    """
+    A function that returns all the entries on the playlist data table
+    that contain the provided playlist id
     """
     with DATABASE.engine.connect() as conn:
         playlist_collection = conn.execute(
             select([DATABASE.playlist]).
-            where(DATABASE.playlist.c.identity == id)
+            where(DATABASE.playlist.c.identity == identity)
         )
         return Playlist(dict(playlist_collection.fetchone()))
 
 
 def select_by_path(path):
-    """ A function that returns all the entries of the playlist data table
-        that contain the provided playlist path
+    """
+    A function that returns all the entries of the playlist data table
+    that contain the provided playlist path
     """
     with DATABASE.engine.connect() as conn:
         playlist_collection = conn.execute(
@@ -194,8 +214,9 @@ def select_by_path(path):
 
 
 def select_active_by_path(path):
-    """ A function taht returns all the active entries on the playlist data table
-        for the provided path
+    """
+    A function taht returns all the active entries on the playlist data table
+    for the provided path
     """
     with DATABASE.engine.connect() as conn:
         playlist_collection = conn.execute(
@@ -208,7 +229,9 @@ def select_active_by_path(path):
 
 
 def select_active():
-    """ A function that returns all the active entries on the playlist data table """
+    """
+    A function that returns all the active entries on the playlist data table
+    """
     with DATABASE.engine.connect() as conn:
         playlist_collection = conn.execute(
             select([DATABASE.playlist]).

@@ -1,4 +1,6 @@
-""" The initial file of the application """
+"""
+The initial file of the application
+"""
 import os
 import models.users as usr
 import models.user_settings as stt
@@ -17,13 +19,17 @@ from enviroment import SOCKET_IO, APP
 
 @APP.route('/')
 def on_index():
-    """ End point for the '/' path """
+    """
+    End point for the '/' path
+    """
     return send_from_directory('static', 'index.html')
 
 
 @APP.route('/<path:path>')
 def on_static_file(path):
-    """ Serve any static file  """
+    """
+    Serve any static file
+    """
     resource = os.path.join('static', path)
     if os.path.isfile(resource):
         return send_from_directory('static', path)
@@ -33,7 +39,9 @@ def on_static_file(path):
 
 @SOCKET_IO.on('connect', namespace='/server')
 def on_connect():
-    """ function that handles a new connection socket """
+    """
+    Function that handles a new connection socket
+    """
     try:
         users = usr.select_by_ip(request.host)
         if users:
@@ -66,7 +74,9 @@ def on_connect():
 
 @SOCKET_IO.on('disconnect', namespace='/server')
 def on_disconnect():
-    """ Function that handles a socket disconnect event """
+    """
+    Function that handles a socket disconnect event
+    """
     try:
         users = usr.select_by_ip(request.host)
         for user in users:
@@ -84,7 +94,9 @@ def on_disconnect():
 
 
 def main():
-    """ The main source of the application execution """    
+    """
+    The main source of the application execution
+    """
     # Loading settings
     print('Loading settings...')
     app_settings.INSTANCE.load()
