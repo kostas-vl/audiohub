@@ -6,7 +6,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 @Component({
     selector: 'app-download',
     templateUrl: './download.component.html',
-    styleUrls: ['./download.component.css']
+    styleUrls: ['./download.component.scss']
 })
 export class DownloadComponent implements OnInit {
 

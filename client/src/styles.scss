@@ -6,6 +6,10 @@ body,
 html {
     font-family: 'Oswald', sans-serif !important;
     font-size: 300;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
 }
 
 .sk-cube-grid {

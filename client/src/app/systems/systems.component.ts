@@ -7,7 +7,7 @@ import { SocketService } from '../socket/socket.service';
 @Component({
     selector: 'app-systems',
     templateUrl: './systems.component.html',
-    styleUrls: ['./systems.component.css']
+    styleUrls: ['./systems.component.scss']
 })
 export class SystemsComponent implements OnInit {
 

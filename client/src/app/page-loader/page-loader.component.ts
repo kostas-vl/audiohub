@@ -4,7 +4,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 @Component({
     selector: 'app-page-loader',
     templateUrl: './page-loader.component.html',
-    styleUrls: ['./page-loader.component.css']
+    styleUrls: ['./page-loader.component.scss']
 })
 export class PageLoaderComponent implements OnInit {
 

@@ -6,7 +6,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 @Component({
     selector: 'app-stream',
     templateUrl: './stream.component.html',
-    styleUrls: ['./stream.component.css']
+    styleUrls: ['./stream.component.scss']
 })
 export class StreamComponent implements OnInit {
 
