@@ -15,8 +15,6 @@ export class TopBarComponent implements OnInit {
     /**
      * implementation of the ngOnInit method, of the OnInit base class
      */
-    ngOnInit() {
-        const i = 0;
-    }
+    ngOnInit() { }
 
 }
