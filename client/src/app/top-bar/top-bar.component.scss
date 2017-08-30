@@ -1,7 +1,8 @@
 .top-bar {
-    padding-top: 10%;
     position: fixed;
     overflow: auto;
+    z-index: 1000;
+    width: 100%;
 }
 
 .top-bar-text {

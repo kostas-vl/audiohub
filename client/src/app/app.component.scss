@@ -1,18 +1,26 @@
-.audiohub {
-    padding-top: 30px;
-    height: 100vh;
+.sidenav-container {
+    position: fixed;
+    overflow: auto;
+    z-index: 2000;
 }
 
 .sidenav {
     width: 250px;
+    padding-top: 64px;
 }
 
 .sidenav .sidenav-list {
     padding-top: 0;
 }
 
+.audiohub {
+    padding-top: 94px;
+    height: 100vh;
+}
+
 .children-components {
     padding-top: 15px;
+    padding-bottom: 30px;
 }
 
 .add-progress {
