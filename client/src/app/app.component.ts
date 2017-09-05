@@ -47,22 +47,32 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // subscribe an event handler on the 'mount volume success' event
         this.socket.subscribe('mount volume success', _ => {
-            this.snackbar.open('Volume mounted!', '', { duration: 1500 });
+            this.snackbar.open('Volume mounted!', '', { duration: 2000 });
+        });
+
+        // subscribe an event handler on the 'mount volume failure' event
+        this.socket.subscribe('mount volume failure', _ => {
+            this.snackbar.open('An error occured!', '', { duration: 2000 });
         });
 
         // subscribe an event handler on the 'add volume success' event
         this.socket.subscribe('add volume success', _ => {
-            this.snackbar.open('Volume added!', '', { duration: 1500 });
+            this.snackbar.open('Volume added!', '', { duration: 2000 });
+        });
+
+        // subscribe an event handler on the 'add volume failure' event
+        this.socket.subscribe('add volume failure', _ => {
+            this.snackbar.open('An error occured', '', { duration: 2000 });
         });
 
         // subscribe an event handler on the 'download finished' event
-        this.socket.subscribe('download finished', data => {
-            this.snackbar.open('Download finished!', '', { duration: 1500 });
+        this.socket.subscribe('download finished', _ => {
+            this.snackbar.open('Download finished!', '', { duration: 2000 });
         });
 
         // subscribe an event handler on the 'stream loaded' event
-        this.socket.subscribe('load stream complete', data => {
-            this.snackbar.open('Stream Loaded!', '', { duration: 1500 });
+        this.socket.subscribe('load stream complete', _ => {
+            this.snackbar.open('Stream Loaded!', '', { duration: 2000 });
         });
 
         // send request for the settings of the user
