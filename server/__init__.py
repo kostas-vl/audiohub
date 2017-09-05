@@ -1,1 +1,3 @@
-""" The initialization file of the directory module """
+"""
+The initialization file of the directory module
+"""

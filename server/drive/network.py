@@ -1,6 +1,7 @@
 """
 Contains functions for mounting and unmounting network file systems
 """
+import os
 import sys
 import subprocess
 from base.model import Model
@@ -14,7 +15,6 @@ class NetworkFileSystem(Model):
     def __init__(self, *initial_data, **kwords):
         self.ip_address = ''
         self.directory = ''
-        self.target_directory = ''
         self.user = ''
         self.password = ''
         self.persistent = True
@@ -24,7 +24,6 @@ class NetworkFileSystem(Model):
     def __iter__(self):
         yield 'ip', self.ip_address
         yield 'directory', self.directory
-        yield 'target_directory', self.target_directory
         yield 'user', self.user
         yield 'password', self.password
         yield 'persistent', self.persistent
@@ -60,7 +59,7 @@ def win32_mount(details):
     """
     try:
         persistent = 'yes' if details.persistent else 'no'
-        path = '\\\\' + details.ip_address + '\\' + details.volume
+        path = '\\\\' + details.ip_address + '\\' + details.directory
         command = [
             'net use',
             path,
@@ -80,7 +79,7 @@ def win32_unmount(details):
     A function that unmounts a network file system on a windows OS
     """
     try:
-        path = '\\\\' + details.ip_address + '\\' + details.volume
+        path = '\\\\' + details.ip_address + '\\' + details.directory
         command = ['net use', path, '/delete']
         subprocess.check_call(' '.join(command), shell=True)
         return 0
@@ -93,33 +92,42 @@ def linux_mount(details):
     """
     A function that mounts a new network file system on a posix OS
     """
+    current_dir = os.path.abspath(os.path.curdir)
+    mnt_network_directory = '//' + details.ip_address + '/' + details.directory
+    mnt_local_directory = current_dir + '/mnt/' + details.directory
     try:
-        path = '//' + details.ip_address + '/' + details.volume
-        command = [
+        if not os.path.exists(mnt_local_directory):
+            os.makedirs(mnt_local_directory)
+        subprocess.check_call([
+            'sudo',
             'mount',
             '-t',
             'cifs',
+            mnt_network_directory,
+            mnt_local_directory,
             '-o',
-            'username=' + details.user,
-            'password=' + details.password,
-            path,
-            details.target_directory
-        ]
-        subprocess.check_call(' '.join(command), shell=True)
-        return details.target_directory + '/'
+            'rw',
+            '-o',
+            'user="' + details.user + '",' + 'password="' + details.password + '"',
+        ], shell=True)
+        return mnt_local_directory + '/'
     except subprocess.CalledProcessError as err:
         print(err)
+        if os.path.exists(mnt_local_directory):
+            os.rmdir(mnt_local_directory)
         return None
 
 
-def linux_unmount(details):
+def linux_unmount(_):
     """
     A function that unmounts a network file system on a posix OS
     """
     try:
         command = [
-            'mount',
-            details.target_directory
+            'umount',
+            '-a',
+            '-t',
+            'cifs'
         ]
         subprocess.check_call(' '.join(command), shell=True)
         return 0

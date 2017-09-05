@@ -63,6 +63,8 @@ def on_add_volume(data):
             active=True
         ))
         emit('add volume success', dict(file_system))
+    else:
+        emit('add volume failure')
 
 
 @SOCKET_IO.on('mount volume', namespace='/server')
@@ -72,18 +74,26 @@ def on_mount_volume(data):
     and then emits its contents
     """
     details = net.NetworkFileSystem(
-        ip=data['ip'],
-        volume=data['volume'],
+        ip_address=data['ip'],
+        directory=data['volume'],
         user=data['user'],
         password=data['password'],
         persistent=True
     )
     mount_path = net.mount(details)
-    mount_name = 'Mount: ' + mount_path
-
-    file_system = fs.insert(fs.FileSystem(
-        name=mount_name, type='directory', path=mount_path, active=True))
-    emit('mount volume success', dict(file_system))
+    if mount_path:
+        mount_name = '(Network) ' + details.directory
+        file_system = fs.insert(
+            fs.FileSystem(
+                name=mount_name,
+                type='directory',
+                path=mount_path,
+                active=True
+            )
+        )
+        emit('mount volume success', dict(file_system))
+    else:
+        emit('mount volume failure')
 
 
 @SOCKET_IO.on('remove volume', namespace='/server')
