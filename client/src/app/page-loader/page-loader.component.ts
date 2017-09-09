@@ -10,10 +10,14 @@ export class PageLoaderComponent implements OnInit {
 
     public loading = false;
 
+    /**
+     * Creates an instance of PageLoaderComponent.
+     * @memberof PageLoaderComponent
+     */
     constructor(private pageLoader: PageLoaderService) { }
 
     /**
-     * implementation of the ngOnInit method, of the OnInit base class
+     * Implementation of the ngOnInit method, of the OnInit base class
      */
     ngOnInit() {
         // create a loader start callback

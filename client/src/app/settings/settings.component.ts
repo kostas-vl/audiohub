@@ -11,12 +11,17 @@ export class SettingsComponent implements OnInit {
 
     public settings: ISettings = new Settings();
 
+    /**
+     * Creates an instance of SettingsComponent.
+     * @memberof SettingsComponent
+     */
     constructor(private settingsService: SettingsService) { }
 
     /**
-     * implamentation of the ngOnInit method, of the OnInit base class
+     * Implamentation of the ngOnInit method, of the OnInit base class
+     * @memberof SettingsComponent
      */
-    ngOnInit() {
+    public ngOnInit() {
         this.settings = this.settingsService.get();
 
         // subscribe to the settings servive inorder to handle any changes
@@ -26,7 +31,8 @@ export class SettingsComponent implements OnInit {
     }
 
     /**
-     * updates the new changes on the settings service
+     * Updates the new changes on the settings service
+     * @memberof SettingsComponent
      */
     public onChange() {
         this.settingsService.set(this.settings);

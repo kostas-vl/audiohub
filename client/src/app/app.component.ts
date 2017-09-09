@@ -19,6 +19,10 @@ export class AppComponent implements OnInit, OnDestroy {
     @ViewChild('sidenav')
     public sidenav: MdSidenav;
 
+    /**
+     * Creates an instance of AppComponent.
+     * @memberof AppComponent
+     */
     constructor(
         private router: Router,
         private pageLoader: PageLoaderService,
@@ -28,7 +32,68 @@ export class AppComponent implements OnInit, OnDestroy {
     ) { }
 
     /**
-     * implementation of the ngOnInit method, of the OnInit base class
+     * Holds an arrow function that handles the mount volume success event
+     * @private
+     * @memberof AppComponent
+     */
+    private onMountVolumeSuccess = _ => {
+        this.snackbar
+            .open('Volume mounted!', '', { duration: 2000 });
+    }
+
+    /**
+     * Holds an arrow function that handles the mount volume failure event
+     * @private
+     * @memberof AppComponent
+     */
+    private onMountVolumeFailure = _ => {
+        this.snackbar
+            .open('An error occured!', '', { duration: 2000 });
+    }
+
+    /**
+     * Holds an arrow function that handles the add volume success event
+     * @private
+     * @memberof AppComponent
+     */
+    private onAddVolumeSuccess = _ => {
+        this.snackbar
+            .open('Volume added!', '', { duration: 2000 });
+    }
+
+    /**
+     * Holds an arrow function that handles the add volume failure event
+     * @private
+     * @memberof AppComponent
+     */
+    private onAddVolumeFailure = _ => {
+        this.snackbar
+            .open('An error occured', '', { duration: 2000 });
+    }
+
+    /**
+     * Holds an arrow function that handles the download finished event
+     * @private
+     * @memberof AppComponent
+     */
+    private onDownloadFinished = _ => {
+        this.snackbar
+            .open('Download finished!', '', { duration: 2000 });
+    }
+
+    /**
+     * Holds an arrow function that handles the load stream complete event
+     * @private
+     * @memberof AppComponent
+     */
+    private onLoadStreamComplete = _ => {
+        this.snackbar
+            .open('Stream Loaded!', '', { duration: 2000 });
+    }
+
+    /**
+     * Implementation of the ngOnInit method, of the OnInit base class
+     * @memberof AppComponent
      */
     public ngOnInit() {
         // initialize the settigns model
@@ -39,48 +104,39 @@ export class AppComponent implements OnInit, OnDestroy {
             this.settings = settings;
         });
 
-        // connect to the server socket
-        this.socket.connect();
+        // connect to the server socket and subscribe to all the neccessary events
+        this.socket
+            .connect();
 
-        // configure socket bindings for the settings service
-        this.settingsService.configure();
+        this.settingsService
+            .configure();
 
-        // subscribe an event handler on the 'mount volume success' event
-        this.socket.subscribe('mount volume success', _ => {
-            this.snackbar.open('Volume mounted!', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('mount volume success', this.onMountVolumeSuccess);
 
-        // subscribe an event handler on the 'mount volume failure' event
-        this.socket.subscribe('mount volume failure', _ => {
-            this.snackbar.open('An error occured!', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('mount volume failure', this.onMountVolumeFailure);
 
-        // subscribe an event handler on the 'add volume success' event
-        this.socket.subscribe('add volume success', _ => {
-            this.snackbar.open('Volume added!', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('add volume success', this.onAddVolumeSuccess);
 
-        // subscribe an event handler on the 'add volume failure' event
-        this.socket.subscribe('add volume failure', _ => {
-            this.snackbar.open('An error occured', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('add volume failure', this.onAddVolumeFailure);
 
-        // subscribe an event handler on the 'download finished' event
-        this.socket.subscribe('download finished', _ => {
-            this.snackbar.open('Download finished!', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('download finished', this.onDownloadFinished);
 
-        // subscribe an event handler on the 'stream loaded' event
-        this.socket.subscribe('load stream complete', _ => {
-            this.snackbar.open('Stream Loaded!', '', { duration: 2000 });
-        });
+        this.socket
+            .subscribe('load stream complete', this.onLoadStreamComplete);
 
         // send request for the settings of the user
-        this.socket.emit('user settings');
+        this.socket
+            .emit('user settings');
     }
 
     /**
-     * implements the ngOnDestroy method, of the OnDestroy base class
+     * Implements the ngOnDestroy method, of the OnDestroy base class
+     * @memberof AppComponent
      */
     public ngOnDestroy() {
         // remove the subscription callback from the settings service
@@ -91,8 +147,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * navigates the user to a view of his choices from the list of the sidenav
+     * Navigates the user to a view of his choices from the list of the sidenav
      * @param {string} url of the new view
+     * @memberof AppComponent
      */
     public onSidenavItemClick(url: string) {
         if (url) {

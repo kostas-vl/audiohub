@@ -10,10 +10,15 @@ export class SocketService {
 
     public socketInstance: SocketIOClient.Socket;
 
+    /**
+     * Creates an instance of SocketService.
+     * @memberof SocketService
+     */
     public constructor(private platform: PlatformLocation) { }
 
     /**
-     * creates a connection with the server web socket
+     * Creates a connection with the server web socket
+     * @memberof SocketService
      */
     public connect() {
         // if the socket hasnt been assigned yet
@@ -29,7 +34,8 @@ export class SocketService {
     }
 
     /**
-     * disconnect from the server web socket
+     * Disconnect from the server web socket
+     * @memberof SocketService
      */
     public disconnect() {
         if (this.socketInstance) {
@@ -38,29 +44,42 @@ export class SocketService {
     }
 
     /**
-     * create an event handler for the provided event
+     * Create an event handler for the provided event
      * @param {string} event for the subscription
-     * @param callback to be executed
+     * @param {(response: any) => void} callback to be executed
+     * @memberof SocketService
      */
     public subscribe(event: string, callback: (response: any) => void) {
         this.socketInstance.on(event, callback);
     }
 
     /**
-     * sends a message to the server socket
+     * Sends a message to the server socket
      * @param {string} data to be sent
+     * @memberof SocketService
      */
     public send(data: string) {
         this.socketInstance.send(data);
     }
 
     /**
-     * emits a message and data, to the server socket, based on the provided event name
+     * Emits a message and data, to the server socket, based on the provided event name
      * @param {string} event to be emitted
-     * @param {any} data to be emitted
+     * @param {*} [data=undefined] to be emitted
+     * @memberof SocketService
      */
     public emit(event: string, data: any = undefined) {
         this.socketInstance.emit(event, data);
+    }
+
+    /**
+     * Removes the provided callback from the present event
+     * @param {string} event to target
+     * @param {Function} callback to be removed
+     * @memberof SocketService
+     */
+    public unsubscribe(event: string, callback: Function) {
+        this.socketInstance.removeEventListener(event, callback);
     }
 
 }

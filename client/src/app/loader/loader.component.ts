@@ -16,6 +16,10 @@ export class LoaderComponent {
     @Input()
     public width = '100%';
 
+    /**
+     * Creates an instance of LoaderComponent.
+     * @memberof LoaderComponent
+     */
     constructor() { }
 
 }

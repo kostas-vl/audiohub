@@ -13,10 +13,15 @@ export class PlaylistComponent implements OnInit {
     public playlist: IPlaylist[] = [];
     public streamSource: any = null;
 
+    /**
+     * Creates an instance of PlaylistComponent.
+     * @memberof PlaylistComponent
+     */
     constructor(private socket: SocketService) { }
 
     /**
-     * implementation of the ngOnInit method, of the OnInit base class
+     * Implementation of the ngOnInit method, of the OnInit base class
+     * @memberof PlaylistComponent
      */
     public ngOnInit() {
         // displays the loader
@@ -31,33 +36,37 @@ export class PlaylistComponent implements OnInit {
     }
 
     /**
-     * refreshes the entries on the displayed playlist
+     * Refreshes the entries on the displayed playlist
+     * @memberof PlaylistComponent
      */
     public onRefresh() {
         this.socket.emit('queue');
     }
 
     /**
-     * start playing the entire playlist
+     * Start playing the entire playlist
+     * @memberof PlaylistComponent
      */
     public onPlaylistPlay() {
         this.socket.emit('play all');
     }
 
     /**
-     * removes an entry from the playlist
+     * Removes an entry from the playlist
+     * @param {IPlaylist} entry 
+     * @memberof PlaylistComponent
      */
     public onRemove(entry: IPlaylist) {
         this.socket.emit('queue pop', entry.identity);
     }
 
     /**
-     * starts playing the provided track, immediately
-     * @param {IPlaylist} entry to start playing
+     * Starts playing the provided track, immediately
+     * @param {IPlaylist} entry 
+     * @memberof PlaylistComponent
      */
     public onPlayNow(entry: IPlaylist) {
         this.socket.emit('play', entry);
-        // this.socket.emit('channel stream', entry);
     }
 
 }

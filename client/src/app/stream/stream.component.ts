@@ -14,30 +14,47 @@ export class StreamComponent implements OnInit {
     public url: string = null;
     public streamHistory: IStream[] = [];
 
+    /**
+     * Creates an instance of StreamComponent.
+     * @memberof StreamComponent
+     */
     constructor(
         private pageLoader: PageLoaderService,
         private socket: SocketService
     ) { }
 
     /**
-     * implementation of the ngOnInit method, of the OnInit base class
+     * Holds an arrow function that handles the stream history event
+     * @private
+     * @param {IStream[]} history list of the streams
+     * @memberof StreamComponent
      */
-    ngOnInit() {
-        this.loading = true;
-
-        // subscribes an event handler for the 'stream history' event
-        this.socket.subscribe('stream history', (history: IStream[]) => {
-            this.streamHistory = history;
-            setTimeout(() => this.loading = false, 500);
-        });
-
-        // send an event message for the list of the stream history
-        this.socket.emit('stream history');
+    private onStreamHistory = (history: IStream[]) => {
+        this.streamHistory = history;
+        setTimeout(() => {
+            this.loading = false;
+        }, 500);
     }
 
     /**
-     * request a load stream to the server
+     * Implementation of the ngOnInit method, of the OnInit base class
+     * @memberof StreamComponent
+     */
+    public ngOnInit() {
+        this.loading = true;
+
+        this.socket
+            .subscribe('stream history', this.onStreamHistory);
+
+        // send an event message for the list of the stream history
+        this.socket
+            .emit('stream history');
+    }
+
+    /**
+     * Request a load stream to the server
      * @param {string} url that is requested for playback
+     * @memberof StreamComponent
      */
     public onRequestStream(url: string) {
         if (url) {
@@ -48,7 +65,9 @@ export class StreamComponent implements OnInit {
     }
 
     /**
-     * request a load registeres stream to the server
+     * Request a load registeres stream to the server
+     * @param {IStream} stream information to be loaded
+     * @memberof StreamComponent
      */
     public onLoad(stream: IStream) {
         if (stream && stream.url) {
@@ -58,7 +77,8 @@ export class StreamComponent implements OnInit {
     }
 
     /**
-     * request the stream history
+     * Request the stream history
+     * @memberof StreamComponent
      */
     public onRefresh() {
         this.loading = true;

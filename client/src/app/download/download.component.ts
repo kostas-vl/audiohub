@@ -17,19 +17,25 @@ export class DownloadComponent implements OnInit {
         'wav'
     ];
 
+    /**
+     * Creates an instance of DownloadComponent.
+     * @memberof DownloadComponent
+     */
     constructor(
         private pageLoader: PageLoaderService,
         private socket: SocketService
     ) { }
 
     /**
-     * implementation of the ngOnInit method, of the OnInit base class
+     * Implementation of the ngOnInit method, of the OnInit base class
+     * @memberof DownloadComponent
      */
-    ngOnInit() { }
+    public ngOnInit() { }
 
     /**
-     * requests a download from the server
+     * Requests a download from the server
      * @param {IDownloadDetails} details of the download
+     * @memberof DownloadComponent
      */
     public onDownload(details: IDownloadDetails) {
         if (details) {

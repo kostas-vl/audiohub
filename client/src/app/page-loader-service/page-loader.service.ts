@@ -7,24 +7,46 @@ export class PageLoaderService {
     private startCallback: () => void;
     private stopCallback: () => void;
 
+    /**
+     * Creates an instance of PageLoaderService.
+     * @memberof PageLoaderService
+     */
     constructor(private socket: SocketService) { }
 
+    /**
+     * Registers a callback for the event of the page loader starting
+     * @param {() => void} callback to be executed
+     * @memberof PageLoaderService
+     */
     public onStart(callback: () => void) {
         if (callback) {
             this.startCallback = callback;
         }
     }
 
+    /**
+     * Registers a callback for the event of the page loader stoping
+     * @param {() => void} callback to be executed
+     * @memberof PageLoaderService
+     */
     public onStop(callback: () => void) {
         if (callback) {
             this.stopCallback = callback;
         }
     }
 
+    /**
+     * Displays the page loader
+     * @memberof PageLoaderService
+     */
     public start() {
         this.startCallback();
     }
 
+    /**
+     * Hides the page loader
+     * @memberof PageLoaderService
+     */
     public stop() {
         this.stopCallback();
     }
