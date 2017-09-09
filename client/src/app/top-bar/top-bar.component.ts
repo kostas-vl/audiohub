@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { PageLoaderService } from '../page-loader-service/page-loader.service';
 import { SocketService } from '../socket/socket.service';
 
@@ -7,7 +7,7 @@ import { SocketService } from '../socket/socket.service';
     templateUrl: './top-bar.component.html',
     styleUrls: ['./top-bar.component.scss']
 })
-export class TopBarComponent implements OnInit {
+export class TopBarComponent implements OnInit, OnDestroy {
 
     @Input()
     public sidenav: any;
@@ -87,6 +87,27 @@ export class TopBarComponent implements OnInit {
 
         this.socket
             .subscribe('load stream complete', this.onLoadStreamComplete);
+    }
+
+    /**
+     * Implementation of the ngOnDestroy method, of the OnDesrtoy base class
+     * @memberof TopBarComponent
+     */
+    public ngOnDestroy() {
+        this.socket
+            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
+
+        this.socket
+            .unsubscribe('mount volume failure', this.onMountVolumeFailure);
+
+        this.socket
+            .unsubscribe('add volume success', this.onAddVolumeSuccess);
+
+        this.socket
+            .unsubscribe('add volume failure', this.onAddVolumeFailure);
+
+        this.socket
+            .unsubscribe('load stream complete', this.onLoadStreamComplete);
     }
 
 }

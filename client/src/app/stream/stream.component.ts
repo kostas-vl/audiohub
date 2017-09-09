@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IStream } from '../models/stream';
 import { SocketService } from '../socket/socket.service';
 import { PageLoaderService } from '../page-loader-service/page-loader.service';
@@ -8,7 +8,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
     templateUrl: './stream.component.html',
     styleUrls: ['./stream.component.scss']
 })
-export class StreamComponent implements OnInit {
+export class StreamComponent implements OnInit, OnDestroy {
 
     public loading = false;
     public url: string = null;
@@ -49,6 +49,15 @@ export class StreamComponent implements OnInit {
         // send an event message for the list of the stream history
         this.socket
             .emit('stream history');
+    }
+
+    /**
+     * Implementation of the ngOnDestroy method, of the OnDestroy base class
+     * @memberof StreamComponent
+     */
+    public ngOnDestroy() {
+        this.socket
+            .unsubscribe('stream history', this.onStreamHistory);
     }
 
     /**

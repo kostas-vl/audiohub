@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IPlaylist, Playlist, Playlist2, Playlist3 } from '../models/playlist';
 import { SocketService } from '../socket/socket.service';
 
@@ -7,7 +7,7 @@ import { SocketService } from '../socket/socket.service';
     templateUrl: './playlist.component.html',
     styleUrls: ['./playlist.component.scss']
 })
-export class PlaylistComponent implements OnInit {
+export class PlaylistComponent implements OnInit, OnDestroy {
 
     public loading: boolean;
     public playlist: IPlaylist[] = [];
@@ -36,6 +36,17 @@ export class PlaylistComponent implements OnInit {
     }
 
     /**
+     * Implementation of the ngOnDestroy method, of the OnDestroy base class
+     * @memberof PlaylistComponent
+     */
+    public ngOnDestroy() {
+        this.socket.unsubscribe('queue', data => {
+            this.playlist = data;
+            this.loading = false;
+        });
+    }
+
+    /**
      * Refreshes the entries on the displayed playlist
      * @memberof PlaylistComponent
      */
@@ -53,7 +64,7 @@ export class PlaylistComponent implements OnInit {
 
     /**
      * Removes an entry from the playlist
-     * @param {IPlaylist} entry 
+     * @param {IPlaylist} entry of the playlist to be removed
      * @memberof PlaylistComponent
      */
     public onRemove(entry: IPlaylist) {
@@ -62,7 +73,7 @@ export class PlaylistComponent implements OnInit {
 
     /**
      * Starts playing the provided track, immediately
-     * @param {IPlaylist} entry 
+     * @param {IPlaylist} entry of the playlist to be played immediately
      * @memberof PlaylistComponent
      */
     public onPlayNow(entry: IPlaylist) {

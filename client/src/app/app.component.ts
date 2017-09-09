@@ -139,8 +139,27 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     public ngOnDestroy() {
-        // remove the subscription callback from the settings service
-        this.settingsService.unsubscribe(this.settingsSubscription);
+        // remove all the subscription callbacks
+        this.settingsService
+            .unsubscribe(this.settingsSubscription);
+
+        this.socket
+            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
+
+        this.socket
+            .unsubscribe('mount volume failure', this.onMountVolumeFailure);
+
+        this.socket
+            .unsubscribe('add volume success', this.onAddVolumeSuccess);
+
+        this.socket
+            .unsubscribe('add volume failure', this.onAddVolumeFailure);
+
+        this.socket
+            .unsubscribe('download finished', this.onDownloadFinished);
+
+        this.socket
+            .unsubscribe('load stream complete', this.onLoadStreamComplete);
 
         // disconnect from the server socket
         this.socket.disconnect();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IPlaylist } from '../models/playlist';
 import { SocketService } from '../socket/socket.service';
 import { IPlayerInfo, PlayerInfo } from '../models/player-info';
@@ -13,7 +13,7 @@ type TimeTuple = {
     templateUrl: './player.component.html',
     styleUrls: ['./player.component.scss']
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
 
     public progressValue = 0;
     public progressBuffer = 0;
@@ -95,6 +95,19 @@ export class PlayerComponent implements OnInit {
         //         this.socket.emit('current time');
         //     }
         // }, 1000);
+    }
+
+    /**
+     * Implementation of the ngOnInit method, of the OnDestroy base class
+     * @memberof PlayerComponent
+     */
+    public ngOnDestroy() {
+        // Unsubscribe from all the message events
+        this.socket
+            .unsubscribe('player info', this.onPlayerInfo);
+
+        this.socket
+            .unsubscribe('current time', this.onCurrentTime);
     }
 
     /**

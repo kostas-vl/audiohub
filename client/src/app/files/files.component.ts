@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
@@ -8,7 +8,7 @@ import { SocketService } from '../socket/socket.service';
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.scss']
 })
-export class FilesComponent implements OnInit {
+export class FilesComponent implements OnInit, OnDestroy {
 
     public systems: IFileSystem[] = [];
     public selectedSystem: IFileSystem;
@@ -115,6 +115,25 @@ export class FilesComponent implements OnInit {
         // send an event message for the list of the available file systems
         this.socket
             .emit('available systems');
+    }
+
+    /**
+     * Implementation of the ngOnDestroy method, of the OnDestroy base class
+     * @memberof FilesComponent
+     */
+    public ngOnDestroy() {
+        // Unsubscribe from all the message event handlers
+        this.socket
+            .unsubscribe('available systems', this.onAvailableSystems);
+
+        this.socket
+            .unsubscribe('list dir', this.onListDir);
+
+        this.socket
+            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
+
+        this.socket
+            .unsubscribe('add volume success', this.onAddVolumeSuccess);
     }
 
     /**
