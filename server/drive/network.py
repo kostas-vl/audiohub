@@ -60,14 +60,13 @@ def win32_mount(details):
     try:
         persistent = 'yes' if details.persistent else 'no'
         path = '\\\\' + details.ip_address + '\\' + details.directory
-        command = [
+        subprocess.check_call(' '.join([
             'net use',
             path,
             details.password,
             '/user:' + details.user,
             '/persistent:' + persistent
-        ]
-        subprocess.check_call(' '.join(command), shell=True)
+        ]), shell=True)
         return path + '\\'
     except subprocess.CalledProcessError as err:
         print(err)
@@ -80,26 +79,28 @@ def win32_unmount(details):
     """
     try:
         path = '\\\\' + details.ip_address + '\\' + details.directory
-        command = ['net use', path, '/delete']
-        subprocess.check_call(' '.join(command), shell=True)
-        return 0
+        subprocess.check_call(' '.join([
+            'net use',
+            path,
+            '/delete'
+        ]), shell=True)
     except subprocess.CalledProcessError as err:
         print(err)
-        return None
 
 
 def linux_mount(details):
     """
     A function that mounts a new network file system on a posix OS
     """
+    # Create all the directory paths (network and local)
     current_dir = os.path.abspath(os.path.curdir)
     mnt_network_directory = '//' + details.ip_address + '/' + details.directory
     mnt_local_directory = current_dir + '/mnt/' + details.directory
     try:
+        # If the local directory doesnt exist, create it
         if not os.path.exists(mnt_local_directory):
             os.makedirs(mnt_local_directory)
-        subprocess.check_call([
-            'sudo',
+        subprocess.check_call(' '.join([
             'mount',
             '-t',
             'cifs',
@@ -109,7 +110,7 @@ def linux_mount(details):
             'rw',
             '-o',
             'user="' + details.user + '",' + 'password="' + details.password + '"',
-        ], shell=True)
+        ]), shell=True)
         return mnt_local_directory + '/'
     except subprocess.CalledProcessError as err:
         print(err)
@@ -123,14 +124,11 @@ def linux_unmount(_):
     A function that unmounts a network file system on a posix OS
     """
     try:
-        command = [
+        subprocess.check_call(' '.join([
             'umount',
             '-a',
             '-t',
             'cifs'
-        ]
-        subprocess.check_call(' '.join(command), shell=True)
-        return 0
+        ]), shell=True)
     except subprocess.CalledProcessError as err:
         print(err)
-        return None

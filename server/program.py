@@ -4,13 +4,8 @@ The initial file of the application
 import os
 import models.users as usr
 import models.user_settings as stt
-import models.file_system
-import models.playlist
 import configuration.application_settings as app_settings
-import configuration.settings as settings
 import sound.player as player
-import drive.files as files
-import drive.download as download
 from flask import request, send_from_directory
 from flask_socketio import join_room, leave_room
 from database.schema import DATABASE
@@ -113,7 +108,3 @@ def main():
         host=os.getenv('IP', app_settings.INSTANCE.server.ip_address),
         port=int(os.getenv('PORT', int(app_settings.INSTANCE.server.port)))
     )
-
-
-if __name__ == '__main__':
-    main()
