@@ -20,19 +20,29 @@ export class PlaylistComponent implements OnInit, OnDestroy {
     constructor(private socket: SocketService) { }
 
     /**
+     * Holds an arrow function that handles the on queue event
+     * @private
+     * @param {IPlaylist[]} data queued on the playlist
+     * @memberof PlaylistComponent
+     */
+    private onQueue = (data: IPlaylist[]) => {
+        this.playlist = data;
+        this.loading = false;
+    }
+
+    /**
      * Implementation of the ngOnInit method, of the OnInit base class
      * @memberof PlaylistComponent
      */
     public ngOnInit() {
-        // displays the loader
         this.loading = true;
-        // subscribes an event handler on the 'queue' event
-        this.socket.subscribe('queue', data => {
-            this.playlist = data;
-            this.loading = false;
-        });
+
+        this.socket
+            .subscribe('queue', this.onQueue);
+
         // sends an event message for the current playlist queue
-        this.socket.emit('queue');
+        this.socket
+            .emit('queue');
     }
 
     /**
@@ -40,10 +50,8 @@ export class PlaylistComponent implements OnInit, OnDestroy {
      * @memberof PlaylistComponent
      */
     public ngOnDestroy() {
-        this.socket.unsubscribe('queue', data => {
-            this.playlist = data;
-            this.loading = false;
-        });
+        this.socket
+            .unsubscribe('queue', this.onQueue);
     }
 
     /**
