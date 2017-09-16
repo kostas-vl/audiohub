@@ -59,15 +59,16 @@ def win32_mount(details):
     """
     try:
         persistent = 'yes' if details.persistent else 'no'
-        path = '\\\\' + details.ip_address + '\\' + details.directory
+        win_path = '\\\\' + details.ip_address + '\\' + details.directory
+        path = '//' + details.ip_address + '/' + details.directory + '/'
         subprocess.check_call(' '.join([
             'net use',
-            path,
+            win_path,
             details.password,
             '/user:' + details.user,
             '/persistent:' + persistent
         ]), shell=True)
-        return path + '\\'
+        return path
     except subprocess.CalledProcessError as err:
         print(err)
         return None
