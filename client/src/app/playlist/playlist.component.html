@@ -1,40 +1,40 @@
 <div class="playlist-card row">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-toolbar color="primary">
+        <mat-toolbar color="primary">
 
-            <span mdTooltip="refresh" mdTooltipPosition="above">
+            <span matTooltip="refresh" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onRefresh()">
+                <button mat-icon-button (click)="onRefresh()">
                 
-                    <md-icon>refresh</md-icon>
+                    <mat-icon>refresh</mat-icon>
                 
                 </button>
 
             </span>
 
-            <span mdTooltip="play all tracks" mdTooltipPosition="above">
+            <span matTooltip="play all tracks" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onPlaylistPlay()">
+                <button mat-icon-button (click)="onPlaylistPlay()">
 
-                    <md-icon>playlist_play</md-icon>
+                    <mat-icon>playlist_play</mat-icon>
 
                 </button>
 
             </span>
 
-        </md-toolbar>
+        </mat-toolbar>
 
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-card>
+        <mat-card>
 
             <app-loader [loading]="loading"></app-loader>
 
-            <md-card-content *ngIf="!loading">
+            <mat-card-content *ngIf="!loading">
 
                 <p class="text-center" [hidden]="playlist.length > 0">
 
@@ -42,33 +42,33 @@
 
                 </p>
 
-                <md-nav-list *ngFor="let entry of playlist">
+                <mat-nav-list *ngFor="let entry of playlist">
 
-                    <md-list-item (click)="onPlayNow(entry)">
+                    <mat-list-item (click)="onPlayNow(entry)">
 
-                        <md-icon md-list-avatar class="file-button">insert_drive_file</md-icon>
+                        <mat-icon mat-list-avatar class="file-button">insert_drive_file</mat-icon>
 
-                        <h4 md-line>{{entry.name}}</h4>
+                        <h4 mat-line>{{entry.name}}</h4>
 
-                        <p md-line>{{entry.path}}</p>
+                        <p mat-line>{{entry.path}}</p>
 
-                        <span mdTooltip="remove" mdTooltipPosition="above">
+                        <span matTooltip="remove" matTooltipPosition="above">
 
-                            <button md-icon-button (click)="onRemove(entry)">
+                            <button mat-icon-button (click)="onRemove(entry)">
 
-                                <md-icon color="warn">delete</md-icon>
+                                <mat-icon color="warn">delete</mat-icon>
 
                             </button>
 
                         </span>
 
-                    </md-list-item>
+                    </mat-list-item>
 
-                </md-nav-list>
+                </mat-nav-list>
 
-            </md-card-content>
+            </mat-card-content>
 
-        </md-card>
+        </mat-card>
 
     </div>
 

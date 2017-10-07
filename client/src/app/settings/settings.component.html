@@ -2,52 +2,55 @@
 
     <br>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-toolbar color="primary">
+        <mat-toolbar color="primary">
 
             Settings
 
-        </md-toolbar>
+        </mat-toolbar>
 
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-card>
+        <mat-card>
 
-            <md-card-content>
+            <mat-card-content>
 
-                <md-slide-toggle [(ngModel)]="settings.dark_theme" (change)="onChange()">Dark Theme</md-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="settings.dark_theme" (change)="onChange()">Dark Theme</mat-slide-toggle>
 
-                <md-select class="settings-select" placeholder="Menu Animation Mode" [(ngModel)]="settings.sidenav_mode" (change)="onChange()">
+                <mat-form-field class="settings-select">
 
-                    <md-option value="over">
+                    <mat-select placeholder="Menu Animation Mode" [(ngModel)]="settings.sidenav_mode" (change)="onChange()">
+    
+                        <mat-option value="over">
+    
+                            over
+    
+                        </mat-option>
+    
+                        <mat-option value="side">
+    
+                            side
+    
+                        </mat-option>
+    
+                        <mat-option value="push">
+    
+                            push
+    
+                        </mat-option>
+    
+                    </mat-select>
 
-                        over
+                </mat-form-field>
 
-                    </md-option>
-
-                    <md-option value="side">
-
-                        side
-
-                    </md-option>
-
-                    <md-option value="push">
-
-                        push
-
-                    </md-option>
-
-                </md-select>
-
-
-            </md-card-content>
+            </mat-card-content>
 
             <br>
 
-        </md-card>
+        </mat-card>
 
     </div>
 

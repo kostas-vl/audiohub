@@ -2,69 +2,69 @@
 
     <app-top-bar [sidenav]="sidenav"></app-top-bar>
 
-    <md-sidenav-container>
+    <mat-sidenav-container>
 
-        <md-sidenav #sidenav class="sidenav" [mode]="settings.sidenav_mode">
+        <mat-sidenav #sidenav class="sidenav" fixedInViewport="true" [mode]="settings.sidenav_mode">
 
-            <md-nav-list class="sidenav-list">
+            <mat-nav-list class="sidenav-list">
 
-                <md-list-item (click)="onSidenavItemClick('/playlist')">
+                <mat-list-item (click)="onSidenavItemClick('/playlist')">
 
-                    <md-icon>album</md-icon>
-                    <span md-line>Playlist</span>
+                    <mat-icon>album</mat-icon>
+                    <span mat-line>Playlist</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-                <md-list-item (click)="onSidenavItemClick('/files')">
+                <mat-list-item (click)="onSidenavItemClick('/files')">
 
-                    <md-icon>insert_drive_file</md-icon>
-                    <span md-line>Files</span>
+                    <mat-icon>insert_drive_file</mat-icon>
+                    <span mat-line>Files</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-                <md-list-item (click)="onSidenavItemClick('/stream')">
+                <mat-list-item (click)="onSidenavItemClick('/stream')">
 
-                    <md-icon>airplay</md-icon>
-                    <span md-line>Streams</span>
+                    <mat-icon>airplay</mat-icon>
+                    <span mat-line>Streams</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-                <md-list-item (click)="onSidenavItemClick('/systems')">
+                <mat-list-item (click)="onSidenavItemClick('/systems')">
 
-                    <md-icon>settings_system_daydream</md-icon>
-                    <span md-line>Systems</span>
+                    <mat-icon>settings_system_daydream</mat-icon>
+                    <span mat-line>Systems</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-                <md-list-item (click)="onSidenavItemClick('/download')">
+                <mat-list-item (click)="onSidenavItemClick('/download')">
 
-                    <md-icon>file_download</md-icon>
-                    <span md-line>Download</span>
+                    <mat-icon>file_download</mat-icon>
+                    <span mat-line>Download</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-                <md-list-item (click)="onSidenavItemClick('/settings')">
+                <mat-list-item (click)="onSidenavItemClick('/settings')">
 
-                    <md-icon>settings</md-icon>
-                    <span md-line>Settings</span>
+                    <mat-icon>settings</mat-icon>
+                    <span mat-line>Settings</span>
 
-                </md-list-item>
+                </mat-list-item>
 
-            </md-nav-list>
+            </mat-nav-list>
 
-        </md-sidenav>
+        </mat-sidenav>
 
         <div class="wrapper container audiohub">
 
             <div class="row">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
                     <app-player></app-player>
 
                 </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 children-components">
+                <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12 children-components">
 
                     <router-outlet></router-outlet>
 
@@ -74,6 +74,6 @@
 
         </div>
 
-    </md-sidenav-container>
+    </mat-sidenav-container>
 
 </div>

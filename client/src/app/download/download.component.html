@@ -1,52 +1,56 @@
 <div class="download-card row">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-toolbar color="primary">
+        <mat-toolbar color="primary">
 
             Download
 
-        </md-toolbar>
+        </mat-toolbar>
 
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-card>
+        <mat-card>
 
-            <md-card-content>
+            <mat-card-content>
 
-                <md-form-field class="download-input">
+                <mat-form-field class="download-input">
 
-                    <input mdInput placeholder="System" [(ngModel)]="details.system">
+                    <input matInput placeholder="System" [(ngModel)]="details.system">
 
-                </md-form-field>
+                </mat-form-field>
 
-                <md-form-field class="download-input">
+                <mat-form-field class="download-input">
 
-                    <input mdInput placeholder="Url" [(ngModel)]="details.url">
+                    <input matInput placeholder="Url" [(ngModel)]="details.url">
 
-                </md-form-field>
+                </mat-form-field>
 
-                <md-select class="download-select" placeholder="File Format" [(ngModel)]="details.fileFormat">
+                <mat-form-field class="download-select">
 
-                    <md-option *ngFor="let option of formatOptions" [value]="option">
+                    <mat-select placeholder="File Format" [(ngModel)]="details.fileFormat">
+    
+                        <mat-option *ngFor="let option of formatOptions" [value]="option">
+    
+                            {{option}}
+    
+                        </mat-option>
+    
+                    </mat-select>
 
-                        {{option}}
+                </mat-form-field>
 
-                    </md-option>
+            </mat-card-content>
 
-                </md-select>
+            <mat-card-actions class="text-right">
 
-            </md-card-content>
+                <button mat-button color="primary" (click)="onDownload(details)">OK</button>
 
-            <md-card-actions class="text-right">
+            </mat-card-actions>
 
-                <button md-button color="primary" (click)="onDownload(details)">OK</button>
-
-            </md-card-actions>
-
-        </md-card>
+        </mat-card>
 
     </div>
 

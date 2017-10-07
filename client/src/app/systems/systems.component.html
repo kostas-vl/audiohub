@@ -1,82 +1,82 @@
 <div class="systems-card row">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-toolbar color="primary">
+        <mat-toolbar color="primary">
 
             Systems
 
-        </md-toolbar>
+        </mat-toolbar>
 
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-card>
+        <mat-card>
 
-            <md-card-content>
+            <mat-card-content>
 
-                <md-tab-group #tabGroup>
+                <mat-tab-group #tabGroup>
 
-                    <md-tab label="Mount">
-
-                        <br>
-
-                        <md-form-field class="systems-card-input">
-
-                            <input mdInput placeholder="IP Address" [(ngModel)]="mountFolder.ip">
-
-                        </md-form-field>
-
-                        <md-form-field class="systems-card-input">
-
-                            <input mdInput placeholder="Volume" [(ngModel)]="mountFolder.volume">
-
-                        </md-form-field>
-
-                        <md-form-field class="systems-card-input">
-
-                            <input mdInput placeholder="Username" [(ngModel)]="mountFolder.user">
-
-                        </md-form-field>
-
-                        <md-form-field class="systems-card-input">
-
-                            <input mdInput placeholder="Password" type="password" [(ngModel)]="mountFolder.password">
-
-                        </md-form-field>
-
-                    </md-tab>
-
-                    <md-tab label="Local">
+                    <mat-tab label="Mount">
 
                         <br>
 
-                        <md-form-field class="systems-card-input">
+                        <mat-form-field class="systems-card-input">
 
-                            <input mdInput placeholder="Name" [(ngModel)]="folder.name">
+                            <input matInput placeholder="IP Address" [(ngModel)]="mountFolder.ip">
 
-                        </md-form-field>
+                        </mat-form-field>
 
-                        <md-form-field class="systems-card-input">
+                        <mat-form-field class="systems-card-input">
 
-                            <input mdInput placeholder="Path" [(ngModel)]="folder.path">
+                            <input matInput placeholder="Volume" [(ngModel)]="mountFolder.volume">
 
-                        </md-form-field>
+                        </mat-form-field>
 
-                    </md-tab>
+                        <mat-form-field class="systems-card-input">
 
-                </md-tab-group>
+                            <input matInput placeholder="Username" [(ngModel)]="mountFolder.user">
 
-            </md-card-content>
+                        </mat-form-field>
 
-            <md-card-actions class="text-right">
+                        <mat-form-field class="systems-card-input">
 
-                <button md-button color="primary" (click)="onComplete(tabGroup.selectedIndex)">Ok</button>
+                            <input matInput placeholder="Password" type="password" [(ngModel)]="mountFolder.password">
 
-            </md-card-actions>
+                        </mat-form-field>
 
-        </md-card>
+                    </mat-tab>
+
+                    <mat-tab label="Local">
+
+                        <br>
+
+                        <mat-form-field class="systems-card-input">
+
+                            <input matInput placeholder="Name" [(ngModel)]="folder.name">
+
+                        </mat-form-field>
+
+                        <mat-form-field class="systems-card-input">
+
+                            <input matInput placeholder="Path" [(ngModel)]="folder.path">
+
+                        </mat-form-field>
+
+                    </mat-tab>
+
+                </mat-tab-group>
+
+            </mat-card-content>
+
+            <mat-card-actions class="text-right">
+
+                <button mat-button color="primary" (click)="onComplete(tabGroup.selectedIndex)">Ok</button>
+
+            </mat-card-actions>
+
+        </mat-card>
 
     </div>
 

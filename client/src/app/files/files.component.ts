@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
 
@@ -24,7 +24,7 @@ export class FilesComponent implements OnInit, OnDestroy {
      */
     constructor(
         private socket: SocketService,
-        private mdSnackBar: MdSnackBar
+        private snackBar: MatSnackBar
     ) { }
 
     /**
@@ -200,7 +200,7 @@ export class FilesComponent implements OnInit, OnDestroy {
      */
     public onAdd(newEntry: IFileSystem) {
         this.socket.emit('queue push', newEntry);
-        this.mdSnackBar.open('Added: ' + newEntry.name, '', { duration: 1500 });
+        this.snackBar.open('Added: ' + newEntry.name, '', { duration: 1500 });
     }
 
 }

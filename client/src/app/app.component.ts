@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdSidenav, MdSnackBar } from '@angular/material';
+import { MatSidenav, MatSnackBar } from '@angular/material';
 import { ISettings } from './models/settings';
 import { SocketService } from './socket/socket.service';
 import { SettingsService } from './settings-service/settings.service';
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public settings: ISettings;
 
     @ViewChild('sidenav')
-    public sidenav: MdSidenav;
+    public sidenav: MatSidenav;
 
     /**
      * Creates an instance of AppComponent.
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private pageLoader: PageLoaderService,
         private socket: SocketService,
         private settingsService: SettingsService,
-        private snackbar: MdSnackBar
+        private snackbar: MatSnackBar
     ) { }
 
     /**

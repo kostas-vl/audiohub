@@ -1,52 +1,52 @@
 <div class="files-card row">
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
         <br>
 
-        <md-toolbar color="primary">
+        <mat-toolbar color="primary">
 
-            <span mdTooltip="refresh" mdTooltipPosition="above">
+            <span matTooltip="refresh" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onRefresh()">
+                <button mat-icon-button (click)="onRefresh()">
 
-                    <md-icon>refresh</md-icon>
-
-                </button>
-
-            </span>
-
-            <span mdTooltip="home directory" mdTooltipPosition="above">
-
-                <button md-icon-button (click)="onHome()">
-
-                    <md-icon>home</md-icon>
+                    <mat-icon>refresh</mat-icon>
 
                 </button>
 
             </span>
 
-            <span mdTooltip="previous directory" mdTooltipPosition="above">
+            <span matTooltip="home directory" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length < 1">
+                <button mat-icon-button (click)="onHome()">
 
-                    <md-icon>reply</md-icon>
+                    <mat-icon>home</mat-icon>
 
                 </button>
 
             </span>
 
-        </md-toolbar>
+            <span matTooltip="previous directory" matTooltipPosition="above">
+
+                <button mat-icon-button (click)="onPrevious()" [disabled]="currentSystemStack.length < 1">
+
+                    <mat-icon>reply</mat-icon>
+
+                </button>
+
+            </span>
+
+        </mat-toolbar>
 
     </div>    
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-        <md-card>
+        <mat-card>
            
             <app-loader [loading]="loading"></app-loader>
 
-            <md-card-content *ngIf="!loading">
+            <mat-card-content *ngIf="!loading">
 
                 <p class="text-center" [hidden]="currentSystemEntries.length > 0">
 
@@ -54,43 +54,43 @@
 
                 </p>
 
-                <md-nav-list *ngFor="let entry of currentSystemEntries">
+                <mat-nav-list *ngFor="let entry of currentSystemEntries">
 
-                    <md-list-item (click)="onEntry(entry)">
+                    <mat-list-item (click)="onEntry(entry)">
 
-                        <md-icon md-list-avatar class="system-button" *ngIf="currentSystemStack.length == 0">settings_system_daydream</md-icon>
+                        <mat-icon mat-list-avatar class="system-button" *ngIf="currentSystemStack.length == 0">settings_system_daydream</mat-icon>
 
-                        <md-icon md-list-avatar class="directory-button" *ngIf="entry.type === 'directory' && currentSystemStack.length > 0">folder</md-icon>
+                        <mat-icon mat-list-avatar class="directory-button" *ngIf="entry.type === 'directory' && currentSystemStack.length > 0">folder</mat-icon>
 
-                        <md-icon md-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</md-icon>
+                        <mat-icon mat-list-avatar class="file-button" *ngIf="entry.type === 'file'">insert_drive_file</mat-icon>
 
-                        <h4 md-line>{{entry.name}}</h4>
+                        <h4 mat-line>{{entry.name}}</h4>
 
-                        <p md-line>{{entry.path}}</p>
+                        <p mat-line>{{entry.path}}</p>
 
-                        <button md-icon-button *ngIf="entry.type === 'file'" (click)="onAdd(entry)">
+                        <button mat-icon-button *ngIf="entry.type === 'file'" (click)="onAdd(entry)">
 
-                            <md-icon>playlist_add</md-icon>
+                            <mat-icon>playlist_add</mat-icon>
 
                         </button>
 
-                        <div mdTooltip="disconnect" mdTooltipPosition="above">
+                        <div matTooltip="disconnect" matTooltipPosition="above">
 
-                            <button md-icon-button *ngIf="currentSystemStack.length === 0" (click)="onDisconect(entry)">
+                            <button mat-icon-button *ngIf="currentSystemStack.length === 0" (click)="onDisconect(entry)">
 
-                                <md-icon color="warn">do_not_disturb</md-icon>
+                                <mat-icon color="warn">do_not_disturb</mat-icon>
 
                             </button>
 
                         </div>
 
-                    </md-list-item>
+                    </mat-list-item>
 
-                </md-nav-list>
+                </mat-nav-list>
 
-            </md-card-content>
+            </mat-card-content>
 
-        </md-card>
+        </mat-card>
 
     </div>
 

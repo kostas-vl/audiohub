@@ -1,54 +1,54 @@
-<md-card class="player-card">
+<mat-card class="player-card">
 
     <div class="row">
 
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 player-actions">
+        <div class="col-lg-6 col-mat-6 col-sm-6 col-xs-12 player-actions">
 
-            <span mdTooltip="Play" mdTooltipPosition="above">
+            <span matTooltip="Play" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onPlay()" *ngIf="info.state === 'paused' || info.state === 'stoped' || info.state === 'init'">
+                <button mat-icon-button (click)="onPlay()" *ngIf="info.state === 'paused' || info.state === 'stoped' || info.state === 'init'">
                     
-                    <md-icon>play_arrow</md-icon>
-                    
-                </button>
-
-            </span>
-
-            <span mdTooltip="Pause" mdTooltipPosition="above">
-
-                <button md-icon-button (click)="onPause()" *ngIf="info.state === 'playing'">
-                    
-                    <md-icon>pause</md-icon>
+                    <mat-icon>play_arrow</mat-icon>
                     
                 </button>
 
             </span>
 
-            <span mdTooltip="Stop" mdTooltipPosition="above">
+            <span matTooltip="Pause" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onStop()">
+                <button mat-icon-button (click)="onPause()" *ngIf="info.state === 'playing'">
+                    
+                    <mat-icon>pause</mat-icon>
+                    
+                </button>
+
+            </span>
+
+            <span matTooltip="Stop" matTooltipPosition="above">
+
+                <button mat-icon-button (click)="onStop()">
                 
-                    <md-icon color="warn">stops</md-icon>
+                    <mat-icon color="warn">stops</mat-icon>
 
                 </button>
 
             </span>
 
-            <span mdTooltip="Previous" mdTooltipPosition="above">
+            <span matTooltip="Previous" matTooltipPosition="above">
 
-                <button md-icon-button (click)="onPrevious()">
+                <button mat-icon-button (click)="onPrevious()">
                     
-                    <md-icon>skip_previous</md-icon>
+                    <mat-icon>skip_previous</mat-icon>
                     
                 </button>  
                 
             </span>
 
-            <span mdTooltip="Next" mdTooltipPosition="above">  
+            <span matTooltip="Next" matTooltipPosition="above">  
 
-                <button md-icon-button (click)="onNext()">
+                <button mat-icon-button (click)="onNext()">
                     
-                    <md-icon>skip_next</md-icon>
+                    <mat-icon>skip_next</mat-icon>
                     
                 </button>
 
@@ -56,21 +56,21 @@
 
         </div>
 
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="col-lg-6 col-mat-6 col-sm-6 col-xs-12">
 
             <div class="player-volume">
 
-                <md-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></md-slider>
+                <mat-slider class="volume-margin" min="0" max="100" step="1" thumb-label="true" [ngModel]="info.volume" (ngModelChange)="onVolume($event)"></mat-slider>
 
             </div>
 
         </div>
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
             <div class="row">
 
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="col-lg-6 col-mat-6 col-sm-6 col-xs-12">
 
                     <div class="track-name">
 
@@ -80,7 +80,7 @@
 
                 </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
+                <div class="col-lg-6 col-mat-6 col-sm-6 col-xs-12 text-right">
 
                     <div class="track-time">
 
@@ -90,9 +90,9 @@
 
                 </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-mat-12 col-sm-12 col-xs-12">
 
-                    <md-progress-bar color="primary" [value]="progressValue" [mode]="progressMode" [bufferValue]="progressBuffer"></md-progress-bar>
+                    <mat-progress-bar color="primary" [value]="progressValue" [mode]="progressMode" [bufferValue]="progressBuffer"></mat-progress-bar>
 
                 </div>
 
@@ -102,4 +102,4 @@
 
     </div>
 
-</md-card>
+</mat-card>
