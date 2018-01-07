@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import {
     MatIconModule,
     MatTooltipModule,
@@ -101,7 +100,6 @@ const appRoutes: Routes = [
         FormsModule,
         HttpModule,
         RouterModule.forRoot(appRoutes),
-        Ng2BootstrapModule.forRoot(),
         MatIconModule,
         MatTooltipModule,
         MatButtonModule,
