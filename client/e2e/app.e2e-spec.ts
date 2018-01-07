@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('client-ng5 App', () => {
+describe('audiohub-client App', () => {
   let page: AppPage;
 
   beforeEach(() => {
