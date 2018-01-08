@@ -301,7 +301,7 @@ def emit_stream_history():
         emit('stream history', [dict(entry) for entry in strm.select()])
     except Exception as err:
         print(err)
-        raise(err)
+        raise err
 
 
 @SOCKET_IO.on('player info', namespace='/server')

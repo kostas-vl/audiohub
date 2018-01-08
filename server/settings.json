@@ -20,7 +20,7 @@
         {
             "name": "mpv",
             "win32_path": "mpv.exe",
-            "linux_path": "mpv"
+            "linux_path": "/usr/bin/mpv"
         }
     ]    
 }

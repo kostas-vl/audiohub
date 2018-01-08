@@ -1,6 +1,0 @@
-youtube-dl
-pafy
-flask
-flask-socketio
-eventlet
-sqlalchemy

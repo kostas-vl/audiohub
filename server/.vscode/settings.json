@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "${workspaceRoot}/venv/bin/python",
+    "python.pythonPath": "/home/kvl/.local/share/virtualenvs/server-_ZMPmRZ9/bin/python",
     "python.linting.pylintEnabled": true,
     "python.formatting.provider": "autopep8"
 }
