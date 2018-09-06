@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav, MatSnackBar } from '@angular/material';
-import { ISettings } from './models/settings';
+import { ISettings, Settings } from './models/settings';
 import { SocketService } from './socket/socket.service';
 import { SettingsService } from './settings-service/settings.service';
 import { PageLoaderService } from './page-loader-service/page-loader.service';
@@ -14,7 +14,7 @@ import { PageLoaderService } from './page-loader-service/page-loader.service';
 export class AppComponent implements OnInit, OnDestroy {
 
     private settingsSubscription?: number;
-    public settings?: ISettings;
+    public settings: ISettings = new Settings();
 
     @ViewChild(MatSidenav)
     public sidenav?: MatSidenav;

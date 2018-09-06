@@ -1,17 +1,13 @@
-<div class="top-bar">
+<app-page-loader></app-page-loader>
 
-    <app-page-loader></app-page-loader>
+<mat-toolbar color="primary">
 
-    <mat-toolbar color="primary">
+    <button mat-icon-button (click)="sidenav.toggle()">
 
-        <button mat-icon-button (click)="sidenav.toggle()">
-            
-            <mat-icon>menu</mat-icon>
-        
-        </button>
+        <mat-icon>menu</mat-icon>
 
-        <span class="top-bar-text">Audiohub</span>
+    </button>
 
-    </mat-toolbar>
+    <span class="top-bar-text">Audiohub</span>
 
-</div>
+</mat-toolbar>

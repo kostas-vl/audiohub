@@ -37,6 +37,23 @@
                         "scripts": []
                     },
                     "configurations": {
+                        "network": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.network.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true
+                        },
                         "production": {
                             "fileReplacements": [
                                 {
@@ -62,6 +79,9 @@
                         "browserTarget": "audiohub-client:build"
                     },
                     "configurations": {
+                        "network": {
+                            "browserTarget": "audiohub-client:build:network"
+                        },
                         "production": {
                             "browserTarget": "audiohub-client:build:production"
                         }
@@ -120,6 +140,9 @@
                         "devServerTarget": "audiohub-client:serve"
                     },
                     "configurations": {
+                        "network": {
+                            "devServerTarget": "audiohub-client:serve:network"
+                        },
                         "production": {
                             "devServerTarget": "audiohub-client:serve:production"
                         }

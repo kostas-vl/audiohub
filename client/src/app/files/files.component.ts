@@ -24,7 +24,7 @@ export class FilesComponent implements OnInit, OnDestroy {
      */
     constructor(
         private socket: SocketService,
-        private mdSnackBar: MatSnackBar
+        private snackBar: MatSnackBar
     ) { }
 
     /**

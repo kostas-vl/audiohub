@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IStream } from '../models/stream';
 import { SocketService } from '../socket/socket.service';
 import { PageLoaderService } from '../page-loader-service/page-loader.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'app-stream',
@@ -20,7 +21,8 @@ export class StreamComponent implements OnInit, OnDestroy {
      */
     constructor(
         private pageLoader: PageLoaderService,
-        private socket: SocketService
+        private socket: SocketService,
+        private snackBar: MatSnackBar
     ) { }
 
     /**
@@ -65,11 +67,14 @@ export class StreamComponent implements OnInit, OnDestroy {
      * @param {string} url that is requested for playback
      * @memberof StreamComponent
      */
-    public onRequestStream(url: string) {
+    public onRequestStream(url?: string) {
         if (url) {
             this.pageLoader.start();
             this.socket.emit('load stream', url);
             this.url = undefined;
+        } else {
+            this.snackBar
+                .open('Invalid Url', '', { duration: 2000 })
         }
     }
 

@@ -2,51 +2,65 @@
 
     <app-top-bar [sidenav]="sidenav"></app-top-bar>
 
-    <mat-sidenav-container>
+    <mat-sidenav-container class="sidenav-container" autosize>
 
-        <mat-sidenav #sidenav class="sidenav" fixedInViewport="true" [mode]="settings.sidenav_mode">
+        <mat-sidenav #sidenav class="sidenav" [mode]="settings.sidenav_mode">
 
-            <mat-nav-list class="sidenav-list">
+            <mat-nav-list>
+
+                <h3 mat-subheader>Home</h3>
 
                 <mat-list-item (click)="onSidenavItemClick('/playlist')">
 
-                    <mat-icon>album</mat-icon>
+                    <mat-icon mat-list-icon>album</mat-icon>
                     <span mat-line>Playlist</span>
 
                 </mat-list-item>
 
+                <mat-divider></mat-divider>
+
+                <h3 mat-subheader>Music</h3>
+
                 <mat-list-item (click)="onSidenavItemClick('/files')">
 
-                    <mat-icon>insert_drive_file</mat-icon>
-                    <span mat-line>Files</span>
+                    <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+                    <h4 mat-line>Files</h4>
 
                 </mat-list-item>
 
                 <mat-list-item (click)="onSidenavItemClick('/stream')">
 
-                    <mat-icon>airplay</mat-icon>
-                    <span mat-line>Streams</span>
+                    <mat-icon mat-list-icon>airplay</mat-icon>
+                    <h4 mat-line>Streams</h4>
 
                 </mat-list-item>
 
+                <mat-divider></mat-divider>
+
+                <h3 mat-subheader>Storage</h3>
+
                 <mat-list-item (click)="onSidenavItemClick('/systems')">
 
-                    <mat-icon>settings_system_daydream</mat-icon>
-                    <span mat-line>Systems</span>
+                    <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+                    <h4 mat-line>Systems</h4>
 
                 </mat-list-item>
 
                 <mat-list-item (click)="onSidenavItemClick('/download')">
 
-                    <mat-icon>file_download</mat-icon>
-                    <span mat-line>Download</span>
+                    <mat-icon mat-list-icon>file_download</mat-icon>
+                    <h4 mat-line>Download</h4>
 
                 </mat-list-item>
 
+                <mat-divider></mat-divider>
+
+                <h3 mat-subheader>Settings</h3>
+
                 <mat-list-item (click)="onSidenavItemClick('/settings')">
 
-                    <mat-icon>settings</mat-icon>
-                    <span mat-line>Settings</span>
+                    <mat-icon mat-list-icon>invert_colors</mat-icon>
+                    <h4 mat-line>Appearence</h4>
 
                 </mat-list-item>
 
@@ -54,7 +68,9 @@
 
         </mat-sidenav>
 
-        <div class="wrapper container audiohub">
+        <div class="container">
+
+            <br>
 
             <div class="row">
 

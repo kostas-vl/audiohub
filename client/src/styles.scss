@@ -3,14 +3,14 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("https://fonts.googleapis.com/css?family=Oswald");
 @import './scss/theme.scss';
-body,
-html {
-    font-family: 'Oswald', sans-serif !important;
-    font-size: 300;
-    height: 100vh;
+html,
+body {
+    height: 100%;
+}
+
+body {
     margin: 0;
-    padding: 0;
-    overflow: auto;
+    font-family: 'Roboto', sans-serif;
 }
 
 .sk-cube-grid {
@@ -117,14 +117,4 @@ html {
 
 .file-button {
     color: #607D8B;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
 }
