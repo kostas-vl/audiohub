@@ -114,11 +114,7 @@ const appRoutes: Routes = [
         MatListModule,
         MatToolbarModule,
         MatCardModule,
-<<<<<<< Updated upstream
         MatSidenavModule
-=======
-        MatSidenavModule,
->>>>>>> Stashed changes
     ],
     entryComponents: [],
     providers: [
