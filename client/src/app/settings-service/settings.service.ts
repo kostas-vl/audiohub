@@ -54,8 +54,10 @@ export class SettingsService {
      * @param {number} index of the callback on the list
      * @memberof SettingsService
      */
-    public unsubscribe(index: number) {
-        this.subscribers.splice(index, 1);
+    public unsubscribe(index?: number) {
+        if (index) {
+            this.subscribers.splice(index, 1);
+        }
     }
 
     /**

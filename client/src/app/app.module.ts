@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
     MatIconModule,
     MatTooltipModule,
@@ -115,7 +114,11 @@ const appRoutes: Routes = [
         MatListModule,
         MatToolbarModule,
         MatCardModule,
+<<<<<<< Updated upstream
         MatSidenavModule
+=======
+        MatSidenavModule,
+>>>>>>> Stashed changes
     ],
     entryComponents: [],
     providers: [

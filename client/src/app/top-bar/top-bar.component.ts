@@ -26,7 +26,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * @private
      * @memberof TopBarComponent
      */
-    private onMountVolumeSuccess = _ => {
+    private onMountVolumeSuccess = (response: any) => {
         this.pageLoader.stop();
     }
 
@@ -35,7 +35,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * @private
      * @memberof TopBarComponent
      */
-    private onMountVolumeFailure = _ => {
+    private onMountVolumeFailure = (response: any) => {
         this.pageLoader.stop();
     }
 
@@ -44,7 +44,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * @private
      * @memberof TopBarComponent
      */
-    private onAddVolumeSuccess = _ => {
+    private onAddVolumeSuccess = (response: any) => {
         this.pageLoader.stop();
     }
 
@@ -53,7 +53,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * @private
      * @memberof TopBarComponent
      */
-    private onAddVolumeFailure = _ => {
+    private onAddVolumeFailure = (response: any) => {
         this.pageLoader.stop();
     }
 
@@ -62,7 +62,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * @private
      * @memberof TopBarComponent
      */
-    private onLoadStreamComplete = _ => {
+    private onLoadStreamComplete = (response: any) => {
         setTimeout(() => {
             this.pageLoader.stop();
         }, 1500);

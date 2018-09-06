@@ -11,7 +11,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 export class StreamComponent implements OnInit, OnDestroy {
 
     public loading = false;
-    public url: string = null;
+    public url?: string;
     public streamHistory: IStream[] = [];
 
     /**
@@ -69,7 +69,7 @@ export class StreamComponent implements OnInit, OnDestroy {
         if (url) {
             this.pageLoader.start();
             this.socket.emit('load stream', url);
-            this.url = null;
+            this.url = undefined;
         }
     }
 

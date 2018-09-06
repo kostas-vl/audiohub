@@ -9,7 +9,7 @@ import { ISettings, Settings } from '../models/settings';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
 
-    private settingsServideId: number;
+    private settingsServideId?: number;
 
     public settings: ISettings = new Settings();
 
@@ -24,12 +24,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public ngOnInit() {
-        this.settings = this.settingsService.get();
+        this.settings = this
+            .settingsService
+            .get();
 
         // subscribe to the settings servive inorder to handle any changes
-        this.settingsServideId = this.settingsService.subscribe(newSettings => {
-            this.settings = newSettings;
-        });
+        this.settingsServideId = this
+            .settingsService
+            .subscribe(newSettings => {
+                this.settings = newSettings;
+            });
     }
 
     /**
@@ -37,7 +41,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public ngOnDestroy() {
-        this.settingsService.unsubscribe(this.settingsServideId);
+        this.settingsService
+            .unsubscribe(this.settingsServideId);
     }
 
     /**
@@ -45,7 +50,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public onChange() {
-        this.settingsService.set(this.settings);
+        this.settingsService
+            .set(this.settings);
     }
 
 }

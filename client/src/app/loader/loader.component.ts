@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class LoaderComponent {
 
     @Input()
-    public loading: boolean;
+    public loading = false;
 
     @Input()
     public height = '250px';

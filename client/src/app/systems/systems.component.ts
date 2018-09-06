@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTabGroup } from '@angular/material';
 import { IMountFolder, MountFolder } from '../models/mount-folder';
 import { ILocalFolder, LocalFolder } from '../models/local-folder';
 import { SocketService } from '../socket/socket.service';
@@ -11,7 +10,6 @@ import { SocketService } from '../socket/socket.service';
 })
 export class SystemsComponent implements OnInit {
 
-    public tabGroupComponent: MatTabGroup;
     public mountFolder: IMountFolder = new MountFolder();
     public folder: ILocalFolder = new LocalFolder();
     public addOptions = [

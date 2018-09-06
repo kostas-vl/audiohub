@@ -8,7 +8,7 @@ import { SoundDirection } from '../models/sound-direction';
 @Injectable()
 export class SocketService {
 
-    public socketInstance: SocketIOClient.Socket;
+    public socketInstance?: SocketIOClient.Socket;
 
     /**
      * Creates an instance of SocketService.
@@ -26,7 +26,7 @@ export class SocketService {
             // if there is no web socket url on the enviroment, set the target on the url on the users browser
             // (code path for production so that the server ip is know at runtime)
             if (!environment.webSocketUrl) {
-                environment.webSocketUrl = 'ws://' + (this.platform as any).location.host + '/server';
+                environment.webSocketUrl = `ws://${(this.platform as any).location.host}/server`;
             }
             // connect and assing the produces socket object
             this.socketInstance = io.connect(environment.webSocketUrl, { transports: ['websocket'] });
@@ -39,7 +39,8 @@ export class SocketService {
      */
     public disconnect() {
         if (this.socketInstance) {
-            this.socketInstance.disconnect();
+            this.socketInstance
+                .disconnect();
         }
     }
 
@@ -50,7 +51,10 @@ export class SocketService {
      * @memberof SocketService
      */
     public subscribe(event: string, callback: (response: any) => void) {
-        this.socketInstance.on(event, callback);
+        if (this.socketInstance) {
+            this.socketInstance
+                .on(event, callback);
+        }
     }
 
     /**
@@ -59,7 +63,10 @@ export class SocketService {
      * @memberof SocketService
      */
     public send(data: string) {
-        this.socketInstance.send(data);
+        if (this.socketInstance) {
+            this.socketInstance
+                .send(data);
+        }
     }
 
     /**
@@ -68,8 +75,11 @@ export class SocketService {
      * @param {*} [data=undefined] to be emitted
      * @memberof SocketService
      */
-    public emit(event: string, data: any = undefined) {
-        this.socketInstance.emit(event, data);
+    public emit(event: string, data?: any) {
+        if (this.socketInstance) {
+            this.socketInstance
+                .emit(event, data);
+        }
     }
 
     /**
@@ -79,7 +89,10 @@ export class SocketService {
      * @memberof SocketService
      */
     public unsubscribe(event: string, callback: Function) {
-        this.socketInstance.removeEventListener(event, callback);
+        if (this.socketInstance) {
+            this.socketInstance
+                .removeEventListener(event, callback);
+        }
     }
 
 }

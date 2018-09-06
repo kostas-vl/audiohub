@@ -9,7 +9,7 @@ import { SocketService } from '../socket/socket.service';
 })
 export class PlaylistComponent implements OnInit, OnDestroy {
 
-    public loading: boolean;
+    public loading = true;
     public playlist: IPlaylist[] = [];
     public streamSource: any = null;
 
@@ -35,8 +35,6 @@ export class PlaylistComponent implements OnInit, OnDestroy {
      * @memberof PlaylistComponent
      */
     public ngOnInit() {
-        this.loading = true;
-
         this.socket
             .subscribe('queue', this.onQueue);
 

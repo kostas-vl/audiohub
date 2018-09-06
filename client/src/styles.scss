@@ -2,6 +2,7 @@
 
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("https://fonts.googleapis.com/css?family=Oswald");
+@import './scss/theme.scss';
 body,
 html {
     font-family: 'Oswald', sans-serif !important;
@@ -116,4 +117,14 @@ html {
 
 .file-button {
     color: #607D8B;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
 }

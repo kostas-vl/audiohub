@@ -4,8 +4,8 @@ import { SocketService } from '../socket/socket.service';
 @Injectable()
 export class PageLoaderService {
 
-    private startCallback: () => void;
-    private stopCallback: () => void;
+    private startCallback?: () => void;
+    private stopCallback?: () => void;
 
     /**
      * Creates an instance of PageLoaderService.
@@ -40,7 +40,9 @@ export class PageLoaderService {
      * @memberof PageLoaderService
      */
     public start() {
-        this.startCallback();
+        if (this.startCallback) {
+            this.startCallback();
+        }
     }
 
     /**
@@ -48,7 +50,9 @@ export class PageLoaderService {
      * @memberof PageLoaderService
      */
     public stop() {
-        this.stopCallback();
+        if (this.stopCallback) {
+            this.stopCallback();
+        }
     }
 
 }

@@ -11,8 +11,8 @@ import { SocketService } from '../socket/socket.service';
 export class FilesComponent implements OnInit, OnDestroy {
 
     public systems: IFileSystem[] = [];
-    public selectedSystem: IFileSystem;
-    public currentSystem: IFileSystem;
+    public selectedSystem?: IFileSystem;
+    public currentSystem?: IFileSystem;
     public currentSystemEntries: IFileSystem[] = [];
     public currentSystemStack: string[] = [];
     public loading = false;
@@ -24,7 +24,7 @@ export class FilesComponent implements OnInit, OnDestroy {
      */
     constructor(
         private socket: SocketService,
-        private snackBar: MatSnackBar
+        private mdSnackBar: MatSnackBar
     ) { }
 
     /**

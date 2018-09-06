@@ -13,11 +13,11 @@ import { PageLoaderService } from './page-loader-service/page-loader.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    private settingsSubscription: number;
-    public settings: ISettings;
+    private settingsSubscription?: number;
+    public settings?: ISettings;
 
-    @ViewChild('sidenav')
-    public sidenav: MatSidenav;
+    @ViewChild(MatSidenav)
+    public sidenav?: MatSidenav;
 
     /**
      * Creates an instance of AppComponent.
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onMountVolumeSuccess = _ => {
+    private onMountVolumeSuccess = (response: any) => {
         this.snackbar
             .open('Volume mounted!', '', { duration: 2000 });
     }
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onMountVolumeFailure = _ => {
+    private onMountVolumeFailure = (response: any) => {
         this.snackbar
             .open('An error occured!', '', { duration: 2000 });
     }
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onAddVolumeSuccess = _ => {
+    private onAddVolumeSuccess = (response: any) => {
         this.snackbar
             .open('Volume added!', '', { duration: 2000 });
     }
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onAddVolumeFailure = _ => {
+    private onAddVolumeFailure = (response: any) => {
         this.snackbar
             .open('An error occured', '', { duration: 2000 });
     }
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onDownloadFinished = _ => {
+    private onDownloadFinished = (response: any) => {
         this.snackbar
             .open('Download finished!', '', { duration: 2000 });
     }
@@ -86,7 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AppComponent
      */
-    private onLoadStreamComplete = _ => {
+    private onLoadStreamComplete = (response: any) => {
         this.snackbar
             .open('Stream Loaded!', '', { duration: 2000 });
     }
@@ -171,9 +171,11 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     public onSidenavItemClick(url: string) {
-        if (url) {
-            this.sidenav.toggle();
-            this.router.navigateByUrl(url);
+        if (url && this.sidenav) {
+            this.sidenav
+                .toggle();
+            this.router
+                .navigateByUrl(url);
         }
     }
 
