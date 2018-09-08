@@ -20,6 +20,7 @@ venv/*
 
 # Mplayer
 mplayer/*
+fonts/*
 
 # Exclude any executables
 **/*.exe

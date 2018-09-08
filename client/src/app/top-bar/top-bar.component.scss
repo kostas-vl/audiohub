@@ -1,10 +1,14 @@
+.top-bar-loader {
+    z-index: 15;
+}
+
 .top-bar {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 10;
     width: 100%;
-    height: 50px;
+    min-height: 64px;
 }
 
 .top-bar-text {

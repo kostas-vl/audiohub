@@ -41,6 +41,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { DownloadComponent } from './download/download.component';
 import { SystemsComponent } from './systems/systems.component';
 import { PageLoaderComponent } from './page-loader/page-loader.component';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 const appRoutes: Routes = [
     {
@@ -126,4 +127,13 @@ const appRoutes: Routes = [
         AppComponent
     ]
 })
-export class AppModule { }
+export class AppModule {
+
+    constructor(private overlayContainer: OverlayContainer) {
+        overlayContainer
+            .getContainerElement()
+            .classList
+            .add('app-light');
+    }
+
+}

@@ -1,10 +1,12 @@
-<div [class.app-dark]="settings.dark_theme" [class.app-light]="!settings.dark_theme">
+<div [class.app-light]="!settings.dark_theme">
+
+    <app-page-loader></app-page-loader>
 
     <app-top-bar [sidenav]="sidenav"></app-top-bar>
 
     <mat-sidenav-container class="sidenav-container" autosize>
 
-        <mat-sidenav #sidenav class="sidenav" [mode]="settings.sidenav_mode">
+        <mat-sidenav #sidenav class="sidenav mat-elevation-z2" [mode]="settings.sidenav_mode">
 
             <mat-nav-list>
 

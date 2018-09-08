@@ -112,8 +112,8 @@ class Player():
             # Setting the volume
             self.volume(self.info.volume)
             # Setting the total time info
-            self.info.time = self.backend_process.time()
-            self.info.time_str = convert_seconds_to_time_str(self.info.time)
+            # self.info.time = self.backend_process.time()
+            # self.info.time_str = convert_seconds_to_time_str(self.info.time)
         # Loading a list of tracks
         elif data and isinstance(data, collections.Sequence):
             # Settings the state info
@@ -258,8 +258,8 @@ class Player():
             )
             self.info.state = PlayerStateEnum.Playing
             # Setting the total time info
-            self.info.time = self.backend_process.time()
-            self.info.time_str = convert_seconds_to_time_str(self.info.time)
+            # self.info.time = self.backend_process.time()
+            # self.info.time_str = convert_seconds_to_time_str(self.info.time)
 
 
 def convert_seconds_to_time_str(value):
