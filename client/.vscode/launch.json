@@ -11,5 +11,12 @@
             "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}"
         }
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against LAN",
+            "url": "http://192.168.1.64:4200",
+            "webRoot": "${workspaceFolder}"
+        }
     ]
 }

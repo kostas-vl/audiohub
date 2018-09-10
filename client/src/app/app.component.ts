@@ -37,6 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onMountVolumeSuccess = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('Volume mounted!', '', { duration: 2000 });
     }
@@ -47,6 +50,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onMountVolumeFailure = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('An error occured!', '', { duration: 2000 });
     }
@@ -57,6 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onAddVolumeSuccess = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('Volume added!', '', { duration: 2000 });
     }
@@ -67,6 +76,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onAddVolumeFailure = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('An error occured', '', { duration: 2000 });
     }
@@ -77,6 +89,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onDownloadFinished = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('Download finished!', '', { duration: 2000 });
     }
@@ -87,6 +102,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onLoadStreamComplete = (response: any) => {
+        this.pageLoader
+            .stop();
+
         this.snackbar
             .open('Stream Loaded!', '', { duration: 2000 });
     }
@@ -100,9 +118,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.settings = this.settingsService.get();
 
         // subscribe a callback on the event of a settings change, and store the produced index
-        this.settingsSubscription = this.settingsService.subscribe(settings => {
-            this.settings = settings;
-        });
+        this.settingsSubscription = this
+            .settingsService
+            .subscribe(settings => {
+                this.settings = settings;
+            });
 
         // connect to the server socket and subscribe to all the neccessary events
         this.socket

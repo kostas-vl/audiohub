@@ -7,7 +7,7 @@ import { SocketService } from '../socket/socket.service';
     templateUrl: './top-bar.component.html',
     styleUrls: ['./top-bar.component.scss']
 })
-export class TopBarComponent implements OnInit, OnDestroy {
+export class TopBarComponent implements OnInit {
 
     @Input()
     public sidenav: any;
@@ -16,98 +16,12 @@ export class TopBarComponent implements OnInit, OnDestroy {
      * Creates an instance of TopBarComponent.
      * @memberof TopBarComponent
      */
-    constructor(
-        private pageLoader: PageLoaderService,
-        private socket: SocketService
-    ) { }
-
-    /**
-     * Holds an arrow function that handles the mount volume success event
-     * @private
-     * @memberof TopBarComponent
-     */
-    private onMountVolumeSuccess = (response: any) => {
-        this.pageLoader.stop();
-    }
-
-    /**
-     * Holds an arrow function that handles the mount volume failure event
-     * @private
-     * @memberof TopBarComponent
-     */
-    private onMountVolumeFailure = (response: any) => {
-        this.pageLoader.stop();
-    }
-
-    /**
-     * Holds an arrow function that handles the add volume success event
-     * @private
-     * @memberof TopBarComponent
-     */
-    private onAddVolumeSuccess = (response: any) => {
-        this.pageLoader.stop();
-    }
-
-    /**
-     * Holds an arrow function that handles the add volume failure event
-     * @private
-     * @memberof TopBarComponent
-     */
-    private onAddVolumeFailure = (response: any) => {
-        this.pageLoader.stop();
-    }
-
-    /**
-     * Holds an arrow function that handles the load stream complete event
-     * @private
-     * @memberof TopBarComponent
-     */
-    private onLoadStreamComplete = (response: any) => {
-        setTimeout(() => {
-            this.pageLoader.stop();
-        }, 1500);
-    }
+    constructor() { }
 
     /**
      * Implementation of the ngOnInit method, of the OnInit base class
      * @memberof TopBarComponent
      */
-    ngOnInit() {
-        this.socket
-            .subscribe('mount volume success', this.onMountVolumeSuccess);
-
-        this.socket
-            .subscribe('mount volume failure', this.onMountVolumeFailure);
-
-        this.socket
-            .subscribe('add volume success', this.onAddVolumeSuccess);
-
-        this.socket
-            .subscribe('add volume failure', this.onAddVolumeFailure);
-
-        this.socket
-            .subscribe('load stream complete', this.onLoadStreamComplete);
-    }
-
-    /**
-     * Implementation of the ngOnDestroy method, of the OnDesrtoy base class
-     * @memberof TopBarComponent
-     */
-    public ngOnDestroy() {
-        this.socket
-            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
-
-        this.socket
-            .unsubscribe('mount volume failure', this.onMountVolumeFailure);
-
-        this.socket
-            .unsubscribe('add volume success', this.onAddVolumeSuccess);
-
-        this.socket
-            .unsubscribe('add volume failure', this.onAddVolumeFailure);
-
-        this.socket
-            .unsubscribe('load stream complete', this.onLoadStreamComplete);
-    }
+    ngOnInit() { }
 
 }

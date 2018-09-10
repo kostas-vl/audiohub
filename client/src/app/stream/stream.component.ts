@@ -74,7 +74,7 @@ export class StreamComponent implements OnInit, OnDestroy {
             this.url = undefined;
         } else {
             this.snackBar
-                .open('Invalid Url', '', { duration: 2000 })
+                .open('Invalid Url', '', { duration: 2000 });
         }
     }
 

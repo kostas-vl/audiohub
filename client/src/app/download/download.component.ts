@@ -39,8 +39,12 @@ export class DownloadComponent implements OnInit {
      */
     public onDownload(details: IDownloadDetails) {
         if (details) {
-            this.pageLoader.start();
-            this.socket.emit('download', details);
+            this.pageLoader
+                .start();
+
+            this.socket
+                .emit('download', details);
+
             this.details = new DownloadDetails();
         }
     }

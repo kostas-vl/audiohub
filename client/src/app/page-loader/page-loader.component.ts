@@ -21,13 +21,16 @@ export class PageLoaderComponent implements OnInit {
      */
     ngOnInit() {
         // create a loader start callback
-        this.pageLoader.onStart(() => {
-            this.loading = true;
-        });
+        this.pageLoader
+            .onStart(() => {
+                this.loading = true;
+            });
+
         // create a loader stop callback
-        this.pageLoader.onStop(() => {
-            this.loading = false;
-        });
+        this.pageLoader
+            .onStop(() => {
+                this.loading = false;
+            });
     }
 
 }
