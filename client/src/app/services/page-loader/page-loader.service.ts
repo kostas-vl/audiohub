@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SocketService } from '../socket/socket.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Injectable()
 export class PageLoaderService {

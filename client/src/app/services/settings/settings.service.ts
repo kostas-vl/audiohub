@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ISettings, Settings } from '../models/settings';
-import { SocketService } from '../socket/socket.service';
+import { ISettings, Settings } from 'src/app/models/settings';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 type SettingsChangeEvent = (settings: ISettings) => void;
 
