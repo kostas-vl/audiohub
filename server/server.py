@@ -4,8 +4,13 @@ The initial file of the application
 import os
 import models.users as usr
 import models.user_settings as stt
+import models.file_system
+import models.playlist
 import configuration.application_settings as app_settings
+import configuration.settings
 import sound.player as player
+import drive.files
+import drive.download
 from flask import request, send_from_directory
 from flask_socketio import join_room, leave_room
 from database.schema import DATABASE
@@ -92,19 +97,24 @@ def main():
     """
     The main source of the application execution
     """
-    # Loading settings
     print('Loading settings...')
     app_settings.INSTANCE.load()
-    # Initializing player
+
     print('Initializing player instance...')
     player.INSTANCE.init()
-    # Initializing database
+
     print('Initializing database schema image...')
     DATABASE.init(app_settings.INSTANCE.database)
-    # Flask APP Initialization
-    print('Starting the flask socket-io server...')
+
+    print('Starting the flask socket-io server...')   
+    APP.config['SECRET'] = app_settings.INSTANCE.server.secret
     SOCKET_IO.run(
         APP,
         host=os.getenv('IP', app_settings.INSTANCE.server.ip_address),
-        port=int(os.getenv('PORT', int(app_settings.INSTANCE.server.port)))
+        port=int(os.getenv('PORT', int(app_settings.INSTANCE.server.port))),
+        debug=True
     )
+
+
+if __name__ == '__main__':
+    main()

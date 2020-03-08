@@ -15,6 +15,7 @@ import { PageLoaderService } from './page-loader-service/page-loader.service';
 export class AppComponent implements OnInit, OnDestroy {
 
     private settingsSubscription?: number;
+
     public settings: ISettings = new Settings();
 
     @ViewChild(MatSidenav, { static: true })
@@ -38,11 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onMountVolumeSuccess = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('Volume mounted!', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('Volume mounted!', '', { duration: 2000 });
     }
 
     /**
@@ -51,11 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onMountVolumeFailure = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('An error occured!', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('An error occured!', '', { duration: 2000 });
     }
 
     /**
@@ -64,11 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onAddVolumeSuccess = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('Volume added!', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('Volume added!', '', { duration: 2000 });
     }
 
     /**
@@ -77,11 +69,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onAddVolumeFailure = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('An error occured', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('An error occured', '', { duration: 2000 });
     }
 
     /**
@@ -90,11 +79,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onDownloadFinished = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('Download finished!', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('Download finished!', '', { duration: 2000 });
     }
 
     /**
@@ -103,11 +89,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private onLoadStreamComplete = (response: any) => {
-        this.pageLoader
-            .stop();
-
-        this.snackbar
-            .open('Stream Loaded!', '', { duration: 2000 });
+        this.pageLoader.stop();
+        this.snackbar.open('Stream Loaded!', '', { duration: 2000 });
     }
 
     /**
@@ -126,33 +109,27 @@ export class AppComponent implements OnInit, OnDestroy {
             });
 
         // connect to the server socket and subscribe to all the neccessary events
-        this.socket
-            .connect();
+        this.socket.connect();
 
-        this.settingsService
-            .configure();
+        this.settingsService.configure();
 
-        this.socket
-            .subscribe('mount volume success', this.onMountVolumeSuccess);
+        this.socket.subscribe('connect', () => {
+            this.socket.subscribe('mount volume success', this.onMountVolumeSuccess);
 
-        this.socket
-            .subscribe('mount volume failure', this.onMountVolumeFailure);
+            this.socket.subscribe('mount volume failure', this.onMountVolumeFailure);
 
-        this.socket
-            .subscribe('add volume success', this.onAddVolumeSuccess);
+            this.socket.subscribe('add volume success', this.onAddVolumeSuccess);
 
-        this.socket
-            .subscribe('add volume failure', this.onAddVolumeFailure);
+            this.socket.subscribe('add volume failure', this.onAddVolumeFailure);
 
-        this.socket
-            .subscribe('download finished', this.onDownloadFinished);
+            this.socket.subscribe('download finished', this.onDownloadFinished);
 
-        this.socket
-            .subscribe('load stream complete', this.onLoadStreamComplete);
+            this.socket.subscribe('load stream complete', this.onLoadStreamComplete);
 
-        // send request for the settings of the user
-        this.socket
-            .emit('user settings');
+            // send request for the settings of the user
+            this.socket.emit('user settings');
+        });
+
     }
 
     /**
@@ -161,26 +138,19 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy() {
         // remove all the subscription callbacks
-        this.settingsService
-            .unsubscribe(this.settingsSubscription);
+        this.settingsService.unsubscribe(this.settingsSubscription);
 
-        this.socket
-            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
+        this.socket.unsubscribe('mount volume success', this.onMountVolumeSuccess);
 
-        this.socket
-            .unsubscribe('mount volume failure', this.onMountVolumeFailure);
+        this.socket.unsubscribe('mount volume failure', this.onMountVolumeFailure);
 
-        this.socket
-            .unsubscribe('add volume success', this.onAddVolumeSuccess);
+        this.socket.unsubscribe('add volume success', this.onAddVolumeSuccess);
 
-        this.socket
-            .unsubscribe('add volume failure', this.onAddVolumeFailure);
+        this.socket.unsubscribe('add volume failure', this.onAddVolumeFailure);
 
-        this.socket
-            .unsubscribe('download finished', this.onDownloadFinished);
+        this.socket.unsubscribe('download finished', this.onDownloadFinished);
 
-        this.socket
-            .unsubscribe('load stream complete', this.onLoadStreamComplete);
+        this.socket.unsubscribe('load stream complete', this.onLoadStreamComplete);
 
         // disconnect from the server socket
         this.socket.disconnect();
@@ -193,10 +163,8 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     public onSidenavItemClick(url: string) {
         if (url && this.sidenav) {
-            this.sidenav
-                .toggle();
-            this.router
-                .navigateByUrl(url);
+            this.sidenav.toggle();
+            this.router.navigateByUrl(url);
         }
     }
 

@@ -19,17 +19,17 @@ def build_dir_tree(path):
         for entry in entries:
             fse = fs.FileSystem(
                 name=entry,
-                path=path + entry
+                path=os.path.join(path, entry)
             )
-            if os.path.isdir(path + entry):
+            if os.path.isdir(fse.path):
                 fse.type = 'directory'
                 tree.append(fse)
             else:
-                _, ext = os.path.splitext(path + entry)
+                _, ext = os.path.splitext(fse.path)
                 if ext in available_formats:
                     fse.type = 'file'
                     tree.append(fse)
-    return tree
+        return tree
 
 
 @SOCKET_IO.on('available systems', namespace='/server')

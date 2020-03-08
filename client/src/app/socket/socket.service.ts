@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
 import * as io from 'socket.io-client';
-import { SoundDirection } from '../models/sound-direction';
 
 @Injectable()
 export class SocketService {
@@ -39,8 +38,7 @@ export class SocketService {
      */
     public disconnect() {
         if (this.socketInstance) {
-            this.socketInstance
-                .disconnect();
+            this.socketInstance.disconnect();
         }
     }
 
@@ -52,8 +50,7 @@ export class SocketService {
      */
     public subscribe(event: string, callback: (response: any) => void) {
         if (this.socketInstance) {
-            this.socketInstance
-                .on(event, callback);
+            this.socketInstance.on(event, callback);
         }
     }
 
@@ -64,8 +61,7 @@ export class SocketService {
      */
     public send(data: string) {
         if (this.socketInstance) {
-            this.socketInstance
-                .send(data);
+            this.socketInstance.send(data);
         }
     }
 
@@ -77,8 +73,7 @@ export class SocketService {
      */
     public emit(event: string, data?: any) {
         if (this.socketInstance) {
-            this.socketInstance
-                .emit(event, data);
+            this.socketInstance.emit(event, data);
         }
     }
 
@@ -90,8 +85,7 @@ export class SocketService {
      */
     public unsubscribe(event: string, callback: Function) {
         if (this.socketInstance) {
-            this.socketInstance
-                .removeEventListener(event, callback);
+            this.socketInstance.removeEventListener(event, callback);
         }
     }
 

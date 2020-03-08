@@ -29,6 +29,8 @@ class ServerSettings(BaseSettings):
     def __init__(self, *initargs):
         self.ip_address = None
         self.port = None
+        self.secret = None
+        self.allowed_origins = None
         self.init_from_dict(initargs)
 
 

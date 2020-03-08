@@ -7,14 +7,10 @@
             "request": "launch",
             "stopOnEntry": true,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/__init__.py",
+            "program": "${workspaceRoot}/server.py",
             "cwd": "${workspaceRoot}",
-            "console": "externalTerminal",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "Sudo"
-            ]
+            // "console": "externalTerminal",
+            // "sudo": true           
         },
         {
             "name": "Python",
@@ -22,13 +18,8 @@
             "request": "launch",
             "stopOnEntry": true,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/__init__.py",        
-            "cwd": "${workspaceRoot}",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ]
+            "program": "${workspaceRoot}/server.py",        
+            "cwd": "${workspaceRoot}"
         },
         {
             "name": "PySpark",
@@ -45,12 +36,7 @@
                 "pythonPath": "${env.SPARK_HOME}/bin/spark-submit"
             },
             "program": "${file}",
-            "cwd": "${workspaceRoot}",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ]
+            "cwd": "${workspaceRoot}"
         },
         {
             "name": "Python Module",
@@ -60,12 +46,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${file}",
             "module": "module.name",
-            "cwd": "${workspaceRoot}",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ]
+            "cwd": "${workspaceRoot}"
         },
         {
             "name": "Integrated Terminal/Console",
@@ -75,11 +56,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${file}",
             "cwd": "null",
-            "console": "integratedTerminal",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit"
-            ]
+            "console": "integratedTerminal"
         },
         {
             "name": "External Terminal/Console",
@@ -89,11 +66,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${file}",
             "cwd": "null",
-            "console": "externalTerminal",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit"
-            ]
+            "console": "externalTerminal"
         },
         {
             "name": "Django",
@@ -106,12 +79,6 @@
             "args": [
                 "runserver",
                 "--noreload"
-            ],
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput",
-                "DjangoDebugging"
             ]
         },
         {
@@ -129,11 +96,6 @@
                 "run",
                 "--no-debugger",
                 "--no-reload"
-            ],
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
             ]
         },
         {
@@ -144,12 +106,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${workspaceRoot}/run.py",
             "cwd": "${workspaceRoot}",
-            "args": [],
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ]
+            "args": []
         },
         {
             "name": "Watson",
@@ -163,22 +120,7 @@
                 "dev",
                 "runserver",
                 "--noreload=True"
-            ],
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
             ]
-        },
-        {
-            "name": "Attach (Remote Debug)",
-            "type": "python",
-            "request": "attach",
-            "localRoot": "${workspaceRoot}",
-            "remoteRoot": "${workspaceRoot}",
-            "port": 3000,
-            "secret": "my_secret",
-            "host": "localhost"
         }
     ]
 }

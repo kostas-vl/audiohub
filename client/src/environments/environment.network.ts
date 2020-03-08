@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    webSocketUrl: 'ws://192.168.1.64:5000/server'
+    webSocketUrl: 'ws://192.16.1.65:5000/server'
 };

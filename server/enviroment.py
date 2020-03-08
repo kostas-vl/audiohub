@@ -5,5 +5,10 @@ from flask import Flask
 from flask_socketio import SocketIO
 
 APP = Flask(__name__, static_url_path='/static')
-APP.config['SECRET_KEY'] = 'secret!'
-SOCKET_IO = SocketIO(APP)
+
+SOCKET_IO = SocketIO(
+    APP, 
+    logger=True, 
+    engineio_logger=True,
+    cors_allowed_origins="*"
+)
