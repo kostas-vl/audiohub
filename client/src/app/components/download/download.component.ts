@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IDownloadDetails, DownloadDetails } from '../models/download-details';
-import { SocketService } from '../socket/socket.service';
-import { PageLoaderService } from '../page-loader-service/page-loader.service';
+import { IDownloadDetails, DownloadDetails } from 'src/app/models/download-details';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 
 @Component({
     selector: 'app-download',
@@ -11,6 +11,7 @@ import { PageLoaderService } from '../page-loader-service/page-loader.service';
 export class DownloadComponent implements OnInit {
 
     public details: IDownloadDetails = new DownloadDetails();
+
     public formatOptions = [
         'mp3',
         'mp4',
@@ -39,12 +40,8 @@ export class DownloadComponent implements OnInit {
      */
     public onDownload(details: IDownloadDetails) {
         if (details) {
-            this.pageLoader
-                .start();
-
-            this.socket
-                .emit('download', details);
-
+            this.pageLoader.start();
+            this.socket.emit('download', details);
             this.details = new DownloadDetails();
         }
     }

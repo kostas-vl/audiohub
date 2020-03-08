@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IStream } from '../models/stream';
-import { SocketService } from '../socket/socket.service';
-import { PageLoaderService } from '../page-loader-service/page-loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IStream } from 'src/app/models/stream';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 
 @Component({
     selector: 'app-stream',
@@ -12,7 +12,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class StreamComponent implements OnInit, OnDestroy {
 
     public loading = false;
+
     public url?: string;
+
     public streamHistory: IStream[] = [];
 
     /**
@@ -45,12 +47,8 @@ export class StreamComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.loading = true;
 
-        this.socket
-            .subscribe('stream history', this.onStreamHistory);
-
-        // send an event message for the list of the stream history
-        this.socket
-            .emit('stream history');
+        this.socket.subscribe('stream history', this.onStreamHistory);
+        this.socket.emit('stream history');
     }
 
     /**
@@ -58,8 +56,7 @@ export class StreamComponent implements OnInit, OnDestroy {
      * @memberof StreamComponent
      */
     public ngOnDestroy() {
-        this.socket
-            .unsubscribe('stream history', this.onStreamHistory);
+        this.socket.unsubscribe('stream history', this.onStreamHistory);
     }
 
     /**
@@ -73,8 +70,7 @@ export class StreamComponent implements OnInit, OnDestroy {
             this.socket.emit('load stream', url);
             this.url = undefined;
         } else {
-            this.snackBar
-                .open('Invalid Url', '', { duration: 2000 });
+            this.snackBar.open('Invalid Url', '', { duration: 2000 });
         }
     }
 
@@ -100,3 +96,4 @@ export class StreamComponent implements OnInit, OnDestroy {
     }
 
 }
+

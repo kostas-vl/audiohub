@@ -2,10 +2,10 @@ import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ISettings, Settings } from './models/settings';
-import { SocketService } from './socket/socket.service';
-import { SettingsService } from './settings-service/settings.service';
-import { PageLoaderService } from './page-loader-service/page-loader.service';
+import { ISettings, Settings } from 'src/app/models/settings';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { SettingsService } from 'src/app/services/settings/settings.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 
 @Component({
     selector: 'app-root',

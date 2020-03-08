@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IMountFolder, MountFolder } from '../models/mount-folder';
-import { ILocalFolder, LocalFolder } from '../models/local-folder';
-import { SocketService } from '../socket/socket.service';
+import { IMountFolder, MountFolder } from 'src/app/models/mount-folder';
+import { ILocalFolder, LocalFolder } from 'src/app/models/local-folder';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
     selector: 'app-systems',
@@ -11,7 +11,9 @@ import { SocketService } from '../socket/socket.service';
 export class SystemsComponent implements OnInit {
 
     public mountFolder: IMountFolder = new MountFolder();
+
     public folder: ILocalFolder = new LocalFolder();
+
     public addOptions = [
         {
             label: 'Mount Network Folder',
@@ -33,7 +35,7 @@ export class SystemsComponent implements OnInit {
      * Implementation of the ngOnInit method, of the OnInit base class
      * @memberof SystemsComponent
      */
-    ngOnInit() { }
+    public ngOnInit() { }
 
     /**
      * Executes the proper event for the selected tab
@@ -43,14 +45,12 @@ export class SystemsComponent implements OnInit {
     public onComplete(index: number) {
         switch (index) {
             case 0:
-                this.socket
-                    .emit('mount volume', this.mountFolder);
+                this.socket.emit('mount volume', this.mountFolder);
                 this.mountFolder = new MountFolder();
                 break;
 
             case 1:
-                this.socket
-                    .emit('add volume', this.folder);
+                this.socket.emit('add volume', this.folder);
                 this.folder = new LocalFolder();
                 break;
 

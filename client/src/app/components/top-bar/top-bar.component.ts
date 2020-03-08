@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { PageLoaderService } from '../page-loader-service/page-loader.service';
-import { SocketService } from '../socket/socket.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
     selector: 'app-top-bar',
@@ -22,6 +22,6 @@ export class TopBarComponent implements OnInit {
      * Implementation of the ngOnInit method, of the OnInit base class
      * @memberof TopBarComponent
      */
-    ngOnInit() { }
+    public ngOnInit() { }
 
 }

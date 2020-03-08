@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IPlaylist, Playlist, Playlist2, Playlist3 } from '../models/playlist';
-import { SocketService } from '../socket/socket.service';
+import { IPlaylist, Playlist, Playlist2, Playlist3 } from 'src/app/models/playlist';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
     selector: 'app-playlist',
@@ -10,7 +10,9 @@ import { SocketService } from '../socket/socket.service';
 export class PlaylistComponent implements OnInit, OnDestroy {
 
     public loading = true;
+
     public playlist: IPlaylist[] = [];
+
     public streamSource: any = null;
 
     /**
@@ -35,12 +37,8 @@ export class PlaylistComponent implements OnInit, OnDestroy {
      * @memberof PlaylistComponent
      */
     public ngOnInit() {
-        this.socket
-            .subscribe('queue', this.onQueue);
-
-        // sends an event message for the current playlist queue
-        this.socket
-            .emit('queue');
+        this.socket.subscribe('queue', this.onQueue);
+        this.socket.emit('queue');
     }
 
     /**
@@ -48,8 +46,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
      * @memberof PlaylistComponent
      */
     public ngOnDestroy() {
-        this.socket
-            .unsubscribe('queue', this.onQueue);
+        this.socket.unsubscribe('queue', this.onQueue);
     }
 
     /**
@@ -87,3 +84,4 @@ export class PlaylistComponent implements OnInit, OnDestroy {
     }
 
 }
+

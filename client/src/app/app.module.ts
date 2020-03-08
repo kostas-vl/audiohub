@@ -20,62 +20,27 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { AppRoutingModule } from 'src/app/app.routing';
 
 /* Audiohub services */
-import { SettingsService } from './settings-service/settings.service';
-import { PageLoaderService } from './page-loader-service/page-loader.service';
-import { SocketService } from './socket/socket.service';
+import { SettingsService } from 'src/app/services/settings/settings.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 /* Audiohub components */
-import { AppComponent } from './app.component';
-import { LoaderComponent } from './loader/loader.component';
-import { PlayerComponent } from './player/player.component';
-import { PlaylistComponent } from './playlist/playlist.component';
-import { FilesComponent } from './files/files.component';
-import { TopBarComponent } from './top-bar/top-bar.component';
-import { StreamComponent } from './stream/stream.component';
-import { SettingsComponent } from './settings/settings.component';
-import { DownloadComponent } from './download/download.component';
-import { SystemsComponent } from './systems/systems.component';
-import { PageLoaderComponent } from './page-loader/page-loader.component';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { AppComponent } from 'src/app/components/root/app.component';
+import { LoaderComponent } from 'src/app/components/loader/loader.component';
+import { PlayerComponent } from 'src/app/components/player/player.component';
+import { PlaylistComponent } from 'src/app/components/playlist/playlist.component';
+import { FilesComponent } from 'src/app/components/files/files.component';
+import { TopBarComponent } from 'src/app/components/top-bar/top-bar.component';
+import { StreamComponent } from 'src/app/components/stream/stream.component';
+import { SettingsComponent } from 'src/app/components/settings/settings.component';
+import { DownloadComponent } from 'src/app/components/download/download.component';
+import { SystemsComponent } from 'src/app/components/systems/systems.component';
+import { PageLoaderComponent } from 'src/app/components/page-loader/page-loader.component';
 
-const appRoutes: Routes = [
-    {
-        path: 'playlist',
-        component: PlaylistComponent
-    },
-    {
-        path: 'files',
-        component: FilesComponent
-    },
-    {
-        path: 'stream',
-        component: StreamComponent
-    },
-    {
-        path: 'systems',
-        component: SystemsComponent
-    },
-    {
-        path: 'download',
-        component: DownloadComponent
-    },
-    {
-        path: 'settings',
-        component: SettingsComponent
-    },
-    {
-        path: '',
-        redirectTo: '/playlist',
-        pathMatch: 'full'
-    },
-    {
-        path: '**',
-        redirectTo: '/playlist',
-        pathMatch: 'full'
-    }
-];
 
 @NgModule({
     declarations: [
@@ -95,7 +60,6 @@ const appRoutes: Routes = [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
-        RouterModule.forRoot(appRoutes),
         MatIconModule,
         MatTooltipModule,
         MatButtonModule,
@@ -111,7 +75,8 @@ const appRoutes: Routes = [
         MatListModule,
         MatToolbarModule,
         MatCardModule,
-        MatSidenavModule
+        MatSidenavModule,
+        AppRoutingModule
     ],
     entryComponents: [],
     providers: [

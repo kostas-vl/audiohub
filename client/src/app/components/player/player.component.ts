@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IPlaylist } from '../models/playlist';
-import { SocketService } from '../socket/socket.service';
-import { IPlayerInfo, PlayerInfo } from '../models/player-info';
+import { IPlaylist } from 'src/app/models/playlist';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { IPlayerInfo, PlayerInfo } from 'src/app/models/player-info';
 
 type TimeTuple = {
     currentTime: number,
@@ -16,8 +16,11 @@ type TimeTuple = {
 export class PlayerComponent implements OnInit, OnDestroy {
 
     public progressValue = 0;
+
     public progressBuffer = 0;
+
     public progressMode: 'indeterminate' | 'determinate' | 'buffer' | 'query' = 'determinate';
+
     public info: IPlayerInfo = new PlayerInfo();
 
     /**
@@ -78,17 +81,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
      * @memberof PlayerComponent
      */
     public ngOnInit() {
-        // subscribe an event handler for the 'player info' event
-        this.socket
-            .subscribe('player info', this.onPlayerInfo);
+        this.socket.subscribe('player info', this.onPlayerInfo);
+        this.socket.subscribe('current time', this.onCurrentTime);
 
-        // subscribe an event handler for the 'current time' event
-        this.socket
-            .subscribe('current time', this.onCurrentTime);
+        this.socket.emit('player info');
 
-        // sends an event message for the current state of the player, on the server
-        this.socket
-            .emit('player info');
         // create a timer point to request the curernt time of the playback
         setInterval(() => {
             if (this.info.state === 'playing') {
@@ -102,12 +99,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
      * @memberof PlayerComponent
      */
     public ngOnDestroy() {
-        // Unsubscribe from all the message events
-        this.socket
-            .unsubscribe('player info', this.onPlayerInfo);
-
-        this.socket
-            .unsubscribe('current time', this.onCurrentTime);
+        this.socket.unsubscribe('player info', this.onPlayerInfo);
+        this.socket.unsubscribe('current time', this.onCurrentTime);
     }
 
     /**
@@ -166,3 +159,4 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
 }
+

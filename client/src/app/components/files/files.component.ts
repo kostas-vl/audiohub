@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IFileSystem, FileSystem } from '../models/file-system';
-import { SocketService } from '../socket/socket.service';
+import { IFileSystem, FileSystem } from 'src/app/models/file-system';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
     selector: 'app-files',
@@ -11,11 +11,17 @@ import { SocketService } from '../socket/socket.service';
 export class FilesComponent implements OnInit, OnDestroy {
 
     public systems: IFileSystem[] = [];
+
     public selectedSystem?: IFileSystem;
+
     public currentSystem?: IFileSystem;
+
     public currentSystemEntries: IFileSystem[] = [];
+
     public currentSystemStack: string[] = [];
+
     public loading = false;
+
     public asyncLoading = false;
 
     /**
@@ -100,21 +106,13 @@ export class FilesComponent implements OnInit, OnDestroy {
         // displays the loader
         this.loading = true;
 
-        this.socket
-            .subscribe('available systems', this.onAvailableSystems);
-
-        this.socket
-            .subscribe('list dir', this.onListDir);
-
-        this.socket
-            .subscribe('mount volume success', this.onMountVolumeSuccess);
-
-        this.socket
-            .subscribe('add volume success', this.onAddVolumeSuccess);
+        this.socket.subscribe('available systems', this.onAvailableSystems);
+        this.socket.subscribe('list dir', this.onListDir);
+        this.socket.subscribe('mount volume success', this.onMountVolumeSuccess);
+        this.socket.subscribe('add volume success', this.onAddVolumeSuccess);
 
         // send an event message for the list of the available file systems
-        this.socket
-            .emit('available systems');
+        this.socket.emit('available systems');
     }
 
     /**
@@ -123,17 +121,10 @@ export class FilesComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy() {
         // Unsubscribe from all the message event handlers
-        this.socket
-            .unsubscribe('available systems', this.onAvailableSystems);
-
-        this.socket
-            .unsubscribe('list dir', this.onListDir);
-
-        this.socket
-            .unsubscribe('mount volume success', this.onMountVolumeSuccess);
-
-        this.socket
-            .unsubscribe('add volume success', this.onAddVolumeSuccess);
+        this.socket.unsubscribe('available systems', this.onAvailableSystems);
+        this.socket.unsubscribe('list dir', this.onListDir);
+        this.socket.unsubscribe('mount volume success', this.onMountVolumeSuccess);
+        this.socket.unsubscribe('add volume success', this.onAddVolumeSuccess);
     }
 
     /**

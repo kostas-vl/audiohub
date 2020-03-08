@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PageLoaderService } from '../page-loader-service/page-loader.service';
+import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 
 @Component({
     selector: 'app-page-loader',
@@ -17,20 +17,12 @@ export class PageLoaderComponent implements OnInit {
     constructor(private pageLoader: PageLoaderService) { }
 
     /**
-     * Implementation of the ngOnInit method, of the OnInit base class
+     * Executes the necessary start up code for the component.
+     * @memberof PageLoaderComponent
      */
-    ngOnInit() {
-        // create a loader start callback
-        this.pageLoader
-            .onStart(() => {
-                this.loading = true;
-            });
-
-        // create a loader stop callback
-        this.pageLoader
-            .onStop(() => {
-                this.loading = false;
-            });
+    public ngOnInit() {
+        this.pageLoader.onStart(() => this.loading = true);
+        this.pageLoader.onStop(() => this.loading = false);
     }
 
 }
