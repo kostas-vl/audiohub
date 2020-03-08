@@ -90,11 +90,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.socket
             .emit('player info');
         // create a timer point to request the curernt time of the playback
-        // setInterval(() => {
-        //     if (this.info.state === 'playing') {
-        //         this.socket.emit('current time');
-        //     }
-        // }, 1000);
+        setInterval(() => {
+            if (this.info.state === 'playing') {
+                this.socket.emit('current time');
+            }
+        }, 1000);
     }
 
     /**

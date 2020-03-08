@@ -112,8 +112,8 @@ class Player():
             # Setting the volume
             self.volume(self.info.volume)
             # Setting the total time info
-            # self.info.time = self.backend_process.time()
-            # self.info.time_str = convert_seconds_to_time_str(self.info.time)
+            self.info.time = self.backend_process.time()
+            self.info.time_str = convert_seconds_to_time_str(self.info.time)
         # Loading a list of tracks
         elif data and isinstance(data, collections.Sequence):
             # Settings the state info
@@ -150,7 +150,12 @@ class Player():
         """
         A method that stops the player
         """
-        if self.info.state == PlayerStateEnum.Playing or self.info.state == PlayerStateEnum.Paused:
+        can_stop = (
+            self.info.state == PlayerStateEnum.Playing
+            or self.info.state == PlayerStateEnum.Paused
+        )
+
+        if can_stop:
             self.backend_process.seek(0)
             self.backend_process.pause()
             self.info.state = PlayerStateEnum.Stoped
@@ -195,7 +200,8 @@ class Player():
 
     def current_time(self):
         """
-        A method that returns the current time position of the playback on the player
+        A method that returns the current time position of the playback
+        on the player
         """
         is_playing = self.info.state == PlayerStateEnum.Playing
         track_ended = self.info.current_time >= self.info.time - 1
@@ -212,7 +218,8 @@ class Player():
 
     def has_entries(self):
         """
-        A method that returns a boolean specifying whether there are entries on the playlist
+        A method that returns a boolean specifying whether there are entries
+        on the playlist
         """
         playlist = pl.select_active()
         return playlist and isinstance(playlist, collections.Sequence)
@@ -225,7 +232,8 @@ class Player():
         if url:
             stream = None
             streams = strm.select_by_url(url)
-            # Check if there are streams in the database with the same url and in cache
+            # Check if there are streams in the database with the same url
+            # and in cache
             if streams and streams[0].identity in self.streams_cache:
                 stream = streams[0]
             else:
