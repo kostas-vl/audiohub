@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private settingsSubscription?: number;
     public settings: ISettings = new Settings();
 
-    @ViewChild(MatSidenav)
+    @ViewChild(MatSidenav, { static: true })
     public sidenav?: MatSidenav;
 
     /**
