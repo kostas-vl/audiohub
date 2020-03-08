@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileSystem, FileSystem } from '../models/file-system';
 import { SocketService } from '../socket/socket.service';
 

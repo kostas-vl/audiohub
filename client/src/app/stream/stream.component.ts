@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IStream } from '../models/stream';
 import { SocketService } from '../socket/socket.service';
 import { PageLoaderService } from '../page-loader-service/page-loader.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-stream',

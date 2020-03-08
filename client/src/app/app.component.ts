@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSidenav, MatSnackBar } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ISettings, Settings } from './models/settings';
 import { SocketService } from './socket/socket.service';
 import { SettingsService } from './settings-service/settings.service';
