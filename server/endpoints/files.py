@@ -1,9 +1,10 @@
 """
-Contains all the file oriented event handlers for the socket io server namespace
+This module contains all the file oriented endpoints for the socket io
+server namespace.
 """
 import os
 import models.file_system as fs
-import drive.network as net
+import drive
 from flask_socketio import emit
 from enviroment import SOCKET_IO
 
@@ -29,7 +30,7 @@ def build_dir_tree(path):
                 if ext in available_formats:
                     fse.type = 'file'
                     tree.append(fse)
-        return tree
+    return tree
 
 
 @SOCKET_IO.on('available systems', namespace='/server')
@@ -73,14 +74,14 @@ def on_mount_volume(data):
     A function that mounts a volume on the list of available systems
     and then emits its contents
     """
-    details = net.NetworkFileSystem(
+    details = drive.NetworkFileSystem(
         ip_address=data['ip'],
         directory=data['volume'],
         user=data['user'],
         password=data['password'],
         persistent=True
     )
-    mount_path = net.mount(details)
+    mount_path = drive.mount(details)
     if mount_path:
         mount_name = '(Network) ' + details.directory
         file_system = fs.insert(
@@ -99,8 +100,8 @@ def on_mount_volume(data):
 @SOCKET_IO.on('remove volume', namespace='/server')
 def on_remove_volume(data):
     """
-    A function that removes a volume from the list of available systems and then
-    emits its contents
+    A function that removes a volume from the list of available systems
+    and then emits its contents.
     """
     if data:
         fs.delete_by_id(data)

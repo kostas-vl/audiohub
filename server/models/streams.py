@@ -5,11 +5,11 @@ import collections
 import datetime
 import uuid
 import sqlalchemy as sql
-from base.model import Model
-from database.schema import DATABASE
+from models.base_model import BaseModel
+from database import DATABASE_INSTANCE
 
 
-class Stream(Model):
+class Stream(BaseModel):
     """
     Class that contains the information of a stream
     """
@@ -28,93 +28,85 @@ class Stream(Model):
         yield 'title', self.title
         yield 'url', self.url
         yield 'player_url', self.player_url
-        yield 'date_created', '' if not self.date_created else self.date_created.isoformat()
+        if self.date_created:
+            yield 'date_created', self.date_created.isoformat()
+        else:
+            yield 'date_created', ''
 
 
 def insert(data):
     """
     A function that inserts new entries on the stream data table
     """
-    # Insert a single entry
     if isinstance(data, Stream) and data:
-        with DATABASE.engine.connect() as conn:
-            # Insert the stream
+        with DATABASE_INSTANCE.engine.connect() as conn:
             stream = dict(data)
             stream['identity'] = str(uuid.uuid4())
             stream['date_created'] = datetime.datetime.now()
             conn.execute(
-                DATABASE.streams.insert(), stream
+                DATABASE_INSTANCE.streams.insert(), stream
             )
             return Stream(stream)
-    # Insert a collection
-    elif isinstance(data, collections.Sequence) and data:
-        with DATABASE.engine.connect() as conn:
-            stream_collection = []
+    if isinstance(data, collections.Sequence) and data:
+        with DATABASE_INSTANCE.engine.connect() as conn:
+            collection = []
             for entry in data:
                 stream = dict(entry)
                 stream['identity'] = str(uuid.uuid4())
                 stream['date_created'] = datetime.datetime.now()
-                stream_collection.append(stream)
+                collection.append(stream)
             conn.execute(
-                DATABASE.streams.insert(), stream
+                DATABASE_INSTANCE.streams.insert(), stream
             )
-            return list(map(Stream, stream_collection))
-    # Insert nothing
-    else:
-        return None
-
+            return [Stream(x) for x in collection]
+    return None
 
 def update(data):
     """
     A function that updates entries of the stream data table
     """
-    # Update a single entry
     if isinstance(data, Stream):
-        with DATABASE.engine.connect() as conn:
+        with DATABASE_INSTANCE.engine.connect() as conn:
             stream = dict(data)
             stream['date_created'] = datetime.datetime.strptime(
                 stream['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
             )
             conn.execute(
-                DATABASE.
+                DATABASE_INSTANCE.
                 streams.
                 update().
-                where(DATABASE.streams.c.identity == data.identity).
+                where(DATABASE_INSTANCE.streams.c.identity == data.identity).
                 values(stream)
             )
             return Stream(stream)
-    # Update a collection
-    elif isinstance(data, collections.Sequence):
-        with DATABASE.engine.connect() as conn:
-            stream_collection = []
+    if isinstance(data, collections.Sequence):
+        with DATABASE_INSTANCE.engine.connect() as conn:
+            collection = []
             for entry in data:
                 stream = dict(entry)
                 stream['date_created'] = datetime.datetime.strptime(
                     stream['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
                 )
                 conn.execute(
-                    DATABASE.
+                    DATABASE_INSTANCE.
                     streams.
                     update().
-                    where(DATABASE.streams.c.identity == entry.identity).
+                    where(DATABASE_INSTANCE.streams.c.identity == entry.identity).
                     values(stream)
                 )
-                stream_collection.append(stream)
-            return list(map(Stream, stream_collection))
-    # Update nothing
-    else:
-        return None
-
+                collection.append(stream)
+            return [Stream(x) for x in collection]
+    return None
 
 def select():
     """
     A function that returns all the entries on the stream data table
     """
-    with DATABASE.engine.connect() as conn:
-        streams = conn.execute(
-            sql.select([DATABASE.streams])
+    with DATABASE_INSTANCE.engine.connect() as conn:
+        collection = conn.execute(
+            sql.select([DATABASE_INSTANCE.streams])
         )
-        return list(map(lambda x: Stream(dict(x)), streams))
+        return [Stream(dict(x)) for x in collection]
 
 
 def select_by_id(identity):
@@ -122,13 +114,13 @@ def select_by_id(identity):
     A function that returns all the entries on the stream data table that contain
     the provided identity
     """
-    with DATABASE.engine.connect() as conn:
-        streams = conn.execute(
+    with DATABASE_INSTANCE.engine.connect() as conn:
+        collection = conn.execute(
             sql.
-            select([DATABASE.streams]).
-            where(DATABASE.streams.c.identity == identity)
+            select([DATABASE_INSTANCE.streams]).
+            where(DATABASE_INSTANCE.streams.c.identity == identity)
         )
-        return list(map(lambda x: Stream(dict(x)), streams))
+        return [Stream(dict(x)) for x in collection]
 
 
 def select_by_url(url):
@@ -136,10 +128,10 @@ def select_by_url(url):
     A function that returns all the entries on the stream data table that contain
     the provided url
     """
-    with DATABASE.engine.connect() as conn:
-        streams = conn.execute(
+    with DATABASE_INSTANCE.engine.connect() as conn:
+        collection = conn.execute(
             sql.
-            select([DATABASE.streams]).
-            where(DATABASE.streams.c.url == url)
+            select([DATABASE_INSTANCE.streams]).
+            where(DATABASE_INSTANCE.streams.c.url == url)
         )
-        return list(map(lambda x: Stream(dict(x)), streams))
+        return [Stream(dict(x)) for x in collection]

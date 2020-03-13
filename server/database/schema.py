@@ -174,4 +174,4 @@ def date_created_update(context):
     )
 
 
-DATABASE = Database()
+DATABASE_INSTANCE = Database()

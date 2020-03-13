@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-Contains event handlers for the user settings
+This module contains all endpoints for the user's settings.
 """
 import models.users as usr
 import models.user_settings as stt

@@ -1,32 +1,9 @@
 """
-Contains functions for mounting and unmounting network file systems
+Module that exposes methods for mounting network folders.
 """
 import os
 import sys
 import subprocess
-from base.model import Model
-
-
-class NetworkFileSystem(Model):
-    """
-    Class representing a network file system details
-    """
-
-    def __init__(self, *initial_data, **kwords):
-        self.ip_address = ''
-        self.directory = ''
-        self.user = ''
-        self.password = ''
-        self.persistent = True
-        self.init_from_dict(initial_data)
-        self.init_from_kwords(kwords)
-
-    def __iter__(self):
-        yield 'ip', self.ip_address
-        yield 'directory', self.directory
-        yield 'user', self.user
-        yield 'password', self.password
-        yield 'persistent', self.persistent
 
 
 def mount(details):
@@ -35,10 +12,9 @@ def mount(details):
     """
     if sys.platform == 'win32':
         return win32_mount(details)
-    elif sys.platform == 'linux':
+    if sys.platform == 'linux':
         return linux_mount(details)
-    else:
-        return ''
+    return ''
 
 
 def unmount(details):

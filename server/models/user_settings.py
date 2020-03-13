@@ -1,14 +1,15 @@
 """
-Contains the user settings class implementation and functions for database interaction
+Contains the user settings class implementation and functions for
+database interaction.
 """
 import collections
 import datetime
+from models.base_model import BaseModel
 from sqlalchemy import Integer, select, func
-from database.schema import DATABASE
-from base.model import Model
+from database import DATABASE_INSTANCE
 
 
-class UserSettings(Model):
+class UserSettings(BaseModel):
     """
     Class that contains the information for the settings of a user
     """
@@ -30,19 +31,25 @@ class UserSettings(Model):
         yield 'sound_direction', self.sound_direction
         yield 'dark_theme', self.dark_theme
         yield 'sidenav_mode', self.sidenav_mode
-        yield 'date_created', '' if not self.date_created else self.date_created.isoformat()
-        yield 'date_modified', '' if not self.date_created else self.date_modified.isoformat()
+        if self.date_created:
+            yield 'date_created', self.date_created.isoformat()
+        else:
+            yield 'date_modified', ''
+        if self.date_modified:
+            yield 'date_modified', self.date_modified.isoformat()
+        else:
+            yield 'date_modified', ''
 
 
 def new_id():
     """
     A function that produces a new id for the user settings data table
     """
-    with DATABASE.engine.connect() as conn:
+    with DATABASE_INSTANCE.engine.connect() as conn:
         max_id = conn.execute(
             select([
                 func.
-                max(DATABASE.user_settings.c.identity, type_=Integer).
+                max(DATABASE_INSTANCE.user_settings.c.identity, type_=Integer).
                 label('max')
             ])
         ).scalar()
@@ -53,62 +60,55 @@ def insert(data):
     """
     A function that inserts new entries on the user settings data table
     """
-    # Insert a signle entry
     if isinstance(data, UserSettings):
-        with DATABASE.engine.connect() as conn:
-            # Insert settings
+        with DATABASE_INSTANCE.engine.connect() as conn:
             settings = dict(data)
             settings['identity'] = new_id()
             settings['date_created'] = datetime.datetime.now()
             settings['date_modified'] = datetime.datetime.now()
             conn.execute(
-                DATABASE.user_settings.insert(), dict(settings)
+                DATABASE_INSTANCE.user_settings.insert(), dict(settings)
             )
             return UserSettings(settings)
-    # Insert a collection
-    elif isinstance(data, collections.Sequence):
-        with DATABASE.engine.connect() as conn:
-            settings_collection = []
+    if isinstance(data, collections.Sequence):
+        with DATABASE_INSTANCE.engine.connect() as conn:
+            collection = []
             id_interval = 0
             for entry in data:
                 settings = dict(entry)
                 settings['identity'] = new_id() + id_interval
                 settings['date_created'] = datetime.datetime.now()
                 settings['date_modified'] = datetime.datetime.now()
-                settings_collection.append(settings)
+                collection.append(settings)
                 id_interval += 1
             conn.execute(
-                DATABASE.users.insert(), settings_collection
+                DATABASE_INSTANCE.users.insert(), settings_collection
             )
-            return list(map(UserSettings, settings_collection))
-    # Insert nothing
-    else:
-        return None
+            return [UserSettings(x) for x in collection]
+    return None
 
 
 def update(data):
     """
     A function that updates entries on the user settings data table
     """
-    # Update a single entry
     if isinstance(data, UserSettings):
-        with DATABASE.engine.connect() as conn:
+        with DATABASE_INSTANCE.engine.connect() as conn:
             settings = dict(data)
             settings['date_created'] = datetime.datetime.strptime(
                 settings['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
             )
             settings['date_modified'] = datetime.datetime.now()
             conn.execute(
-                DATABASE.
+                DATABASE_INSTANCE.
                 user_settings.
                 update().
                 values(settings)
             )
             return UserSettings(settings)
-    # Update a collection
-    elif isinstance(data, collections.Sequence):
-        with DATABASE.engine.connect() as conn:
-            settings_collection = []
+    if isinstance(data, collections.Sequence):
+        with DATABASE_INSTANCE.engine.connect() as conn:
+            collection = []
             for entry in data:
                 settings = dict(entry)
                 settings['date_created'] = datetime.datetime.strptime(
@@ -116,16 +116,14 @@ def update(data):
                 )
                 settings['date_modified'] = datetime.datetime.now()
                 conn.execute(
-                    DATABASE.
+                    DATABASE_INSTANCE.
                     user_settings.
                     update().
                     values(settings)
                 )
-                settings_collection.append(settings)
-            return list(map(UserSettings, settings_collection))
-    # Update nothing
-    else:
-        return None
+                collection.append(settings)
+            return [UserSettings(x) for x in collection]
+    return None
 
 
 def update_by_id(data):
@@ -133,26 +131,24 @@ def update_by_id(data):
     A function that updates an entry on the user settings data table
     that contains the provided id
     """
-    # Update single entry
     if isinstance(data, UserSettings):
-        with DATABASE.engine.connect() as conn:
+        with DATABASE_INSTANCE.engine.connect() as conn:
             settings = dict(data)
             settings['date_created'] = datetime.datetime.strptime(
                 settings['date_created'], '%Y-%m-%dT%H:%M:%S.%f'
             )
             settings['date_modified'] = datetime.datetime.now()
             conn.execute(
-                DATABASE.
+                DATABASE_INSTANCE.
                 user_settings.
                 update().
-                where(DATABASE.user_settings.c.identity == data.identity).
+                where(DATABASE_INSTANCE.user_settings.c.identity == data.identity).
                 values(settings)
             )
             return UserSettings(settings)
-    # Update a collection
-    elif isinstance(data, collections.Sequence):
-        with DATABASE.engine.connect() as conn:
-            settings_collection = []
+    if isinstance(data, collections.Sequence):
+        with DATABASE_INSTANCE.engine.connect() as conn:
+            collection = []
             for entry in data:
                 settings = dict(entry)
                 settings['date_creted'] = datetime.datetime.strptime(
@@ -160,17 +156,15 @@ def update_by_id(data):
                 )
                 settings['date_modified'] = datetime.datetime.now()
                 conn.execute(
-                    DATABASE.
+                    DATABASE_INSTANCE.
                     user_settings.
                     update().
-                    where(DATABASE.user_settings.c.identity == entry.identity).
+                    where(DATABASE_INSTANCE.user_settings.c.identity == entry.identity).
                     values(settings)
                 )
-                settings_collection.append(settings)
-            return list(map(UserSettings, settings_collection))
-    # Update nothing
-    else:
-        return None
+                collection.append(settings)
+            return [UserSettings(x) for x in collection]
+    return None
 
 
 def delete(data):
@@ -178,21 +172,21 @@ def delete(data):
     A function that deletes entries from the user settings data table
     """
     if isinstance(data, UserSettings):
-        with DATABASE.engine.connect() as conn:
+        with DATABASE_INSTANCE.engine.connect() as conn:
             conn.execute(
-                DATABASE.
+                DATABASE_INSTANCE.
                 user_settings.
                 delete().
-                where(DATABASE.user_settings.c.identity == data.identity)
+                where(DATABASE_INSTANCE.user_settings.c.identity == data.identity)
             )
     elif isinstance(data, collections.Sequence):
-        with DATABASE.engine.connect() as conn:
+        with DATABASE_INSTANCE.engine.connect() as conn:
             for entry in data:
                 conn.execute(
-                    DATABASE.
+                    DATABASE_INSTANCE.
                     user_settings.
                     delete().
-                    where(DATABASE.user_settings.c.identity == entry.identity)
+                    where(DATABASE_INSTANCE.user_settings.c.identity == entry.identity)
                 )
     else:
         pass
@@ -202,8 +196,8 @@ def delete_all():
     """
     A function that deletes all entries in the users date table
     """
-    with DATABASE.engine.connect() as conn:
-        conn.execute(DATABASE.user_settings.delete())
+    with DATABASE_INSTANCE.engine.connect() as conn:
+        conn.execute(DATABASE_INSTANCE.user_settings.delete())
 
 
 def delete_by_id(identity):
@@ -211,23 +205,24 @@ def delete_by_id(identity):
     A function that removes an entry from the user settings data table
     that contains the provided id
     """
-    with DATABASE.engine.connect() as conn:
+    with DATABASE_INSTANCE.engine.connect() as conn:
         conn.execute(
-            DATABASE.
+            DATABASE_INSTANCE.
             user_settings.
             delete().
-            where(DATABASE.user_settings.c.identity == identity)
+            where(DATABASE_INSTANCE.user_settings.c.identity == identity)
         )
 
 
 def select_by_id(settings_id):
     """
-    A function that returns the entry on the user settings data table with the provided id
+    A function that returns the entry on the user settings data table with
+    the provided id
     """
-    with DATABASE.engine.connect() as conn:
+    with DATABASE_INSTANCE.engine.connect() as conn:
         collection = conn.execute(
-            select([DATABASE.user_settings]).
-            where(DATABASE.user_settings.c.identity == settings_id)
+            select([DATABASE_INSTANCE.user_settings]).
+            where(DATABASE_INSTANCE.user_settings.c.identity == settings_id)
         )
         return list(map(lambda x: UserSettings(dict(x)), collection))
 
@@ -237,9 +232,9 @@ def select_by_user_id(user_id):
     A function that returns the entry on the user settings data table
     with the provided user id
     """
-    with DATABASE.engine.connect() as conn:
+    with DATABASE_INSTANCE.engine.connect() as conn:
         collection = conn.execute(
-            select([DATABASE.user_settings]).
-            where(DATABASE.user_settings.c.user_id == user_id)
+            select([DATABASE_INSTANCE.user_settings]).
+            where(DATABASE_INSTANCE.user_settings.c.user_id == user_id)
         )
         return list(map(lambda x: UserSettings(dict(x)), collection))

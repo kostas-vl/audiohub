@@ -1,9 +1,9 @@
 """
-Contains the base class for all the models of the application
+Module that exposes the BaseModel class.
 """
 
 
-class Model():
+class BaseModel():
     """
     The base class for the models of the application
     """

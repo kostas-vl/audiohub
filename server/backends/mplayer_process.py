@@ -3,7 +3,7 @@ Wrapper class on an mplayer slave process
 """
 import sys
 import subprocess
-import configuration.application_settings as app_settings
+from configuration import APP_SETTINGS_INSTANCE
 from backends.backend_process import BackendProcess
 
 
@@ -40,9 +40,9 @@ class MplayerProcess(BackendProcess):
         try:
             execution_path = ''
             if sys.platform == 'win32':
-                execution_path = app_settings.INSTANCE.backend.win32_path
+                execution_path = APP_SETTINGS_INSTANCE.backend.win32_path
             else:
-                execution_path = app_settings.INSTANCE.backend.linux_path
+                execution_path = APP_SETTINGS_INSTANCE.backend.linux_path
             self.process_handler = subprocess.Popen(
                 [
                     execution_path,
@@ -66,7 +66,6 @@ class MplayerProcess(BackendProcess):
             if self.process_handler is not None:
                 self.process_handler.terminate()
                 self.process_handler = None
-            return None
 
     def loadfile(self, file, append=False):
         """
@@ -103,7 +102,8 @@ class MplayerProcess(BackendProcess):
 
     def seek(self, value, seek_type=None):
         """
-        Executes a command to seek a specific time in the playback of the mplayer proccess
+        Executes a command to seek a specific time in the playback
+        of the mplayer proccess.
         """
         str_seek_type = str(2 if seek_type is None else seek_type)
         self.__execute(['seek', str(value), str_seek_type])
@@ -114,34 +114,30 @@ class MplayerProcess(BackendProcess):
         """
         self.__execute(['get_time_length'])
         if self.process_handler is not None:
-            try:
-                if self.process_handler.stdout.readable():
-                    result_bytes = self.process_handler.stdout.readline()
-                    result_str = result_bytes.decode('utf-8')
-                    seconds_str = result_str.replace('ANS_LENGTH=', '')
-                    return float(seconds_str)
-            except IOError:
-                return None
-        return None
+            if self.process_handler.stdout.readable():
+                result_bytes = self.process_handler.stdout.readline()
+                result_str = result_bytes.decode('utf-8')
+                seconds_str = result_str.replace('ANS_LENGTH=', '')
+                return float(seconds_str)
+        raise ValueError("no backend process handle")
 
     def current_time(self):
         """
-        Executes a command to get the current time on the playback of the player proccess
+        Executes a command to get the current time on the playback
+        of the player proccess.
         """
         self.__execute(['get_time_pos'])
         if self.process_handler is not None:
-            try:
-                if self.process_handler.stdout.readable():
-                    result_bytes = self.process_handler.stdout.readline()
-                    result_str = result_bytes.decode('utf-8')
-                    seconds_str = result_str.replace('ANS_TIME_POSITION=', '')
-                    return float(seconds_str)
-            except IOError:
-                return None
-        return None
+            if self.process_handler.stdout.readable():
+                result_bytes = self.process_handler.stdout.readline()
+                result_str = result_bytes.decode('utf-8')
+                seconds_str = result_str.replace('ANS_TIME_POSITION=', '')
+                return float(seconds_str)
+        raise ValueError("no backend process handle")
 
     def volume(self, value):
         """
-        Executes a command to set the volume of the mplayer process to the provided value
+        Executes a command to set the volume of the mplayer process
+        to the provided value.
         """
         self.__execute(['volume', str(value), '1'])
