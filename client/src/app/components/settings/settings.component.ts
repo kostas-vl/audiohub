@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ISettings, Settings } from 'src/app/models/settings';
 import { SettingsService } from 'src/app/services/settings/settings.service';
 
@@ -9,7 +10,7 @@ import { SettingsService } from 'src/app/services/settings/settings.service';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
 
-    private settingsServideId?: number;
+    private onSettingsChangedSub?: Subscription;
 
     public settings: ISettings = new Settings();
 
@@ -24,13 +25,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public ngOnInit() {
-        this.settings = this
+        this.onSettingsChangedSub = this
             .settingsService
-            .get();
-
-        // subscribe to the settings servive inorder to handle any changes
-        this.settingsServideId = this
-            .settingsService
+            .onSettingsChanged
             .subscribe(newSettings => this.settings = newSettings);
     }
 
@@ -39,7 +36,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public ngOnDestroy() {
-        this.settingsService.unsubscribe(this.settingsServideId);
+        this.onSettingsChangedSub?.unsubscribe();
     }
 
     /**
@@ -47,7 +44,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     public onChange() {
-        this.settingsService.set(this.settings);
+        this.settingsService.change(this.settings);
     }
 
 }

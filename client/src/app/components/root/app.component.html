@@ -8,65 +8,7 @@
 
         <mat-sidenav #sidenav class="sidenav mat-elevation-z2" [mode]="settings.sidenav_mode">
 
-            <mat-nav-list>
-
-                <h3 mat-subheader>Home</h3>
-
-                <mat-list-item (click)="onSidenavItemClick('/playlist')">
-
-                    <mat-icon mat-list-icon>album</mat-icon>
-                    <span mat-line>Playlist</span>
-
-                </mat-list-item>
-
-                <mat-divider></mat-divider>
-
-                <h3 mat-subheader>Music</h3>
-
-                <mat-list-item (click)="onSidenavItemClick('/files')">
-
-                    <mat-icon mat-list-icon>insert_drive_file</mat-icon>
-                    <h4 mat-line>Files</h4>
-
-                </mat-list-item>
-
-                <mat-list-item (click)="onSidenavItemClick('/stream')">
-
-                    <mat-icon mat-list-icon>airplay</mat-icon>
-                    <h4 mat-line>Streams</h4>
-
-                </mat-list-item>
-
-                <mat-divider></mat-divider>
-
-                <h3 mat-subheader>Storage</h3>
-
-                <mat-list-item (click)="onSidenavItemClick('/systems')">
-
-                    <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
-                    <h4 mat-line>Systems</h4>
-
-                </mat-list-item>
-
-                <mat-list-item (click)="onSidenavItemClick('/download')">
-
-                    <mat-icon mat-list-icon>file_download</mat-icon>
-                    <h4 mat-line>Download</h4>
-
-                </mat-list-item>
-
-                <mat-divider></mat-divider>
-
-                <h3 mat-subheader>Settings</h3>
-
-                <mat-list-item (click)="onSidenavItemClick('/settings')">
-
-                    <mat-icon mat-list-icon>invert_colors</mat-icon>
-                    <h4 mat-line>Appearence</h4>
-
-                </mat-list-item>
-
-            </mat-nav-list>
+            <app-sidebar></app-sidebar>
 
         </mat-sidenav>
 

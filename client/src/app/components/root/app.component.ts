@@ -2,9 +2,11 @@ import { Component, Input, ViewChild, OnInit, OnDestroy, SimpleChanges } from '@
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { ISettings, Settings } from 'src/app/models/settings';
 import { SocketService } from 'src/app/services/socket/socket.service';
 import { SettingsService } from 'src/app/services/settings/settings.service';
+import { SidebarService } from 'src/app/services/sidebar/sidebar.service';
 import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 
 @Component({
@@ -14,7 +16,9 @@ import { PageLoaderService } from 'src/app/services/page-loader/page-loader.serv
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    private settingsSubscription?: number;
+    private onSettingsChangedSub?: Subscription;
+
+    private sidebarToggleSub?: Subscription;
 
     public settings: ISettings = new Settings();
 
@@ -30,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private pageLoader: PageLoaderService,
         private socket: SocketService,
         private settingsService: SettingsService,
+        private sidebarService: SidebarService,
         private snackbar: MatSnackBar
     ) { }
 
@@ -98,15 +103,15 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     public ngOnInit() {
-        // initialize the settigns model
-        this.settings = this.settingsService.get();
-
-        // subscribe a callback on the event of a settings change, and store the produced index
-        this.settingsSubscription = this
+        this.onSettingsChangedSub = this
             .settingsService
-            .subscribe(settings => {
-                this.settings = settings;
-            });
+            .onSettingsChanged
+            .subscribe(settings => this.settings = settings);
+
+        this.sidebarToggleSub = this
+            .sidebarService
+            .sidebarToggle
+            .subscribe(() => this.sidenav?.toggle());
 
         // connect to the server socket and subscribe to all the neccessary events
         this.socket.connect();
@@ -129,7 +134,6 @@ export class AppComponent implements OnInit, OnDestroy {
             // send request for the settings of the user
             this.socket.emit('user settings');
         });
-
     }
 
     /**
@@ -137,8 +141,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * @memberof AppComponent
      */
     public ngOnDestroy() {
-        // remove all the subscription callbacks
-        this.settingsService.unsubscribe(this.settingsSubscription);
+        this.onSettingsChangedSub?.unsubscribe();
+
+        this.sidebarToggleSub?.unsubscribe();
 
         this.socket.unsubscribe('mount volume success', this.onMountVolumeSuccess);
 
@@ -152,20 +157,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.socket.unsubscribe('load stream complete', this.onLoadStreamComplete);
 
-        // disconnect from the server socket
         this.socket.disconnect();
-    }
-
-    /**
-     * Navigates the user to a view of his choices from the list of the sidenav
-     * @param {string} url of the new view
-     * @memberof AppComponent
-     */
-    public onSidenavItemClick(url: string) {
-        if (url && this.sidenav) {
-            this.sidenav.toggle();
-            this.router.navigateByUrl(url);
-        }
     }
 
 }

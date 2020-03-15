@@ -25,11 +25,14 @@ import { AppRoutingModule } from 'src/app/app.routing';
 
 /* Audiohub services */
 import { SettingsService } from 'src/app/services/settings/settings.service';
+import { SidebarService } from 'src/app/services/sidebar/sidebar.service';
 import { PageLoaderService } from 'src/app/services/page-loader/page-loader.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
 
 /* Audiohub components */
 import { AppComponent } from 'src/app/components/root/app.component';
+import { SidebarComponent } from 'src/app/components/sidebar/sidebar.component';
+import { SidebarNodeComponent } from 'src/app/components/sidebar-node/sidebar-node.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
 import { PlayerComponent } from 'src/app/components/player/player.component';
 import { PlaylistComponent } from 'src/app/components/playlist/playlist.component';
@@ -41,21 +44,7 @@ import { DownloadComponent } from 'src/app/components/download/download.componen
 import { SystemsComponent } from 'src/app/components/systems/systems.component';
 import { PageLoaderComponent } from 'src/app/components/page-loader/page-loader.component';
 
-
 @NgModule({
-    declarations: [
-        AppComponent,
-        LoaderComponent,
-        TopBarComponent,
-        PlayerComponent,
-        PlaylistComponent,
-        FilesComponent,
-        StreamComponent,
-        SettingsComponent,
-        DownloadComponent,
-        SystemsComponent,
-        PageLoaderComponent,
-    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -78,9 +67,24 @@ import { PageLoaderComponent } from 'src/app/components/page-loader/page-loader.
         MatSidenavModule,
         AppRoutingModule
     ],
-    entryComponents: [],
+    declarations: [
+        AppComponent,
+        SidebarComponent,
+        SidebarNodeComponent,
+        LoaderComponent,
+        TopBarComponent,
+        PlayerComponent,
+        PlaylistComponent,
+        FilesComponent,
+        StreamComponent,
+        SettingsComponent,
+        DownloadComponent,
+        SystemsComponent,
+        PageLoaderComponent,
+    ],
     providers: [
         SettingsService,
+        SidebarService,
         PageLoaderService,
         SocketService
     ],

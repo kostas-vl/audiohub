@@ -1,0 +1,14 @@
+<h3 mat-subheader *ngIf="node && node.isHeader">{{node.text}}</h3>
+
+<span *ngFor="let child of children">
+
+    <mat-list-item (click)="onNavigateToUrl(child.url)">
+
+        <mat-icon mat-list-icon>{{child.icon}}</mat-icon>
+        <span mat-line>{{child.text}}</span>
+
+    </mat-list-item>
+
+</span>
+
+<mat-divider *ngIf="node"></mat-divider>
