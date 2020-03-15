@@ -6,7 +6,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-on-network": "ng serve -c network",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
